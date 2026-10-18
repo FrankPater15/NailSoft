@@ -118,7 +118,6 @@ const FormularioEmpleado = ({ empleado, onClose, onEmpleadoActualizado = () => {
         icon: "error",
         title: "Error de validación",
         text: "Por favor corrige los errores en el formulario",
-        confirmButtonColor: "#db2777",
       })
       return
     }
@@ -152,7 +151,6 @@ const FormularioEmpleado = ({ empleado, onClose, onEmpleadoActualizado = () => {
         icon: "success",
         title: "¡Éxito!",
         text: empleado ? "Empleado actualizado correctamente" : "Empleado creado correctamente",
-        confirmButtonColor: "#db2777",
       })
 
       onEmpleadoActualizado(data.empleado || data)
@@ -164,7 +162,6 @@ const FormularioEmpleado = ({ empleado, onClose, onEmpleadoActualizado = () => {
         icon: "error",
         title: "Error",
         text: error.message,
-        confirmButtonColor: "#db2777",
       })
     } finally {
       setLoading(false)

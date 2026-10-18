@@ -1,0 +1,179 @@
+/* Mis citas: panel del cliente */
+.mis-citas {
+  max-width: 60rem;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 6rem;
+}
+.mis-citas-cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+.mis-citas-titulo {
+  margin: 0;
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+.mis-citas-bajada {
+  margin: 0.375rem 0 0;
+  color: rgb(var(--c-ink-soft));
+}
+.mis-citas-error {
+  color: rgb(var(--c-danger));
+}
+.mis-citas-seccion {
+  margin: 2.5rem 0 1rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+.mis-citas-cargando {
+  height: 8rem;
+  border-radius: var(--radius);
+  background: rgb(var(--c-surface-2));
+}
+.mis-citas-vacio {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.5rem;
+  border: 1px dashed rgb(var(--c-line-strong));
+  border-radius: calc(var(--radius) + 0.25rem);
+  color: rgb(var(--c-ink-soft));
+}
+.mis-citas-vacio p {
+  margin: 0;
+}
+
+/* Próximas citas */
+.citas-lista {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.cita-tarjeta {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.25rem;
+  background: rgb(var(--c-surface));
+  border: 1px solid rgb(var(--c-line));
+  border-radius: calc(var(--radius) + 0.25rem);
+  box-shadow: var(--sombra-1);
+}
+.cita-fecha {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-radius: var(--radius);
+  background: rgb(var(--c-primary-soft));
+  color: rgb(var(--c-primary-ink));
+}
+.cita-dia {
+  font-size: 2rem;
+  line-height: 1;
+}
+.cita-mes {
+  font-size: 0.8125rem;
+  text-transform: capitalize;
+}
+.cita-info p {
+  margin: 0;
+}
+.cita-cuando {
+  font-weight: 600;
+}
+.cita-cuando::first-letter {
+  text-transform: uppercase;
+}
+.cita-servicios {
+  margin-top: 0.125rem !important;
+}
+.cita-detalle {
+  margin: 0.25rem 0 0.5rem !important;
+  font-size: 0.875rem;
+  color: rgb(var(--c-ink-soft));
+}
+.cita-acciones {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Estado de la cita con el color de esmalte */
+.estado-cita {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+.estado-pendiente {
+  color: rgb(var(--nude-700));
+}
+.estado-pendiente .esmalte {
+  color: rgb(var(--st-pendiente));
+}
+.estado-confirmada,
+.estado-confirmada .esmalte {
+  color: rgb(var(--st-confirmada));
+}
+.estado-progreso,
+.estado-progreso .esmalte {
+  color: rgb(var(--st-progreso));
+}
+.estado-completada,
+.estado-completada .esmalte {
+  color: rgb(var(--st-completada));
+}
+.estado-cancelada {
+  color: rgb(var(--c-ink-faint));
+}
+.estado-cancelada .esmalte {
+  color: rgb(var(--st-cancelada));
+}
+
+/* Historial */
+.historial-lista {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid rgb(var(--c-line));
+}
+.historial-lista li {
+  display: grid;
+  grid-template-columns: 9.5rem minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgb(var(--c-line));
+  font-size: 0.9375rem;
+}
+.historial-fecha {
+  white-space: nowrap;
+  color: rgb(var(--c-ink-faint));
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 640px) {
+  .cita-tarjeta {
+    grid-template-columns: 4rem minmax(0, 1fr);
+  }
+  .cita-acciones {
+    grid-column: 1 / -1;
+    flex-direction: row;
+  }
+  .historial-lista li {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+}

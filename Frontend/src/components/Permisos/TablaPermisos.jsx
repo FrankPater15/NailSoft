@@ -156,7 +156,6 @@ export default function TablaPermisos() {
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: nuevoEstado ? "#3085d6" : "#d33",
-      cancelButtonColor: "#6c757d",
       confirmButtonText: `Sí, ${accion}!`,
       cancelButtonText: "Cancelar",
     });
@@ -211,8 +210,7 @@ export default function TablaPermisos() {
       text: "¡No podrás revertir esto! Ten en cuenta que eliminar un permiso puede afectar a los roles que lo utilizan.",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
+      confirmButtonColor: "rgb(var(--c-danger))",
       confirmButtonText: "Sí, eliminarlo!",
       cancelButtonText: "Cancelar",
     });

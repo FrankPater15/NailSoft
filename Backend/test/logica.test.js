@@ -213,6 +213,25 @@ describe("citas", () => {
     expect(res.status).toBe(409);
   });
 
+  it("la disponibilidad excluye las horas ocupadas y las que ya pasaron", async () => {
+    const disponibles = async (dia) =>
+      (
+        await post("/api/citas/verificar-disponibilidad", "cliente", {
+          nombreempleado: datos.empleado2._id,
+          fecha: dia,
+          servicios: [datos.manicure._id],
+        })
+      ).body.horariosDisponibles.map((h) => h.hora);
+
+    const futuras = await disponibles(fecha(20));
+    expect(futuras).not.toContain("10:00"); // reservada en la prueba anterior (45 min)
+    expect(futuras).not.toContain("09:30"); // terminaría a las 10:15, dentro de la otra cita
+    expect(futuras).toContain("11:00");
+
+    const ayer = await disponibles(fecha(-1));
+    expect(ayer).toEqual([]);
+  });
+
   it("otro empleado sí puede tener cita a esa hora", async () => {
     expect((await nuevaCita("recepcion", { nombreempleado: datos.empleado1._id })).status).toBe(201);
   });

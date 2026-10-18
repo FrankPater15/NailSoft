@@ -183,7 +183,6 @@ const FormularioInsumo = ({ insumo, onClose, onSuccess }) => {
         icon: "error",
         title: "Error de validación",
         text: "Por favor corrige los errores en el formulario",
-        confirmButtonColor: "#db2777",
       })
       return
     }
@@ -205,7 +204,6 @@ const FormularioInsumo = ({ insumo, onClose, onSuccess }) => {
           icon: "error",
           title: "Error",
           text: "No se encontró el token de autenticación. Por favor, inicia sesión.",
-          confirmButtonColor: "#db2777",
         })
         return
       }
@@ -222,7 +220,6 @@ const FormularioInsumo = ({ insumo, onClose, onSuccess }) => {
           icon: "success",
           title: "¡Éxito!",
           text: "Insumo actualizado correctamente",
-          confirmButtonColor: "#db2777",
         })
       } else {
         await axios.post(apiUrl, insumoData, config)
@@ -230,7 +227,6 @@ const FormularioInsumo = ({ insumo, onClose, onSuccess }) => {
           icon: "success",
           title: "¡Éxito!",
           text: "Insumo creado correctamente",
-          confirmButtonColor: "#db2777",
         })
       }
 
@@ -244,7 +240,6 @@ const FormularioInsumo = ({ insumo, onClose, onSuccess }) => {
         icon: "error",
         title: "Error",
         text: errorMessage,
-        confirmButtonColor: "#db2777",
       })
     } finally {
       setLoading(false)

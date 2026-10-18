@@ -137,10 +137,12 @@ const horariosDisponibles = async ({ empleadoId, fecha, duracion }) => {
     return [inicio, inicio + (cita.duracionTotal || 60)];
   });
   const libres = [];
+  const ahora = new Date();
   for (let inicio = HORA_APERTURA; inicio + duracion <= HORA_CIERRE; inicio += 30) {
     if (!ocupadas.some(([a, b]) => seCruzan(inicio, inicio + duracion, a, b))) {
       const fechaInicio = new Date(dia);
       fechaInicio.setMinutes(inicio);
+      if (fechaInicio <= ahora) continue; // las horas que ya pasaron no se ofrecen
       const fechaFin = new Date(dia);
       fechaFin.setMinutes(inicio + duracion);
       libres.push({ hora: textoHora(inicio), duracion, inicio: fechaInicio, fin: fechaFin });

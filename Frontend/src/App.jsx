@@ -7,7 +7,7 @@ import { usePermissions } from "./hooks/usePermissions"
 import "./tailwind.css"
 import TablaBajaInsumo from "./components/BajaProducto/TablaBajaInsumo"
 import MainLayout from "./components/Sidebar/MainLayout"
-import ClientDashboard from "./components/Clientes/client-dashboard"
+import ClientDashboard from "./components/Clientes/MisCitas"
 import Sidebar from "./components/Sidebar/Sidebar"
 import Navbar from "./components/NavBars/Navbar"
 import { FaWhatsapp } from "react-icons/fa"
@@ -27,7 +27,7 @@ const GestionVentaServicio = lazy(() => import("./components/VentaServicios/Gest
 const CitasEnProgreso = lazy(() => import("./components/Citas_Agenda/CitasEnProgreso"))
 const AgendaEmpleado = lazy(() => import("./components/Citas_Agenda/AgendaEmpleado"))
 const ArticlesGrid = lazy(() => import("./components/Galeria/ArticlesGrid"))
-const SeleccionarServicios = lazy(() => import("./components/Galeria/SeleccionarServicios"))
+const Reservar = lazy(() => import("./components/Reservar/Reservar"))
 const TablaInsumos = lazy(() => import("./components/Insumos/TablaInsumos"))
 const TablaEmpleados = lazy(() => import("./components/Empleados/TablaEmpleados"))
 const TablaClientes = lazy(() => import("./components/Clientes/TablaClientes"))
@@ -404,7 +404,7 @@ function App() {
               element={
                 <PrivateRoute allowedRoles={["admin", "cliente", "usuario"]}>
                   <Layout>
-                    <SeleccionarServicios />
+                    <Reservar />
                   </Layout>
                 </PrivateRoute>
               }

@@ -166,7 +166,6 @@ export default function FormularioUsuario({ onClose, onUsuarioActualizado, usuar
         icon: "error",
         title: "Error",
         text: "Todos los campos son obligatorios",
-        confirmButtonColor: "#db2777",
       })
       return
     }
@@ -179,7 +178,6 @@ export default function FormularioUsuario({ onClose, onUsuarioActualizado, usuar
         icon: "error",
         title: "Error",
         text: "Las contraseñas no coinciden",
-        confirmButtonColor: "#db2777",
       })
       return
     }
@@ -245,7 +243,6 @@ export default function FormularioUsuario({ onClose, onUsuarioActualizado, usuar
           icon: "success",
           title: "Actualización Exitosa",
           text: "Usuario actualizado exitosamente!",
-          confirmButtonColor: "#db2777",
         })
 
         onUsuarioActualizado()
@@ -294,7 +291,6 @@ export default function FormularioUsuario({ onClose, onUsuarioActualizado, usuar
           icon: "success",
           title: usuarioEditando ? "Actualización Exitosa" : "Registro Exitoso",
           text: usuarioEditando ? "Usuario actualizado exitosamente!" : "Usuario creado exitosamente!",
-          confirmButtonColor: "#db2777",
         })
 
         onUsuarioActualizado()
@@ -325,7 +321,6 @@ export default function FormularioUsuario({ onClose, onUsuarioActualizado, usuar
     title: "Error",
     text: errorMsg,
     footer: errorDetails || "Si el problema persiste, contacte al administrador del sistema",
-    confirmButtonColor: "#db2777",
   })
 }
 finally {

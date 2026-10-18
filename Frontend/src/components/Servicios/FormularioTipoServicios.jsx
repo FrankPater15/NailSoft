@@ -79,8 +79,7 @@ export default function FormularioTipoServicio({ tipoServicioSeleccionado, onTip
     return Swal.fire({
       icon: "warning",
       title: "Nombre inválido",
-      text: "El nombre no puede contener más de dos letras iguales consecutivas, solo letras y espacios, ni ser una cadena repetida o solo números. Debe tener entre 3 y 50 caracteres.",
-      confirmButtonColor: "#f59e0b", // Amarillo
+      text: "El nombre no puede contener más de dos letras iguales consecutivas, solo letras y espacios, ni ser una cadena repetida o solo números. Debe tener entre 3 y 50 caracteres.", // Amarillo
     });
   }
 
@@ -107,8 +106,7 @@ if (
   return Swal.fire({
     icon: "warning",
     title: "Descuento inválido",
-    text: "El descuento debe ser un número entre 0 y 100, sin comenzar en 0 y con mínimo 2 dígitos.",
-    confirmButtonColor: "#f59e0b", // color amarillo
+    text: "El descuento debe ser un número entre 0 y 100, sin comenzar en 0 y con mínimo 2 dígitos.", // color amarillo
   });
 }
 
@@ -141,7 +139,6 @@ if (
       text: tipoServicioSeleccionado
         ? "Tipo de servicio actualizado correctamente"
         : "Tipo de servicio creado correctamente",
-      confirmButtonColor: "#db2777",
     });
 
     onTipoServicioActualizado(data.tiposervicio);
@@ -152,7 +149,6 @@ if (
       icon: "error",
       title: "Error",
       text: error.message,
-      confirmButtonColor: "#db2777",
     });
   } finally {
     setLoading(false);

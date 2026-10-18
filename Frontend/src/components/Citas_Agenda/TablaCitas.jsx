@@ -400,7 +400,6 @@ const TablaCitas = () => {
         title: "Error",
         text: "No se pudieron cargar los empleados",
         icon: "error",
-        confirmButtonColor: "#ff69b4",
       })
     }
   }
@@ -500,7 +499,6 @@ const TablaCitas = () => {
         title: "Error",
         text: "No se pudieron cargar las citas",
         icon: "error",
-        confirmButtonColor: "#ff69b4",
       })
       setIsLoading(false)
       setFiltrando(false)

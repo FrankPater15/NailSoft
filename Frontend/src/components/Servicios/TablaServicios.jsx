@@ -112,7 +112,6 @@ const TablaServicios = () => {
           title: "Error",
           text: "No tienes permiso para estar aquí. No se encontró un token válido.",
           icon: "error",
-          confirmButtonColor: "#db2777",
         });
         dispatch({
           type: ACTIONS.FETCH_FAILURE,
@@ -136,7 +135,6 @@ const TablaServicios = () => {
         title: "Error",
         text: "No tienes permiso para estar aquí. Tu token no es válido.",
         icon: "error",
-        confirmButtonColor: "#db2777",
       });
       dispatch({
         type: ACTIONS.FETCH_FAILURE,
@@ -170,7 +168,6 @@ const TablaServicios = () => {
       icon: "success",
       title: "¡Éxito!",
       text: "El servicio ha sido guardado correctamente.",
-      confirmButtonColor: "#db2777",
     });
 
     // Actualizar la lista de servicios después de agregar o editar
@@ -188,8 +185,7 @@ const TablaServicios = () => {
     text: "¡No podrás revertir esto!",
     icon: "warning",
     showCancelButton: true,
-    confirmButtonColor: "#d33",
-    cancelButtonColor: "#3085d6",
+    confirmButtonColor: "rgb(var(--c-danger))",
     confirmButtonText: "Sí, eliminarlo!",
     cancelButtonText: "Cancelar",
   });
@@ -219,7 +215,6 @@ const TablaServicios = () => {
         title: "Eliminado!",
         text: "El servicio ha sido eliminado.",
         icon: "success",
-        confirmButtonColor: "#db2777",
       });
 
       obtenerServicios(); // Actualizar la lista después de eliminar
@@ -229,7 +224,6 @@ const TablaServicios = () => {
         title: "Error",
         text: error.message || "No se pudo eliminar el servicio.",
         icon: "error",
-        confirmButtonColor: "#db2777",
       });
     }
   }
@@ -245,7 +239,6 @@ const TablaServicios = () => {
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: nuevoEstado ? "#3085d6" : "#d33",
-      cancelButtonColor: "#6c757d",
       confirmButtonText: `Sí, ${accion}!`,
       cancelButtonText: "Cancelar",
     });
@@ -284,7 +277,6 @@ const TablaServicios = () => {
           text: `El servicio ha sido ${
             nuevoEstado ? "activado" : "desactivado"
           }.`,
-          confirmButtonColor: "#db2777",
         });
 
         // Actualizar la lista después de cambiar el estado
@@ -295,7 +287,6 @@ const TablaServicios = () => {
           icon: "error",
           title: "Error",
           text: `No se pudo ${accion} el servicio`,
-          confirmButtonColor: "#db2777",
         });
       }
     }
@@ -354,7 +345,6 @@ const TablaServicios = () => {
         icon: "success",
         title: "¡Éxito!",
         text: "El archivo Excel ha sido generado correctamente.",
-        confirmButtonColor: "#db2777",
       });
     } catch (error) {
       console.error("Error al exportar a Excel:", error);
@@ -362,7 +352,6 @@ const TablaServicios = () => {
         icon: "error",
         title: "Error",
         text: "No se pudo generar el archivo Excel.",
-        confirmButtonColor: "#db2777",
       });
     }
   };

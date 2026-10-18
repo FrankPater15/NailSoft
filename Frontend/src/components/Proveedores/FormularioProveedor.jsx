@@ -185,7 +185,6 @@ const FormularioProveedor = ({ proveedor, onProveedorActualizado, onClose }) => 
         icon: "error",
         title: "Error de validación",
         text: "Por favor corrige los errores en el formulario",
-        confirmButtonColor: "#db2777",
       })
       return
     }
@@ -208,7 +207,6 @@ const FormularioProveedor = ({ proveedor, onProveedorActualizado, onClose }) => 
           icon: "error",
           title: "Error",
           text: "No se encontró el token de autenticación. Por favor, inicia sesión.",
-          confirmButtonColor: "#db2777",
         })
         return
       }
@@ -226,7 +224,6 @@ const FormularioProveedor = ({ proveedor, onProveedorActualizado, onClose }) => 
           icon: "success",
           title: "¡Éxito!",
           text: "Proveedor actualizado correctamente",
-          confirmButtonColor: "#db2777",
         })
       } else {
         response = await axios.post(apiUrl, proveedorData, config)
@@ -234,7 +231,6 @@ const FormularioProveedor = ({ proveedor, onProveedorActualizado, onClose }) => 
           icon: "success",
           title: "¡Éxito!",
           text: "Proveedor creado correctamente",
-          confirmButtonColor: "#db2777",
         })
       }
 
@@ -254,7 +250,6 @@ const FormularioProveedor = ({ proveedor, onProveedorActualizado, onClose }) => 
         icon: "error",
         title: "Error",
         text: errorMessage,
-        confirmButtonColor: "#db2777",
       })
     } finally {
       setLoading(false)

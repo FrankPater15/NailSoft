@@ -45,7 +45,6 @@ const TablaEmpleados = () => {
           title: "Error",
           text: "No tienes permiso para estar aquí. No se encontró un token válido.",
           icon: "error",
-          confirmButtonColor: "#db2777",
         })
         return
       }
@@ -62,7 +61,6 @@ const TablaEmpleados = () => {
         title: "Error",
         text: "No tienes permiso para estar aquí. Tu token no es válido.",
         icon: "error",
-        confirmButtonColor: "#db2777",
       })
     }
   }
@@ -92,7 +90,6 @@ const TablaEmpleados = () => {
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: nuevoEstado ? "#3085d6" : "#d33",
-      cancelButtonColor: "#6c757d",
       confirmButtonText: `Sí, ${accion}!`,
       cancelButtonText: "Cancelar",
     })
@@ -117,7 +114,6 @@ const TablaEmpleados = () => {
           icon: "success",
           title: `${nuevoEstado ? "Activado" : "Desactivado"}!`,
           text: `El empleado ha sido ${nuevoEstado ? "activado" : "desactivado"}.`,
-          confirmButtonColor: "#db2777",
         })
       } catch (error) {
         console.error(`Error al ${accion} el empleado:`, error)
@@ -133,7 +129,6 @@ const TablaEmpleados = () => {
           icon: "error",
           title: "Error",
           text: errorMessage,
-          confirmButtonColor: "#db2777",
         })
       }
     }
@@ -145,8 +140,7 @@ const TablaEmpleados = () => {
       text: "¡No podrás revertir esto!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
+      confirmButtonColor: "rgb(var(--c-danger))",
       confirmButtonText: "Sí, eliminarlo!",
       cancelButtonText: "Cancelar",
     })
@@ -164,7 +158,6 @@ const TablaEmpleados = () => {
           title: "Eliminado!",
           text: "El empleado ha sido eliminado.",
           icon: "success",
-          confirmButtonColor: "#db2777",
         })
       } catch (error) {
         console.error("Error al eliminar el empleado:", error)
@@ -172,7 +165,6 @@ const TablaEmpleados = () => {
           title: "Error",
           text: "No se pudo eliminar el empleado.",
           icon: "error",
-          confirmButtonColor: "#db2777",
         })
       }
     }

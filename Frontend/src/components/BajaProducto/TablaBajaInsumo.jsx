@@ -29,7 +29,6 @@ const TablaBajaInsumo = () => {
           title: "Error",
           text: "No se encontró el token de autenticación. Por favor, inicia sesión.",
           icon: "error",
-          confirmButtonColor: "#db2777",
         })
         return
       }
@@ -54,21 +53,18 @@ const TablaBajaInsumo = () => {
           title: "Error",
           text: `Error ${error.response.status}: ${error.response.data.message || "No se pudieron cargar las bajas de productos"}`,
           icon: "error",
-          confirmButtonColor: "#db2777",
         })
       } else if (error.request) {
         Swal.fire({
           title: "Error",
           text: "No se pudo conectar con el servidor",
           icon: "error",
-          confirmButtonColor: "#db2777",
         })
       } else {
         Swal.fire({
           title: "Error",
           text: `Error: ${error.message}`,
           icon: "error",
-          confirmButtonColor: "#db2777",
         })
       }
     } finally {
@@ -113,7 +109,6 @@ const TablaBajaInsumo = () => {
         title: "Error",
         text: "No hay datos para exportar",
         icon: "error",
-        confirmButtonColor: "#db2777",
       })
       return
     }
@@ -164,7 +159,6 @@ const TablaBajaInsumo = () => {
         title: "Error",
         text: "No se pudo exportar a Excel",
         icon: "error",
-        confirmButtonColor: "#db2777",
       })
     } finally {
       setExportando(false)

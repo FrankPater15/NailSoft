@@ -490,3 +490,91 @@
     color: rgb(var(--c-primary-ink));
   }
 }
+
+/* Ventanas de SweetAlert con el sistema de diseño (se usan en toda la app).
+   Fuera de @layer: Tailwind quitaría estas clases porque solo existen en tiempo de ejecución. */
+.swal2-container.swal2-backdrop-show {
+  background: rgb(var(--neutral-950) / 0.45) !important;
+}
+.swal2-popup {
+  width: min(30rem, calc(100vw - 2rem)) !important;
+  padding: 1.75rem 1.5rem 1.5rem !important;
+  border-radius: calc(var(--radius) + 0.5rem) !important;
+  background: rgb(var(--c-surface)) !important;
+  color: rgb(var(--c-ink)) !important;
+  border: 1px solid rgb(var(--c-line));
+  box-shadow: var(--sombra-3);
+  font-family: inherit !important;
+}
+.swal2-title {
+  padding: 0 !important;
+  font-size: 1.25rem !important;
+  font-weight: 600 !important;
+  color: rgb(var(--c-ink)) !important;
+}
+.swal2-html-container {
+  margin: 0.75rem 0 0 !important;
+  font-size: 0.9375rem !important;
+  color: rgb(var(--c-ink-soft)) !important;
+}
+.swal2-icon {
+  margin: 0 auto 1rem !important;
+  transform: scale(0.75);
+}
+.swal2-icon.swal2-success [class^="swal2-success-line"] {
+  background-color: rgb(var(--c-success)) !important;
+}
+.swal2-icon.swal2-success .swal2-success-ring {
+  border-color: rgb(var(--c-success) / 0.3) !important;
+}
+.swal2-actions {
+  gap: 0.5rem;
+  margin-top: 1.5rem !important;
+}
+.swal2-styled {
+  margin: 0 !important;
+  min-height: 2.5rem;
+  padding: 0 1.125rem !important;
+  border-radius: var(--radius) !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  box-shadow: none !important;
+}
+.swal2-styled.swal2-confirm {
+  background: rgb(var(--c-primary));
+  color: rgb(var(--c-on-primary)) !important;
+}
+.swal2-styled.swal2-cancel,
+.swal2-styled.swal2-deny {
+  background: rgb(var(--c-surface)) !important;
+  color: rgb(var(--c-ink)) !important;
+  border: 1px solid rgb(var(--c-line-strong)) !important;
+}
+.swal2-styled:focus-visible {
+  outline: 2px solid rgb(var(--c-primary)) !important;
+  outline-offset: 2px;
+}
+.swal2-input,
+.swal2-textarea,
+.swal2-select {
+  margin: 1rem 0 0 !important;
+  width: 100% !important;
+  font: inherit !important;
+  color: rgb(var(--c-ink)) !important;
+  background: rgb(var(--c-surface)) !important;
+  border: 1px solid rgb(var(--c-line-strong)) !important;
+  border-radius: var(--radius) !important;
+  box-shadow: none !important;
+}
+.swal2-input-label {
+  margin-top: 1rem !important;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+.swal2-validation-message {
+  background: rgb(var(--c-danger) / 0.08) !important;
+  color: rgb(var(--c-danger)) !important;
+}
+.swal2-timer-progress-bar {
+  background: rgb(var(--c-primary) / 0.5) !important;
+}

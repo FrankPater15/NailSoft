@@ -47,7 +47,6 @@ const FormularioServicio = ({
           icon: "error",
           title: "Error",
           text: "No se pudieron cargar los tipos de servicios",
-          confirmButtonColor: "#db2777",
         });
       } finally {
         setIsLoading(false);
@@ -146,7 +145,6 @@ const FormularioServicio = ({
           icon: "warning",
           title: "Nombre duplicado",
           text: "El nombre del servicio ya está en uso.",
-          confirmButtonColor: "#db2777",
         });
       } else {
         console.error("❌ Error al validar nombre:", error);
@@ -199,7 +197,6 @@ const FormularioServicio = ({
                 }
               </div>
             `,
-            confirmButtonColor: "#db2777",
           });
         }
       }
@@ -290,7 +287,6 @@ const FormularioServicio = ({
         icon: "warning",
         title: "Validación inválida",
         text: error || errorDescripcion || errorTiempo,
-        confirmButtonColor: "#db2777",
       });
       return;
     }
@@ -335,7 +331,6 @@ const FormularioServicio = ({
         icon: "success",
         title: "¡Éxito!",
         text: "Servicio guardado correctamente.",
-        confirmButtonColor: "#db2777",
       });
       onServicioActualizado(response.data.servicio);
       onClose();
@@ -348,7 +343,6 @@ const FormularioServicio = ({
         icon: "error",
         title: "Error",
         text: "No se pudo guardar el servicio. Inténtalo nuevamente.",
-        confirmButtonColor: "#db2777",
       });
     } finally {
       setIsSubmitting(false);

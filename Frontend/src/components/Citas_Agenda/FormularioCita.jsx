@@ -512,7 +512,6 @@ export default function FormularioCita({ cita, fechaSeleccionada, servicioSelecc
           title: "Error",
           text: "Este servicio ya fue agregado o no existe.",
           icon: "error",
-          confirmButtonColor: "#ff69b4",
         })
       }
     } else {
@@ -520,7 +519,6 @@ export default function FormularioCita({ cita, fechaSeleccionada, servicioSelecc
         title: "Error",
         text: "Debes seleccionar un servicio antes de agregar.",
         icon: "error",
-        confirmButtonColor: "#ff69b4",
       })
     }
   }
@@ -540,7 +538,6 @@ export default function FormularioCita({ cita, fechaSeleccionada, servicioSelecc
         title: "Error",
         text: "Debe seleccionar al menos un servicio",
         icon: "error",
-        confirmButtonColor: "#ff69b4",
       })
     }
 
@@ -549,7 +546,6 @@ export default function FormularioCita({ cita, fechaSeleccionada, servicioSelecc
         title: "Error",
         text: "Debe seleccionar un empleado",
         icon: "error",
-        confirmButtonColor: "#ff69b4",
       })
     }
 
@@ -558,7 +554,6 @@ export default function FormularioCita({ cita, fechaSeleccionada, servicioSelecc
         title: "Error",
         text: "Debe seleccionar un cliente",
         icon: "error",
-        confirmButtonColor: "#ff69b4",
       })
     }
 
@@ -567,7 +562,6 @@ export default function FormularioCita({ cita, fechaSeleccionada, servicioSelecc
         title: "Error",
         text: "Debe seleccionar una hora",
         icon: "error",
-        confirmButtonColor: "#ff69b4",
       })
     }
 
@@ -577,7 +571,6 @@ export default function FormularioCita({ cita, fechaSeleccionada, servicioSelecc
         title: "Modo demostración",
         text: "Esta función no está disponible en modo demostración. Intente conectarse al servidor para usar todas las funcionalidades.",
         icon: "info",
-        confirmButtonColor: "#ff69b4",
       })
     }
 
@@ -628,7 +621,6 @@ export default function FormularioCita({ cita, fechaSeleccionada, servicioSelecc
           title: "¡Éxito!",
           text: "Cita actualizada correctamente",
           icon: "success",
-          confirmButtonColor: "#ff69b4",
         })
       } else {
         const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/citas`, dataToSend, { headers })
@@ -636,7 +628,6 @@ export default function FormularioCita({ cita, fechaSeleccionada, servicioSelecc
           title: "¡Éxito!",
           text: "Cita creada correctamente",
           icon: "success",
-          confirmButtonColor: "#ff69b4",
         })
       }
 
@@ -654,7 +645,6 @@ export default function FormularioCita({ cita, fechaSeleccionada, servicioSelecc
         title: "Error",
         text: mensajeError,
         icon: "error",
-        confirmButtonColor: "#ff69b4",
       })
     } finally {
       setIsSubmitting(false)
@@ -668,8 +658,6 @@ export default function FormularioCita({ cita, fechaSeleccionada, servicioSelecc
         text: "No podrás revertir esta acción",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: "#ff69b4",
-        cancelButtonColor: "#d33",
         confirmButtonText: "Sí, eliminar",
         cancelButtonText: "Cancelar",
       }).then((result) => result.isConfirmed)
@@ -683,7 +671,6 @@ export default function FormularioCita({ cita, fechaSeleccionada, servicioSelecc
             title: "Modo demostración",
             text: "Esta función no está disponible en modo demostración. Intente conectarse al servidor para usar todas las funcionalidades.",
             icon: "info",
-            confirmButtonColor: "#ff69b4",
           })
           return
         }
@@ -700,7 +687,6 @@ export default function FormularioCita({ cita, fechaSeleccionada, servicioSelecc
           title: "Eliminado",
           text: "La cita ha sido eliminada correctamente.",
           icon: "success",
-          confirmButtonColor: "#ff69b4",
         })
         onCitaActualizada()
         onClose()
@@ -709,7 +695,6 @@ export default function FormularioCita({ cita, fechaSeleccionada, servicioSelecc
           title: "Error",
           text: "No se pudo eliminar la cita.",
           icon: "error",
-          confirmButtonColor: "#ff69b4",
         })
       } finally {
         setIsSubmitting(false)
@@ -723,7 +708,6 @@ export default function FormularioCita({ cita, fechaSeleccionada, servicioSelecc
         title: "Error",
         text: "Debe seleccionar al menos un servicio",
         icon: "error",
-        confirmButtonColor: "#ff69b4",
       })
     }
 
@@ -732,7 +716,6 @@ export default function FormularioCita({ cita, fechaSeleccionada, servicioSelecc
         title: "Error",
         text: "Debe seleccionar un empleado",
         icon: "error",
-        confirmButtonColor: "#ff69b4",
       })
     }
 
@@ -741,7 +724,6 @@ export default function FormularioCita({ cita, fechaSeleccionada, servicioSelecc
         title: "Error",
         text: "Debe seleccionar un cliente",
         icon: "error",
-        confirmButtonColor: "#ff69b4",
       })
     }
 

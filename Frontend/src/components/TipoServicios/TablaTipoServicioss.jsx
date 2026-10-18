@@ -54,7 +54,6 @@ export default function TablaTipoServicioss() {
         title: "Error",
         text: "No tienes permiso para estar aquí. Tu token no es válido.",
         icon: "error",
-        confirmButtonColor: "#db2777",
       });
     } finally {
       setIsLoading(false);
@@ -94,7 +93,6 @@ export default function TablaTipoServicioss() {
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: nuevoEstado ? "#3085d6" : "#d33",
-      cancelButtonColor: "#6c757d",
       confirmButtonText: `Sí, ${accion}!`,
       cancelButtonText: "Cancelar",
     });
@@ -130,7 +128,6 @@ export default function TablaTipoServicioss() {
           text: `El tipo de servicio ha sido ${
             nuevoEstado ? "activado" : "desactivado"
           }.`,
-          confirmButtonColor: "#db2777",
         });
       } catch (error) {
         console.error(`Error al ${accion} el tipo de servicio:`, error);
@@ -138,7 +135,6 @@ export default function TablaTipoServicioss() {
           icon: "error",
           title: "Error",
           text: `No se pudo ${accion} el tipo de servicio`,
-          confirmButtonColor: "#db2777",
         });
       }
     }
@@ -150,8 +146,7 @@ export default function TablaTipoServicioss() {
       text: "¡No podrás revertir esto!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
+      confirmButtonColor: "rgb(var(--c-danger))",
       confirmButtonText: "Sí, eliminarlo!",
       cancelButtonText: "Cancelar",
     });
@@ -176,7 +171,6 @@ export default function TablaTipoServicioss() {
           icon: "success",
           title: "Eliminado!",
           text: "El tipo de servicio ha sido eliminado.",
-          confirmButtonColor: "#db2777",
         });
       } catch (error) {
         console.error("Error al eliminar el tipo de servicio:", error);
@@ -184,7 +178,6 @@ export default function TablaTipoServicioss() {
           icon: "error",
           title: "Error",
           text: "No se pudo eliminar el tipo de servicio",
-          confirmButtonColor: "#db2777",
         });
       }
     }

@@ -117,7 +117,6 @@ const FormularioCliente = ({ cliente, onClose, onClienteActualizado = () => {} }
         icon: "error",
         title: "Error de validación",
         text: "Por favor corrige los errores en el formulario",
-        confirmButtonColor: "#db2777",
       })
       return
     }
@@ -154,7 +153,6 @@ const FormularioCliente = ({ cliente, onClose, onClienteActualizado = () => {} }
         icon: "success",
         title: "¡Éxito!",
         text: cliente ? "Cliente actualizado correctamente" : "Cliente creado correctamente",
-        confirmButtonColor: "#db2777",
       })
 
       onClienteActualizado(data.cliente || data)
@@ -166,7 +164,6 @@ const FormularioCliente = ({ cliente, onClose, onClienteActualizado = () => {} }
         icon: "error",
         title: "Error",
         text: error.message,
-        confirmButtonColor: "#db2777",
       })
     } finally {
       setLoading(false)

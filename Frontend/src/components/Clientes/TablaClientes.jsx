@@ -45,7 +45,6 @@ const TablaClientes = () => {
           title: "Error",
           text: "No tienes permiso para estar aquí. No se encontró un token válido.",
           icon: "error",
-          confirmButtonColor: "#db2777",
         });
         setError("Token no encontrado.");
         return;
@@ -68,7 +67,6 @@ const TablaClientes = () => {
         title: "Error",
         text: "No tienes permiso para estar aquí. Tu token no es válido.",
         icon: "error",
-        confirmButtonColor: "#db2777",
       });
     } finally {
       setIsLoading(false);
@@ -94,7 +92,6 @@ const TablaClientes = () => {
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: nuevoEstado ? "#3085d6" : "#d33",
-    cancelButtonColor: "#6c757d",
     confirmButtonText: `Sí, ${accion}!`,
     cancelButtonText: "Cancelar",
   });
@@ -123,7 +120,6 @@ const TablaClientes = () => {
         icon: "success",
         title: `${nuevoEstado ? "Activado" : "Desactivado"}!`,
         text: `El cliente ha sido ${nuevoEstado ? "activado" : "desactivado"}.`,
-        confirmButtonColor: "#db2777",
       });
     } catch (error) {
       console.error(`Error al ${accion} el cliente:`, error);
@@ -139,7 +135,6 @@ const TablaClientes = () => {
         icon: "error",
         title: "Error",
         text: errorMessage,
-        confirmButtonColor: "#db2777",
       });
     }
   }
@@ -151,8 +146,7 @@ const TablaClientes = () => {
       text: "¡No podrás revertir esto!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
+      confirmButtonColor: "rgb(var(--c-danger))",
       confirmButtonText: "Sí, eliminarlo!",
       cancelButtonText: "Cancelar",
     });
@@ -170,7 +164,6 @@ const TablaClientes = () => {
           title: "Eliminado!",
           text: "El cliente ha sido eliminado.",
           icon: "success",
-          confirmButtonColor: "#db2777",
         });
       } catch (error) {
         console.error("Error al eliminar el cliente:", error);
@@ -178,7 +171,6 @@ const TablaClientes = () => {
           title: "Error",
           text: "No se pudo eliminar el cliente.",
           icon: "error",
-          confirmButtonColor: "#db2777",
         });
       }
     }

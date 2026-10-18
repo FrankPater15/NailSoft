@@ -46,7 +46,6 @@ export default function FormularioTipoServicios({ tipoServicioSeleccionado, onTi
         icon: "warning",
         title: "Error",
         text: "El nombre del tipo de servicio no puede estar vacío.",
-        confirmButtonColor: "#db2777",
       })
       setLoading(false)
       return
@@ -56,7 +55,6 @@ export default function FormularioTipoServicios({ tipoServicioSeleccionado, onTi
         icon: "warning",
         title: "Error",
         text: "El nombre del tipo de servicio debe tener entre 3 y 50 caracteres.",
-        confirmButtonColor: "#db2777",
       })
       setLoading(false)
       return
@@ -66,7 +64,6 @@ export default function FormularioTipoServicios({ tipoServicioSeleccionado, onTi
         icon: "warning",
         title: "Error",
         text: "El nombre del tipo de servicio solo puede contener letras , tildesy espacios.",
-        confirmButtonColor: "#db2777",
       })
       setLoading(false)
       return
@@ -76,7 +73,6 @@ export default function FormularioTipoServicios({ tipoServicioSeleccionado, onTi
         icon: "warning",
         title: "Error",
         text: "El nombre del tipo de servicio no puede ser solo números.",
-        confirmButtonColor: "#db2777",
       })
       setLoading(false)
       return
@@ -96,7 +92,6 @@ export default function FormularioTipoServicios({ tipoServicioSeleccionado, onTi
         icon: "warning",
         title: "Error",
         text: "El nombre del tipo de servicio no puede ser una cadena repetida.",
-        confirmButtonColor: "#db2777",
       })
       setLoading(false)
       return
@@ -141,7 +136,6 @@ const data = await response.json();
         icon: "error",
         title: "Error",
         text: data.msg || "No se pudo guardar el tipo de servicio",
-        confirmButtonColor: "#db2777",
       })
       setLoading(false)
       return
@@ -155,7 +149,6 @@ const data = await response.json();
       text: tipoServicioSeleccionado
         ? "Tipo de servicio actualizado correctamente"
         : "Tipo de servicio creado correctamente",
-      confirmButtonColor: "#db2777",
     })
   } catch (error) {
     console.error("Error al guardar el tipo de servicio:", error)
@@ -163,7 +156,6 @@ const data = await response.json();
       icon: "error",
       title: "Error",
       text: "No se pudo guardar el tipo de servicio",
-      confirmButtonColor: "#db2777",
     })
   } finally {
     setLoading(false)

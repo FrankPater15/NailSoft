@@ -64,7 +64,6 @@ const obtenerRoles = async () => {
       title: "Error",
       text: "No tienes permiso para estar aquí. Tu token no es válido.",
       icon: "error",
-      confirmButtonColor: "#db2777",
     });
   } finally {
     setIsLoading(false);
@@ -125,7 +124,6 @@ const obtenerRoles = async () => {
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: nuevoEstado ? "#3085d6" : "#d33",
-      cancelButtonColor: "#6c757d",
       confirmButtonText: `Sí, ${accion}!`,
       cancelButtonText: "Cancelar",
     });
@@ -161,7 +159,6 @@ const obtenerRoles = async () => {
           icon: "success",
           title: `${nuevoEstado ? "Activado" : "Desactivado"}!`,
           text: `El rol ha sido ${nuevoEstado ? "activado" : "desactivado"}.`,
-          confirmButtonColor: "#db2777",
         });
       } catch (error) {
         console.error(`Error al ${accion} el rol:`, error);
@@ -169,7 +166,6 @@ const obtenerRoles = async () => {
           icon: "error",
           title: "Error",
           text: `No se pudo ${accion} el rol`,
-          confirmButtonColor: "#db2777",
         });
       }
     }
@@ -188,7 +184,6 @@ const obtenerRoles = async () => {
         icon: "error",
         title: "Acción no permitida",
         text: "No se puede eliminar el rol de Administrador",
-        confirmButtonColor: "#db2777",
       });
       return;
     }
@@ -198,8 +193,7 @@ const obtenerRoles = async () => {
       text: "¡No podrás revertir esto!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
+      confirmButtonColor: "rgb(var(--c-danger))",
       confirmButtonText: "Sí, eliminarlo!",
       cancelButtonText: "Cancelar",
     });
@@ -233,7 +227,6 @@ const obtenerRoles = async () => {
           icon: "success",
           title: "Eliminado!",
           text: "El rol ha sido eliminado.",
-          confirmButtonColor: "#db2777",
         });
       } catch (error) {
         console.error("Error al eliminar el rol:", error);
@@ -241,7 +234,6 @@ const obtenerRoles = async () => {
           icon: "error",
           title: "Error",
           text: error.message || "No se pudo eliminar el rol",
-          confirmButtonColor: "#db2777",
         });
       }
     }
@@ -308,7 +300,6 @@ const obtenerRoles = async () => {
         icon: "error",
         title: "Error",
         text: "No se pudo exportar la lista de roles a Excel",
-        confirmButtonColor: "#db2777",
       });
     } finally {
       setExportando(false);

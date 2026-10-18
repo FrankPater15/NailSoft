@@ -50,7 +50,6 @@ const TablaProductos = () => {
           title: "Error",
           text: "No se encontró el token de autenticación. Por favor, inicia sesión.",
           icon: "error",
-          confirmButtonColor: "#db2777",
         })
         return
       }
@@ -68,7 +67,6 @@ const TablaProductos = () => {
         title: "Error",
         text: "No tienes permiso para estar aquí o tu token no es válido.",
         icon: "error",
-        confirmButtonColor: "#db2777",
       })
     } finally {
       setIsLoading(false)
@@ -96,8 +94,7 @@ const TablaProductos = () => {
       text: "¡No podrás revertir esto!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
+      confirmButtonColor: "rgb(var(--c-danger))",
       confirmButtonText: "Sí, eliminarlo!",
       cancelButtonText: "Cancelar",
     })
@@ -110,7 +107,6 @@ const TablaProductos = () => {
             title: "Error",
             text: "No se encontró el token de autenticación. Por favor, inicia sesión.",
             icon: "error",
-            confirmButtonColor: "#db2777",
           })
           return
         }
@@ -125,7 +121,6 @@ const TablaProductos = () => {
           title: "Eliminado!",
           text: "El producto ha sido eliminado.",
           icon: "success",
-          confirmButtonColor: "#db2777",
         })
       } catch (error) {
         console.error("Error al eliminar el producto:", error)
@@ -133,7 +128,6 @@ const TablaProductos = () => {
           title: "Error",
           text: "No se pudo eliminar el producto.",
           icon: "error",
-          confirmButtonColor: "#db2777",
         })
       }
     }
@@ -149,7 +143,6 @@ const TablaProductos = () => {
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: nuevoEstado ? "#3085d6" : "#d33",
-      cancelButtonColor: "#6c757d",
       confirmButtonText: `Sí, ${accion}!`,
       cancelButtonText: "Cancelar",
     })
@@ -162,7 +155,6 @@ const TablaProductos = () => {
             title: "Error",
             text: "No se encontró el token de autenticación. Por favor, inicia sesión.",
             icon: "error",
-            confirmButtonColor: "#db2777",
           })
           return
         }
@@ -187,7 +179,6 @@ const TablaProductos = () => {
           icon: "success",
           title: `${nuevoEstado ? "Activado" : "Desactivado"}!`,
           text: `El producto ha sido ${nuevoEstado ? "activado" : "desactivado"}.`,
-          confirmButtonColor: "#db2777",
         })
       } catch (error) {
         console.error(`Error al ${accion} el producto:`, error)
@@ -195,7 +186,6 @@ const TablaProductos = () => {
           icon: "error",
           title: "Error",
           text: `No se pudo ${accion} el producto`,
-          confirmButtonColor: "#db2777",
         })
       }
     }
@@ -278,7 +268,6 @@ const TablaProductos = () => {
         title: "Error",
         text: "No se pudo exportar a Excel",
         icon: "error",
-        confirmButtonColor: "#db2777",
       })
     } finally {
       setExportando(false)

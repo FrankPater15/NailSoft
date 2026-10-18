@@ -622,8 +622,6 @@ const CitasEnProgreso = () => {
       text: "Esta acción eliminará la cita permanentemente.",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
       confirmButtonText: "Sí, eliminar",
       cancelButtonText: "Cancelar",
     }).then(async (result) => {

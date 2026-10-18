@@ -147,7 +147,6 @@ const FormularioProducto = ({ producto, onClose, onProductoActualizado }) => {
             icon: "error",
             title: "Error",
             text: "No se encontró el token de autenticación. Por favor, inicia sesión.",
-            confirmButtonColor: "#db2777",
           })
           return
         }
@@ -166,7 +165,6 @@ const FormularioProducto = ({ producto, onClose, onProductoActualizado }) => {
           icon: "error",
           title: "Error",
           text: "No se pudieron cargar las categorías",
-          confirmButtonColor: "#db2777",
         })
       }
     }
@@ -255,7 +253,6 @@ const FormularioProducto = ({ producto, onClose, onProductoActualizado }) => {
         icon: "error",
         title: "Error de validación",
         text: "Por favor corrige los errores en el formulario",
-        confirmButtonColor: "#db2777",
       })
       return
     }
@@ -282,7 +279,6 @@ const FormularioProducto = ({ producto, onClose, onProductoActualizado }) => {
           icon: "error",
           title: "Error",
           text: "No se encontró el token de autenticación. Por favor, inicia sesión.",
-          confirmButtonColor: "#db2777",
         })
         return
       }
@@ -300,7 +296,6 @@ const FormularioProducto = ({ producto, onClose, onProductoActualizado }) => {
           icon: "success",
           title: "¡Éxito!",
           text: "Producto actualizado correctamente",
-          confirmButtonColor: "#db2777",
         })
       } else {
         await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/productos`, data, config)
@@ -308,7 +303,6 @@ const FormularioProducto = ({ producto, onClose, onProductoActualizado }) => {
           icon: "success",
           title: "¡Éxito!",
           text: "Producto creado correctamente",
-          confirmButtonColor: "#db2777",
         })
       }
 
@@ -328,7 +322,6 @@ const FormularioProducto = ({ producto, onClose, onProductoActualizado }) => {
         icon: "error",
         title: "Error",
         text: errorMessage,
-        confirmButtonColor: "#db2777",
       })
     } finally {
       setLoading(false)

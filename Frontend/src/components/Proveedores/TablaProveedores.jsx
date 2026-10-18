@@ -48,7 +48,6 @@ const TablaProveedores = () => {
           title: "Error",
           text: "No se encontró el token de autenticación. Por favor, inicia sesión.",
           icon: "error",
-          confirmButtonColor: "#db2777",
         })
         return
       }
@@ -109,7 +108,6 @@ const TablaProveedores = () => {
         title: "Error",
         text: errorMessage,
         icon: "error",
-        confirmButtonColor: "#db2777",
       })
     } finally {
       setIsLoading(false)
@@ -137,8 +135,7 @@ const TablaProveedores = () => {
       text: "¡No podrás revertir esto!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
+      confirmButtonColor: "rgb(var(--c-danger))",
       confirmButtonText: "Sí, eliminarlo!",
       cancelButtonText: "Cancelar",
     })
@@ -151,7 +148,6 @@ const TablaProveedores = () => {
             title: "Error",
             text: "No se encontró el token de autenticación. Por favor, inicia sesión.",
             icon: "error",
-            confirmButtonColor: "#db2777",
           })
           return
         }
@@ -166,7 +162,6 @@ const TablaProveedores = () => {
           title: "Eliminado!",
           text: "El proveedor ha sido eliminado.",
           icon: "success",
-          confirmButtonColor: "#db2777",
         })
       } catch (error) {
         console.error("Error al eliminar el proveedor:", error)
@@ -174,7 +169,6 @@ const TablaProveedores = () => {
           title: "Error",
           text: "No se pudo eliminar el proveedor.",
           icon: "error",
-          confirmButtonColor: "#db2777",
         })
       }
     }
@@ -190,7 +184,6 @@ const TablaProveedores = () => {
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: nuevoEstado ? "#3085d6" : "#d33",
-      cancelButtonColor: "#6c757d",
       confirmButtonText: `Sí, ${accion}!`,
       cancelButtonText: "Cancelar",
     })
@@ -203,7 +196,6 @@ const TablaProveedores = () => {
             title: "Error",
             text: "No se encontró el token de autenticación. Por favor, inicia sesión.",
             icon: "error",
-            confirmButtonColor: "#db2777",
           })
           return
         }
@@ -260,7 +252,6 @@ const TablaProveedores = () => {
           icon: "success",
           title: `${nuevoEstado ? "Activado" : "Desactivado"}!`,
           text: `El proveedor ha sido ${nuevoEstado ? "activado" : "desactivado"}.`,
-          confirmButtonColor: "#db2777",
         })
       } catch (error) {
         console.error(`❌ Error completo al ${accion} el proveedor:`, {
@@ -300,7 +291,6 @@ const TablaProveedores = () => {
           icon: "error",
           title: "Error",
           text: errorMessage,
-          confirmButtonColor: "#db2777",
         })
       }
     }
@@ -383,7 +373,6 @@ const TablaProveedores = () => {
         title: "Error",
         text: "No se pudo exportar a Excel",
         icon: "error",
-        confirmButtonColor: "#db2777",
       })
     } finally {
       setExportando(false)
@@ -397,7 +386,6 @@ const TablaProveedores = () => {
         title: "Sin datos",
         text: "No hay proveedores para imprimir",
         icon: "warning",
-        confirmButtonColor: "#db2777",
       })
       return
     }

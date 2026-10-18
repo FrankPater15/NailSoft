@@ -413,7 +413,6 @@ const AgendaEmpleado = () => {
           title: "Error de Autenticación",
           text: "No se encontró un token de autenticación válido",
           icon: "error",
-          confirmButtonColor: "#8b5cf6",
         })
         return
       }
@@ -433,7 +432,6 @@ const AgendaEmpleado = () => {
         title: "Error",
         text: mensaje,
         icon: "error",
-        confirmButtonColor: "#8b5cf6",
       })
     }
   }
@@ -538,7 +536,6 @@ const AgendaEmpleado = () => {
         title: "Error",
         text: mensaje,
         icon: "error",
-        confirmButtonColor: "#8b5cf6",
       })
     } finally {
       setIsLoading(false)
@@ -614,7 +611,6 @@ const AgendaEmpleado = () => {
           title: "Error",
           text: "No se encontró un token de autenticación",
           icon: "error",
-          confirmButtonColor: "#8b5cf6",
         })
         return
       }
@@ -638,7 +634,6 @@ const AgendaEmpleado = () => {
           title: "Error",
           text: "Formato de respuesta inválido al verificar ventas",
           icon: "error",
-          confirmButtonColor: "#8b5cf6",
         })
         return
       }
@@ -660,7 +655,6 @@ const AgendaEmpleado = () => {
         title: "Error",
         text: mensaje,
         icon: "error",
-        confirmButtonColor: "#8b5cf6",
       })
     }
   }

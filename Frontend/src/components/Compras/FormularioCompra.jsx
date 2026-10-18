@@ -219,7 +219,6 @@ const FormularioCompra = ({ compra, onClose, onSuccess }) => {
           icon: "error",
           title: "Error",
           text: errorMessage,
-          confirmButtonColor: "#db2777",
         })
         setProveedores([])
         setInsumos([])
@@ -267,7 +266,6 @@ const FormularioCompra = ({ compra, onClose, onSuccess }) => {
         icon: "warning",
         title: "Advertencia",
         text: "Debes seleccionar un insumo antes de agregar.",
-        confirmButtonColor: "#db2777",
       })
       return
     }
@@ -278,7 +276,6 @@ const FormularioCompra = ({ compra, onClose, onSuccess }) => {
         icon: "error",
         title: "Error",
         text: "Insumo no encontrado.",
-        confirmButtonColor: "#db2777",
       })
       return
     }
@@ -288,7 +285,6 @@ const FormularioCompra = ({ compra, onClose, onSuccess }) => {
         icon: "warning",
         title: "Advertencia",
         text: "Este insumo ya fue agregado.",
-        confirmButtonColor: "#db2777",
       })
       return
     }
@@ -400,7 +396,6 @@ const FormularioCompra = ({ compra, onClose, onSuccess }) => {
         icon: "error",
         title: "Error de validación",
         text: "Por favor corrija los errores en el formulario",
-        confirmButtonColor: "#db2777",
       })
       return
     }
@@ -429,7 +424,6 @@ const FormularioCompra = ({ compra, onClose, onSuccess }) => {
           icon: "error",
           title: "Error",
           text: "No se encontró el token de autenticación. Por favor, inicia sesión.",
-          confirmButtonColor: "#db2777",
         })
         return
       }
@@ -445,7 +439,6 @@ const FormularioCompra = ({ compra, onClose, onSuccess }) => {
           icon: "success",
           title: "¡Éxito!",
           text: "Compra actualizada correctamente",
-          confirmButtonColor: "#db2777",
         })
       } else {
         response = await axios.post(apiUrl, compraData, config)
@@ -453,7 +446,6 @@ const FormularioCompra = ({ compra, onClose, onSuccess }) => {
           icon: "success",
           title: "¡Éxito!",
           text: "Compra creada correctamente",
-          confirmButtonColor: "#db2777",
         })
       }
 
@@ -474,7 +466,6 @@ const FormularioCompra = ({ compra, onClose, onSuccess }) => {
         icon: "error",
         title: "Error",
         text: errorMessage,
-        confirmButtonColor: "#db2777",
       })
     } finally {
       setLoading(false)

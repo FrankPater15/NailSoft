@@ -228,7 +228,6 @@ const UserProfile = () => {
           icon: "error",
           title: "Error",
           text: "Todos los campos son obligatorios",
-          confirmButtonColor: "#db2777",
         })
         return
       }
@@ -265,7 +264,6 @@ const UserProfile = () => {
           icon: "success",
           title: "Actualización Exitosa",
           text: "Perfil actualizado exitosamente!",
-          confirmButtonColor: "#db2777",
         }).then(() => {
           // Desplazar hacia arriba después de cerrar la alerta
           scrollToTop()
@@ -334,7 +332,6 @@ const UserProfile = () => {
         icon: "error",
         title: "Error",
         text: errorMessage,
-        confirmButtonColor: "#db2777",
       }).then(() => {
         // Desplazar hacia arriba después de cerrar la alerta
         scrollToTop()

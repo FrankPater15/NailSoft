@@ -48,7 +48,6 @@ const TablaCompras = () => {
           title: "Error",
           text: "No se encontró el token de autenticación. Por favor, inicia sesión.",
           icon: "error",
-          confirmButtonColor: "#db2777",
         })
         return
       }
@@ -68,7 +67,6 @@ const TablaCompras = () => {
         title: "Error",
         text: "No tienes permiso para estar aquí o tu token no es válido.",
         icon: "error",
-        confirmButtonColor: "#db2777",
       })
       // Inicializar con array vacío en caso de error
       setCompras([])
@@ -108,8 +106,7 @@ const TablaCompras = () => {
       text: "¡No podrás revertir esto!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
+      confirmButtonColor: "rgb(var(--c-danger))",
       confirmButtonText: "Sí, eliminarla!",
       cancelButtonText: "Cancelar",
     })
@@ -122,7 +119,6 @@ const TablaCompras = () => {
             title: "Error",
             text: "No se encontró el token de autenticación. Por favor, inicia sesión.",
             icon: "error",
-            confirmButtonColor: "#db2777",
           })
           return
         }
@@ -137,7 +133,6 @@ const TablaCompras = () => {
           title: "Eliminado!",
           text: "La compra ha sido eliminada.",
           icon: "success",
-          confirmButtonColor: "#db2777",
         })
       } catch (error) {
         console.error("Error al eliminar la compra:", error)
@@ -145,7 +140,6 @@ const TablaCompras = () => {
           title: "Error",
           text: "No se pudo eliminar la compra.",
           icon: "error",
-          confirmButtonColor: "#db2777",
         })
       }
     }
@@ -233,7 +227,6 @@ const TablaCompras = () => {
         title: "Error",
         text: "No se pudo exportar a Excel",
         icon: "error",
-        confirmButtonColor: "#db2777",
       })
     } finally {
       setExportando(false)

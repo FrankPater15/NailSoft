@@ -72,7 +72,6 @@ const FormularioRol = ({ rolSeleccionado, onRolActualizado, onClose }) => {
             icon: "error",
             title: "Error de autenticación",
             text: "Tu sesión ha expirado. Por favor, vuelve a iniciar sesión.",
-            confirmButtonColor: "#db2777",
           });
         }
       } finally {
@@ -120,7 +119,6 @@ const FormularioRol = ({ rolSeleccionado, onRolActualizado, onClose }) => {
         title: "Nombre no válido",
         text: "El nombre del rol debe tener entre 5 y 20 caracteres y solo contener letras y espacios.",
         confirmButtonText: "Entendido",
-        confirmButtonColor: "#db2777",
       });
       setEnviando(false);
       return;
@@ -132,7 +130,6 @@ const FormularioRol = ({ rolSeleccionado, onRolActualizado, onClose }) => {
         title: "Advertencia",
         text: "Debes seleccionar al menos un permiso para el rol",
         confirmButtonText: "Entendido",
-        confirmButtonColor: "#db2777",
       });
       setEnviando(false);
       return;
@@ -176,7 +173,6 @@ const FormularioRol = ({ rolSeleccionado, onRolActualizado, onClose }) => {
             title: "Sesión reiniciada",
             text: "Has editado el rol asociado a tu cuenta. Por seguridad, es necesario volver a iniciar sesión.",
             confirmButtonText: "Cerrar sesión",
-            confirmButtonColor: "#db2777",
           }).then(() => {
             localStorage.clear();
             window.location.href = "/login";
@@ -191,7 +187,6 @@ const FormularioRol = ({ rolSeleccionado, onRolActualizado, onClose }) => {
             ? "Rol actualizado exitosamente"
             : "Rol creado exitosamente",
           confirmButtonText: "Ok",
-          confirmButtonColor: "#db2777",
         });
 
         if (onRolActualizado) onRolActualizado();
@@ -209,7 +204,6 @@ const FormularioRol = ({ rolSeleccionado, onRolActualizado, onClose }) => {
           icon: "error",
           title: "Error",
           text: mensageError,
-          confirmButtonColor: "#db2777",
         });
       }
     } catch (error) {
@@ -217,7 +211,6 @@ const FormularioRol = ({ rolSeleccionado, onRolActualizado, onClose }) => {
         icon: "error",
         title: "Error en la solicitud",
         text: error.message,
-        confirmButtonColor: "#db2777",
       });
     } finally {
       setEnviando(false);

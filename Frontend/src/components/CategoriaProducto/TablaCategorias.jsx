@@ -45,7 +45,6 @@ const TablaCategorias = () => {
         title: "Error",
         text: "No se encontró el token de autenticación. Por favor, inicia sesión.",
         icon: "error",
-        confirmButtonColor: "#db2777",
       });
       setIsLoading(false);
       return;
@@ -70,7 +69,6 @@ const TablaCategorias = () => {
         title: "Error",
         text: "No tienes permiso para estar aquí. Tu token no es válido.",
         icon: "error",
-        confirmButtonColor: "#db2777",
       });
     } finally {
       setIsLoading(false);
@@ -103,8 +101,7 @@ const TablaCategorias = () => {
       text: "¡No podrás revertir esto!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
+      confirmButtonColor: "rgb(var(--c-danger))",
       confirmButtonText: "Sí, eliminarlo!",
       cancelButtonText: "Cancelar",
     });
@@ -116,7 +113,6 @@ const TablaCategorias = () => {
           title: "Error",
           text: "No se encontró el token de autenticación. Por favor, inicia sesión.",
           icon: "error",
-          confirmButtonColor: "#db2777",
         });
         return;
       }
@@ -135,7 +131,6 @@ const TablaCategorias = () => {
           title: "Eliminado!",
           text: "La categoría ha sido eliminada.",
           icon: "success",
-          confirmButtonColor: "#db2777",
         });
       } catch (error) {
         console.error("Error al eliminar la categoría:", error);
@@ -143,7 +138,6 @@ const TablaCategorias = () => {
           title: "Error",
           text: "No se pudo eliminar la categoría.",
           icon: "error",
-          confirmButtonColor: "#db2777",
         });
       }
     }
@@ -159,7 +153,6 @@ const TablaCategorias = () => {
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: nuevoEstado ? "#3085d6" : "#d33",
-      cancelButtonColor: "#6c757d",
       confirmButtonText: `Sí, ${accion}!`,
       cancelButtonText: "Cancelar",
     });
@@ -171,7 +164,6 @@ const TablaCategorias = () => {
           title: "Error",
           text: "No se encontró el token de autenticación. Por favor, inicia sesión.",
           icon: "error",
-          confirmButtonColor: "#db2777",
         });
         return;
       }
@@ -207,7 +199,6 @@ const TablaCategorias = () => {
           text: `La categoría ha sido ${
             nuevoEstado ? "activada" : "desactivada"
           }.`,
-          confirmButtonColor: "#db2777",
         });
       } catch (error) {
         console.error(`Error al ${accion} la categoría:`, error);
@@ -215,7 +206,6 @@ const TablaCategorias = () => {
           icon: "error",
           title: "Error",
           text: `No se pudo ${accion} la categoría`,
-          confirmButtonColor: "#db2777",
         });
       }
     }
