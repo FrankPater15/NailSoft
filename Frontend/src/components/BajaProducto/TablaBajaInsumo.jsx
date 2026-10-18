@@ -202,9 +202,9 @@ const TablaBajaInsumo = () => {
 
   return (
     <div className="content">
-      <h2 className="text-3xl font-semibold mb-6 text-foreground px-4 pt-4">Bajas de Insumos</h2>
+      <h2 className="pagina-titulo">Bajas de Insumos</h2>
 
-      <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 px-4">
+      <div className="pagina-acciones">
         <div className="flex space-x-2">
           <button
             className="btn-export"
@@ -233,14 +233,14 @@ const TablaBajaInsumo = () => {
         </div>
       </div>
 
-      <div className="overflow-x-auto bg-white rounded-lg shadow mx-4 mx-auto">
+      <div className="tabla-contenedor">
         <table className="universal-tabla-moderna w-full">
-          <thead className="bg-pink-200 text-black dark:card-gradient-4">
+          <thead className="tabla-cabecera">
             <tr className="text-foreground">
-              <th className="dark:hover:bg-gray-500/50" style={{ width: "25%" }}>Insumo</th>
-              <th className="dark:hover:bg-gray-500/50" style={{ width: "25%" }}>Fecha de Baja</th>
-              <th className="dark:hover:bg-gray-500/50" style={{ width: "25%" }}>Cantidad</th>
-              <th className="dark:hover:bg-gray-500/50" style={{ width: "25%" }}>Observaciones</th>
+              <th style={{ width: "25%" }}>Insumo</th>
+              <th style={{ width: "25%" }}>Fecha de Baja</th>
+              <th style={{ width: "25%" }}>Cantidad</th>
+              <th style={{ width: "25%" }}>Observaciones</th>
             </tr>
           </thead>
           <tbody className="dark:bg-zinc-900/80">

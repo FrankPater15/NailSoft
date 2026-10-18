@@ -229,9 +229,9 @@ const TablaEmpleados = () => {
 
   return (
     <div className="content">
-      <h2 className="text-3xl font-semibold mb-6 text-foreground px-4 pt-4">Gestión de Empleados</h2>
+      <h2 className="pagina-titulo">Gestión de Empleados</h2>
 
-      <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 px-4">
+      <div className="pagina-acciones">
         <button
           className="btn-add"
           onClick={() => {
@@ -255,23 +255,23 @@ const TablaEmpleados = () => {
         </div>
       </div>
 
-      <div className="overflow-x-auto rounded-lg shadow mx-auto w-full">
+      <div className="tabla-contenedor">
         <table className="universal-tabla-moderna w-full">
-          <thead className="bg-pink-200 dark:card-gradient-4">
+          <thead className="tabla-cabecera">
             <tr className="text-foreground">
-              <th onClick={() => handleSort("nombreempleado")} className="cursor-pointer dark:hover:bg-gray-500/50">
+              <th onClick={() => handleSort("nombreempleado")} className="cursor-pointer">
                 Nombre {getSortIcon("nombreempleado")}
               </th>
-              <th onClick={() => handleSort("apellidoempleado")} className="cursor-pointer dark:hover:bg-gray-500/50">
+              <th onClick={() => handleSort("apellidoempleado")} className="cursor-pointer">
                 Apellido {getSortIcon("apellidoempleado")}
               </th>
-              <th onClick={() => handleSort("correoempleado")} className="cursor-pointer dark:hover:bg-gray-500/50">
+              <th onClick={() => handleSort("correoempleado")} className="cursor-pointer">
                 Correo {getSortIcon("correoempleado")}
               </th>
-              <th onClick={() => handleSort("telefonoempleado")} className="cursor-pointer dark:hover:bg-gray-500/50">
+              <th onClick={() => handleSort("telefonoempleado")} className="cursor-pointer">
                 Teléfono {getSortIcon("telefonoempleado")}
               </th>
-              <th className="dark:hover:bg-gray-500/50">Estado</th>
+              <th>Estado</th>
               <th className="dark:hover:bg-gray-500/50 text-foreground">Acciones</th>
             </tr>
           </thead>
@@ -285,7 +285,7 @@ const TablaEmpleados = () => {
                   <td>{empleado.telefonoempleado}</td>
                   <td>
                     <span
-                      className={`universal-estado-badge ${empleado.estadoempleado ? "activo bg-emerald-500/50 dark:bg-emerald-500" : "inactivo bg-red-500/80"}`}
+                      className={`universal-estado-badge ${empleado.estadoempleado ? "activo" : "inactivo"}`}
                     >
                       {empleado.estadoempleado ? "Activo" : "Inactivo"}
                     </span>
@@ -293,14 +293,14 @@ const TablaEmpleados = () => {
                   <td>
                     <div className="flex space-x-2 center">
                       <button
-                        className="btn-edit-1 dark:bg-indigo-900/50 dark:hover:bg-indigo-800/90"
+                        className="btn-edit-1"
                         onClick={() => abrirFormulario(empleado)}
                         title="Editar"
                       >
                         <FontAwesomeIcon icon={faEdit} />
                       </button>
                       <button
-                        className="btn-delete-1 dark:bg-rose-950/100 dark:hover:bg-rose-800/90"
+                        className="btn-delete-1"
                         onClick={() => manejarEliminarEmpleado(empleado._id)}
                         title="Eliminar"
                       >

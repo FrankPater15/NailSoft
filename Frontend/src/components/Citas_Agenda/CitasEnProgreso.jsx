@@ -680,7 +680,7 @@ const CitasEnProgreso = () => {
   // Mostrar indicador de carga mientras se cargan los datos
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-[64vh] dark:bg-primary">
+      <div className="flex justify-center items-center h-[64vh]">
         <div className="flex flex-col items-center">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pink-500"></div>
           <p className="mt-4 text-foreground">Cargando citas en progreso...</p>
@@ -844,7 +844,7 @@ const CitasEnProgreso = () => {
           })}
         </div>
       ) : (
-        <div className="dark:bg-primary p-6 rounded-lg text-center">
+        <div className="p-6 rounded-lg text-center">
           <FaExclamationTriangle className="inline-block text-yellow-500 text-4xl mb-2" />
           <p className="text-gray-500">No hay citas activas en este momento</p>
         </div>

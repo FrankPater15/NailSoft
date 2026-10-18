@@ -361,9 +361,9 @@ const TablaCompras = () => {
 
   return (
     <div className="content">
-      <h2 className="text-3xl font-semibold mb-6 text-foreground px-4 pt-4">Gestión de Compras</h2>
+      <h2 className="pagina-titulo">Gestión de Compras</h2>
 
-      <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 px-4">
+      <div className="pagina-acciones">
         <div className="flex space-x-2">
           <button
             className="btn-add"
@@ -412,17 +412,17 @@ const TablaCompras = () => {
         </div>
       </div>
 
-      <div className="overflow-x-auto bg-white rounded-lg shadow mx-4 mx-auto">
+      <div className="tabla-contenedor">
         <table className="universal-tabla-moderna w-full ">
-          <thead className="bg-pink-200 text-black dark:card-gradient-4">
+          <thead className="tabla-cabecera">
             <tr className="text-foreground">
-              <th className="dark:hover:bg-gray-500/50" style={{ width: "15%" }}>Proveedor</th>
-              <th className="dark:hover:bg-gray-500/50" style={{ width: "15%" }}>Recibo</th>
-              <th className="dark:hover:bg-gray-500/50" style={{ width: "15%" }}>Fecha Compra</th>
-              <th className="dark:hover:bg-gray-500/50" style={{ width: "15%" }}>Fecha Registro</th>
-              <th className="dark:hover:bg-gray-500/50" style={{ width: "10%" }}>Monto</th>
-              <th className="dark:hover:bg-gray-500/50" style={{ width: "10%" }}>Insumos</th>
-              <th className="dark:hover:bg-gray-500/50" style={{ width: "20%" }}>Acciones</th>
+              <th style={{ width: "15%" }}>Proveedor</th>
+              <th style={{ width: "15%" }}>Recibo</th>
+              <th style={{ width: "15%" }}>Fecha Compra</th>
+              <th style={{ width: "15%" }}>Fecha Registro</th>
+              <th style={{ width: "10%" }}>Monto</th>
+              <th style={{ width: "10%" }}>Insumos</th>
+              <th style={{ width: "20%" }}>Acciones</th>
             </tr>
           </thead>
           <tbody className="dark:bg-zinc-900/80">
@@ -437,14 +437,14 @@ const TablaCompras = () => {
                   <td>{compra.insumos ? compra.insumos.length : 0} insumos</td>
                   <td>
                     <div className="flex space-x-2 center">
-                      <button className="btn-edit-1 dark:bg-indigo-900/50 dark:hover:bg-indigo-800/90" onClick={() => abrirFormulario(compra)} title="Editar compra">
+                      <button className="btn-edit-1" onClick={() => abrirFormulario(compra)} title="Editar compra">
                         <FontAwesomeIcon icon={faEdit} />
                       </button>
                       <button className="btn-info-1" onClick={() => abrirDetalles(compra)} title="Ver detalles">
                         <FontAwesomeIcon icon={faEye} />
                       </button>
                       <button
-                        className="btn-delete-1  dark:bg-rose-950/100 dark:hover:bg-rose-800/90"
+                        className="btn-delete-1"
                         onClick={() => manejarEliminarCompra(compra._id)}
                         title="Eliminar compra"
                       >
@@ -512,7 +512,7 @@ const TablaCompras = () => {
           >
             &times;
           </button>
-          <h2 className="text-2xl font-semibold mb-4 text-center text-pink-600">
+          <h2 className="modal-titulo">
             {compraSeleccionada ? "Actualizar Compra" : "Nueva Compra"}
           </h2>
             <FormularioCompra
@@ -535,7 +535,7 @@ const TablaCompras = () => {
           <button className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-xl" onClick={cerrarDetalles}>
             &times;
           </button>
-          <h2 className="text-2xl font-semibold mb-4 text-center text-pink-600">Detalles de la Compra</h2>
+          <h2 className="modal-titulo">Detalles de la Compra</h2>
 
           {compraSeleccionada ? (
             <div className="p-4 ">

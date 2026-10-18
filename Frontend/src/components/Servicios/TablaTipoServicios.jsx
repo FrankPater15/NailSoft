@@ -222,7 +222,7 @@ export default function TablaTipoServicios() {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-[64vh] dark:bg-primary">
+      <div className="flex justify-center items-center h-[64vh]">
         <div className="flex flex-col items-center">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pink-500"></div>
           <p className="mt-4 text-gray-600">Cargando tipos de descuentos...</p>
@@ -254,11 +254,11 @@ export default function TablaTipoServicios() {
 
   return (
     <div className="content">
-      <h2 className="text-3xl font-semibold mb-8  px-4 pt-4 text-foreground">
+      <h2 className="pagina-titulo">
         Gestión de Descuentos
       </h2>
 
-      <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 px-4">
+      <div className="pagina-acciones">
         <div className="flex space-x-2">
           <button className="btn-add" onClick={manejarAgregarNuevo}>
             <FontAwesomeIcon icon={faPlus} className="mr-2" />
@@ -278,17 +278,17 @@ export default function TablaTipoServicios() {
         </div>
       </div>
 
-      <div className="overflow-x-auto rounded-lg shadow mx-auto">
+      <div className="tabla-contenedor">
         <table
           className="universal-tabla-moderna w-full"
           style={{ width: "100%", tableLayout: "fixed" }}
         >
-          <thead className="bg-pink-200 dark:card-gradient-4 ">
+          <thead className="tabla-cabecera">
             <tr className="text-foreground">
-              <th className="dark:hover:bg-gray-500/50">Nombre</th>
-              <th className="dark:hover:bg-gray-500/50">Descuento</th>
-              <th className="dark:hover:bg-gray-500/50">Tipo</th>
-              <th className="dark:hover:bg-gray-500/50">Estado</th>
+              <th>Nombre</th>
+              <th>Descuento</th>
+              <th>Tipo</th>
+              <th>Estado</th>
               <th className="dark:hover:bg-gray-500/50 text-foreground">
                 Acciones
               </th>
@@ -326,8 +326,8 @@ export default function TablaTipoServicios() {
                     <span
                       className={`universal-estado-badge text-foreground ${
                         tipoServicio.activo
-                          ? "activo bg-emerald-300/70 dark:bg-emerald-500"
-                          : "inactivo bg-red-500/80"
+                          ? "activo"
+                          : "inactivo"
                       }`}
                     >
                       {tipoServicio.activo ? "Activo" : "Inactivo"}
@@ -336,7 +336,7 @@ export default function TablaTipoServicios() {
                   <td>
                     <div className="flex space-x-2 center">
                       <button
-                        className="btn-edit-1 dark:bg-indigo-900/50 dark:hover:bg-indigo-800/90"
+                        className="btn-edit-1"
                         onClick={() => manejarEditar(tipoServicio)}
                         title="Editar"
                       >
@@ -344,7 +344,7 @@ export default function TablaTipoServicios() {
                       </button>
 
                       <button
-                        className="btn-delete-1 dark:bg-rose-950/100 dark:hover:bg-rose-800/90"
+                        className="btn-delete-1"
                         onClick={() => manejarEliminar(tipoServicio._id)}
                         title="Eliminar"
                       >

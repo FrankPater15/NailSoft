@@ -61,7 +61,7 @@ const Dashboard = () => {
               Citas del Día
             </button>
           </div>
-          <div className="flex items-center gap-2 dark:bg-primary dark:hover:bg-pink-600">
+          <div className="flex items-center gap-2">
             <Button size="sm" variant="outline" className="h-8 gap-1 border-fancy">
               <Download className="h-4 w-4 dark:text-white" />
               <span className="hidden sm:inline dark:text-white">Exportar</span>

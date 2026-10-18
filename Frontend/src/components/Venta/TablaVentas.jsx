@@ -576,7 +576,7 @@ const TablaVentas = () => {
 
   return (
     <div className="content">
-      <h2 className="text-3xl font-semibold mb-8 text-foreground px-4 pt-4">
+      <h2 className="pagina-titulo">
         Gestión de Ventas
       </h2>
 
@@ -658,17 +658,17 @@ const TablaVentas = () => {
         </div>
       </div>
 
-      <div className="overflow-x-auto bg-white rounded-lg shadow mx-auto">
+      <div className="tabla-contenedor">
         <table className="universal-tabla-moderna w-full">
-          <thead className="bg-pink-200 text-black dark:card-gradient-4">
+          <thead className="tabla-cabecera">
             <tr className="text-foreground">
-              <th className="dark:hover:bg-gray-500/50">Código</th>
-              <th className="dark:hover:bg-gray-500/50">Cliente</th>
-              <th className="dark:hover:bg-gray-500/50">Tipo</th>
-              <th className="dark:hover:bg-gray-500/50">Fecha</th>
-              <th className="dark:hover:bg-gray-500/50">Total</th>
-              <th className="dark:hover:bg-gray-500/50">Estado</th>
-              <th className="dark:hover:bg-gray-500/50">Acciones</th>
+              <th>Código</th>
+              <th>Cliente</th>
+              <th>Tipo</th>
+              <th>Fecha</th>
+              <th>Total</th>
+              <th>Estado</th>
+              <th>Acciones</th>
             </tr>
           </thead>
           <tbody className="dark:bg-zinc-900/80">
@@ -715,8 +715,8 @@ const TablaVentas = () => {
                     <span
                       className={`universal-estado-badge ${
                         venta.estado
-                          ? "activo bg-emerald-500/50 dark:bg-emerald-500"
-                          : "inactivo bg-red-500/80"
+                          ? "activo"
+                          : "inactivo"
                       }`}
                     >
                       {venta.estado ? "Completada" : "Pendiente"}
@@ -822,7 +822,7 @@ const TablaVentas = () => {
           >
             &times;
           </button>
-          <h2 className="text-2xl font-semibold mb-6 text-center text-pink-600">
+          <h2 className="modal-titulo">
             {ventaSeleccionada ? "Editar Venta" : "Agregar Nueva Venta"}
           </h2>
           <FormularioVenta
@@ -847,7 +847,7 @@ const TablaVentas = () => {
           >
             &times;
           </button>
-          <h2 className="text-2xl font-semibold mb-6 text-center text-pink-600">
+          <h2 className="modal-titulo">
             Detalles de la Venta
           </h2>
           {detallesVenta && (

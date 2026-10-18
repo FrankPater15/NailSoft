@@ -560,9 +560,9 @@ const TablaInsumos = () => {
 
   return (
     <div className="content">
-      <h2 className="text-3xl font-semibold mb-6 text-foreground px-4 pt-4">Gestión de Insumos</h2>
+      <h2 className="pagina-titulo">Gestión de Insumos</h2>
 
-      <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 px-4">
+      <div className="pagina-acciones">
         <div className="flex space-x-2">
           <button
             className="btn-add"
@@ -611,9 +611,9 @@ const TablaInsumos = () => {
         </div>
       </div>
 
-      <div className="overflow-x-auto bg-white rounded-lg shadow mx-4 mx-auto">
+      <div className="tabla-contenedor">
         <table className="universal-tabla-moderna w-full">
-          <thead className="bg-pink-200 text-black dark:card-gradient-4">
+          <thead className="tabla-cabecera">
             <tr className="text-foreground">
               <th className="dark:bg-gray-500/50" style={{ width: "20%" }}>
                 Nombre del Insumo
@@ -642,7 +642,7 @@ const TablaInsumos = () => {
                   <td>
                     <span
                       className={`universal-estado-badge ${
-                        insumo.estado ? "activo bg-emerald-300/70 dark:bg-emerald-500" : "inactivo bg-red-500/80"
+                        insumo.estado ? "activo" : "inactivo"
                       }`}
                     >
                       {insumo.estado ? "Disponible" : "No disponible"}
@@ -651,7 +651,7 @@ const TablaInsumos = () => {
                   <td>
                     <div className="flex justify-center space-x-2">
                       <button
-                        className="btn-edit-1 dark:bg-indigo-900/50 dark:hover:bg-indigo-800/90"
+                        className="btn-edit-1"
                         onClick={() => abrirFormulario(insumo)}
                         title="Editar insumo"
                       >
@@ -661,7 +661,7 @@ const TablaInsumos = () => {
                         <FontAwesomeIcon icon={faArrowDown} />
                       </button>
                       <button
-                        className="btn-delete-1 dark:bg-rose-950/100 dark:hover:bg-rose-800/90"
+                        className="btn-delete-1"
                         onClick={() => manejarEliminarInsumo(insumo._id)}
                         title="Eliminar insumo"
                       >
@@ -743,7 +743,7 @@ const TablaInsumos = () => {
           >
             &times;
           </button>
-          <h2 className="text-2xl font-semibold mb-4 text-center text-pink-600">
+          <h2 className="modal-titulo">
             {insumoSeleccionado ? "Actualizar Insumo" : "Nuevo Insumo"}
           </h2>
           <FormularioInsumo
@@ -768,7 +768,7 @@ const TablaInsumos = () => {
           >
             &times;
           </button>
-          <h2 className="text-2xl font-semibold mb-4 text-center text-pink-600">Dar de Baja Insumo</h2>
+          <h2 className="modal-titulo">Dar de Baja Insumo</h2>
           <FormularioBajaInsumo insumo={insumoSeleccionado} onClose={cerrarModalBaja} onSubmit={manejarBajaInsumo} />
         </div>
       </Modal>

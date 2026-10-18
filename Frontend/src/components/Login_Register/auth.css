@@ -1,0 +1,287 @@
+/* Pantallas de acceso: iniciar sesión, registro y recuperación de contraseña */
+.auth {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  min-height: 100vh;
+  background: rgb(var(--c-surface));
+}
+
+/* Lado del formulario */
+.auth-lado-form {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem clamp(1.5rem, 5vw, 4.5rem);
+}
+.auth-marca {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  align-self: flex-start;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: rgb(var(--c-ink));
+  text-decoration: none;
+}
+.auth-marca-una {
+  width: 1.125rem;
+  height: 1.5rem;
+  background: rgb(var(--c-primary));
+  box-shadow:
+    inset -2px -3px 0 rgb(0 0 0 / 0.18),
+    inset 2px 2px 0 rgb(255 255 255 / 0.28);
+}
+.auth-form {
+  width: 100%;
+  max-width: 24rem;
+  margin: auto 0;
+  padding: 3rem 0;
+}
+.auth-titulo {
+  margin: 0 0 0.5rem;
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+.auth-descripcion {
+  margin: 0 0 2rem;
+  color: rgb(var(--c-ink-soft));
+}
+.auth-legal {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: rgb(var(--c-ink-faint));
+}
+
+/* Campos */
+.auth-campo {
+  margin-bottom: 1.125rem;
+}
+.auth-campo label {
+  display: block;
+  margin-bottom: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgb(var(--c-ink));
+}
+.auth-campo input {
+  display: block;
+  width: 100%;
+  height: 2.875rem;
+  padding: 0 0.875rem;
+  font: inherit;
+  color: rgb(var(--c-ink));
+  background: rgb(var(--c-surface));
+  border: 1px solid rgb(var(--c-line-strong));
+  border-radius: var(--radius);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+.auth-campo input:focus {
+  outline: none;
+  border-color: rgb(var(--c-primary));
+  box-shadow: 0 0 0 3px rgb(var(--c-primary) / 0.15);
+}
+.auth-campo input[aria-invalid="true"] {
+  border-color: rgb(var(--c-danger));
+}
+.auth-campo-ayuda,
+.auth-campo-error {
+  margin: 0.375rem 0 0;
+  font-size: 0.8125rem;
+}
+.auth-campo-ayuda {
+  color: rgb(var(--c-ink-faint));
+}
+.auth-campo-error {
+  color: rgb(var(--c-danger));
+}
+.auth-fila {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 0.875rem;
+}
+
+/* Mensaje de error del formulario */
+.auth-alerta {
+  margin-bottom: 1.25rem;
+  padding: 0.75rem 0.875rem;
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  color: rgb(var(--c-danger));
+  background: rgb(var(--c-danger) / 0.08);
+  border: 1px solid rgb(var(--c-danger) / 0.25);
+}
+.auth-alerta.exito {
+  color: rgb(var(--c-success));
+  background: rgb(var(--c-success) / 0.08);
+  border-color: rgb(var(--c-success) / 0.25);
+}
+
+/* Botón principal */
+.auth-boton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  height: 2.875rem;
+  margin-top: 0.5rem;
+  border: 0;
+  border-radius: var(--radius);
+  font: inherit;
+  font-weight: 600;
+  color: rgb(var(--c-on-primary));
+  background: rgb(var(--c-primary));
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+.auth-boton:hover:not(:disabled) {
+  background: rgb(var(--c-primary-hover));
+}
+.auth-boton:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+.auth-boton-secundario {
+  color: rgb(var(--c-ink));
+  background: rgb(var(--c-surface));
+  border: 1px solid rgb(var(--c-line-strong));
+}
+.auth-boton-secundario:hover:not(:disabled) {
+  background: rgb(var(--c-surface-2));
+}
+.auth-cargando {
+  width: 1.125rem;
+  height: 1.125rem;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 999px;
+  animation: auth-girar 0.7s linear infinite;
+}
+@keyframes auth-girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Enlaces bajo el formulario */
+.auth-pie {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  margin-top: 1.5rem;
+  font-size: 0.875rem;
+  color: rgb(var(--c-ink-soft));
+}
+.auth-pie a,
+.auth-enlace {
+  color: rgb(var(--c-primary-ink));
+  font-weight: 500;
+  text-decoration: none;
+}
+.auth-pie a:hover,
+.auth-enlace:hover {
+  text-decoration: underline;
+}
+
+/* Código de verificación de 6 dígitos */
+.auth-codigo {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+.auth-codigo input {
+  width: 100%;
+  min-width: 0;
+  height: 3.25rem;
+  padding: 0;
+  text-align: center;
+  font: inherit;
+  font-size: 1.375rem;
+  font-weight: 600;
+  color: rgb(var(--c-ink));
+  background: rgb(var(--c-surface));
+  border: 1px solid rgb(var(--c-line-strong));
+  border-radius: var(--radius);
+}
+.auth-codigo input:focus {
+  outline: none;
+  border-color: rgb(var(--c-primary));
+  box-shadow: 0 0 0 3px rgb(var(--c-primary) / 0.15);
+}
+
+/* Lado de marca */
+.auth-lado-marca {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(2rem, 5vw, 4rem);
+  background: rgb(var(--berry-800));
+  color: rgb(var(--berry-50));
+}
+.auth-lema {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  max-width: 11ch;
+  font-size: clamp(2.75rem, 5vw, 4.75rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+.auth-foto {
+  position: absolute;
+  right: 12%;
+  bottom: -6%;
+  width: min(46%, 22rem);
+  aspect-ratio: 3 / 4.4;
+  overflow: hidden;
+  box-shadow: 0 30px 60px -20px rgb(0 0 0 / 0.5);
+}
+.auth-foto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* Una segunda uña, de esmalte nude, junto a la foto */
+.auth-esmalte {
+  position: absolute;
+  right: calc(12% + min(46%, 22rem) - 1.5rem);
+  bottom: 18%;
+  width: min(13%, 6rem);
+  aspect-ratio: 3 / 4.4;
+  background: rgb(var(--nude-300));
+  box-shadow:
+    inset -8px -10px 0 rgb(0 0 0 / 0.12),
+    inset 6px 6px 0 rgb(255 255 255 / 0.35);
+}
+
+@media (max-width: 900px) {
+  .auth {
+    grid-template-columns: 1fr;
+  }
+  .auth-lado-marca {
+    display: none;
+  }
+  .auth-form {
+    margin: 2.5rem 0 auto;
+  }
+}
+@media (max-width: 480px) {
+  .auth-fila {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Enlace con aspecto de texto que ejecuta una acción */
+button.auth-enlace {
+  padding: 0;
+  font: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}

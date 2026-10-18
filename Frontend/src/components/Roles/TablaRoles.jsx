@@ -371,7 +371,7 @@ const obtenerRoles = async () => {
 
   return (
     <div className="content">
-      <h2 className="text-3xl font-semibold mb-8 text-foreground px-4 pt-4">
+      <h2 className="pagina-titulo">
         Gestión de Roles
       </h2>
       
@@ -424,19 +424,19 @@ const obtenerRoles = async () => {
         </div>
       </div>
         
-      <div className="overflow-x-auto rounded-lg shadow  mx-auto">
+      <div className="tabla-contenedor">
         <table
           className="universal-tabla-moderna w-full"
           style={{ width: "100%", tableLayout: "fixed" }}
         >
-          <thead className="bg-pink-200 text-black dark:card-gradient-4">
+          <thead className="tabla-cabecera">
             <tr className="text-foreground">
-              <th className="dark:hover:bg-gray-500/50">Nombre del Rol</th>
-              <th className="dark:hover:bg-gray-500/50">Estado</th>
-              <th className="dark:hover:bg-gray-500/50">Acciones</th>
+              <th>Nombre del Rol</th>
+              <th>Estado</th>
+              <th>Acciones</th>
             </tr>
           </thead>
-          <tbody className="dark:bg-zinc-900/80 text-foreground">
+          <tbody>
             {rolesFiltrados.length > 0 ? (
               rolesFiltrados.map((rol) => (
                 <tr
@@ -448,8 +448,8 @@ const obtenerRoles = async () => {
                     <span
                       className={`universal-estado-badge ${
                         rol.estadoRol
-                          ? "activo bg-emerald-300/70 dark:bg-emerald-500"
-                          : "inactivo bg-red-500/80"
+                          ? "activo"
+                          : "inactivo"
                       }`}
                     >
                       {rol.estadoRol ? "Activo" : "Inactivo"}
@@ -458,7 +458,7 @@ const obtenerRoles = async () => {
                   <td>
                     <div className="flex space-x-2 center">
                       <button
-                        className="btn-edit-1 dark:bg-indigo-900/50 dark:hover:bg-indigo-800/90"
+                        className="btn-edit-1"
                         onClick={() => manejarEditar(rol)}
                         title="Editar rol"
                       >
@@ -466,7 +466,7 @@ const obtenerRoles = async () => {
                       </button>
 
                       <button
-                        className="btn-delete-1 dark:bg-rose-950/100 dark:hover:bg-rose-800/90"
+                        className="btn-delete-1"
                         onClick={() => manejarEliminar(rol._id)}
                         title="Eliminar rol"
                       >
@@ -599,7 +599,7 @@ const obtenerRoles = async () => {
             &times;
           </button>
           <div className="p-6 modal-p">
-            <h2 className="text-2xl font-semibold mb-6 text-center text-pink-600">
+            <h2 className="modal-titulo">
               Detalles del Rol
             </h2>
             {rolSeleccionado &&

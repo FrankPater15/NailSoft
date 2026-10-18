@@ -221,7 +221,7 @@ const TablaClientes = () => {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-[64vh] dark:bg-primary">
+      <div className="flex justify-center items-center h-[64vh]">
         <div className="flex flex-col items-center">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pink-500"></div>
           <p className="mt-4 text-gray-600">Cargando clientes...</p>
@@ -253,11 +253,11 @@ const TablaClientes = () => {
 
   return (
     <div className="content">
-      <h2 className="text-3xl font-semibold mb-6 text-gray-800 px-4 pt-4 dark:text-foreground">
+      <h2 className="pagina-titulo">
         Gestión de Clientes
       </h2>
 
-      <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 px-4">
+      <div className="pagina-acciones">
         <button
           className="btn-add"
           onClick={() => {
@@ -281,9 +281,9 @@ const TablaClientes = () => {
         </div>
       </div>
 
-      <div className="overflow-x-auto rounded-lg shadow mx-auto w-full">
+      <div className="tabla-contenedor">
         <table className="universal-tabla-moderna w-full ">
-          <thead className="bg-pink-200 dark:card-gradient-4">
+          <thead className="tabla-cabecera">
             <tr className="text-foreground">
               <th className="py-3 px-4 text-left font-semibold dark:hover:bg-gray-500/50">
                 Nombre
@@ -322,8 +322,8 @@ const TablaClientes = () => {
                     <span
                       className={`universal-estado-badge ${
                         cliente.estadocliente
-                          ? "bg-emerald-500/50 dark:bg-emerald-500 text-foreground"
-                          : "bg-red-500/80"
+                          ? "activo"
+                          : "inactivo"
                       }`}
                     >
                       {cliente.estadocliente ? "Activo" : "Inactivo"}
@@ -332,7 +332,7 @@ const TablaClientes = () => {
                   <td className="py-3 px-4">
                     <div className="flex space-x-2 center">
                       <button
-                        className="btn-edit-1 dark:bg-indigo-900/50 dark:hover:bg-indigo-800/90 text-white transition-all duration-200 relative overflow-hidden"
+                        className="btn-edit-1"
                         onClick={() => manejarEditar(cliente)}
                         title="Editar"
                       >
@@ -340,7 +340,7 @@ const TablaClientes = () => {
                       </button>
 
                       <button
-                        className="btn-delete-1 dark:bg-rose-950/100 dark:hover:bg-rose-800/90 text-white transition-all duration-200 relative overflow-hidden"
+                        className="btn-delete-1"
                         onClick={() => manejarEliminar(cliente._id)}
                         title="Eliminar"
                       >

@@ -452,7 +452,7 @@ const TablaServicios = () => {
 
   if (state.isLoading)
     return (
-      <div className="flex justify-center items-center h-[64vh] dark:bg-primary">
+      <div className="flex justify-center items-center h-[64vh]">
         <div className="flex flex-col items-center">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pink-500"></div>
           <p className="mt-4 text-foreground">Cargando servicios...</p>
@@ -463,11 +463,11 @@ const TablaServicios = () => {
     return <div className="alert alert-error">{state.error}</div>;
   return (
     <div className="content">
-      <h2 className="text-3xl font-semibold mb-6 text-foreground px-4 pt-4">
+      <h2 className="pagina-titulo">
         Gestión de Servicios
       </h2>
 
-      <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 px-4">
+      <div className="pagina-acciones">
         <div className="flex gap-2">
           <button className="btn-add" onClick={manejarAgregarNuevo}>
             <FontAwesomeIcon icon={faPlus} className="mr-2" />
@@ -493,48 +493,48 @@ const TablaServicios = () => {
         </div>
       </div>
 
-      <div className="overflow-x-auto bg-white rounded-lg shadow mx-auto">
+      <div className="tabla-contenedor">
         {/* Modificar la tabla para mostrar información de descuento */}
         <table className="universal-tabla-moderna w-full">
-          <thead className="bg-pink-200 text-black dark:card-gradient-4">
+          <thead className="tabla-cabecera">
             <tr className="text-foreground">
               <th
                 onClick={() => handleSort("nombreServicio")}
-                className="dark:hover:bg-gray-500/50"
+               
               >
                 Nombre del Servicio {getSortIcon("nombreServicio")}
               </th>
               <th
                 onClick={() => handleSort("tipoServicio")}
-                className="cursor-pointer dark:hover:bg-gray-500/50"
+                className="cursor-pointer"
               >
                 Tipo {getSortIcon("tipoServicio")}
               </th>
               <th
                 onClick={() => handleSort("tiempo")}
-                className="cursor-pointer dark:hover:bg-gray-500/50"
+                className="cursor-pointer"
               >
                 Tiempo {getSortIcon("tiempo")}
               </th>
               <th
                 onClick={() => handleSort("precio")}
-                className="cursor-pointer dark:hover:bg-gray-500/50"
+                className="cursor-pointer"
               >
                 Precio {getSortIcon("precio")}
               </th>
               <th>Precio con Descuento</th>
               <th
                 onClick={() => handleSort("estado")}
-                className="cursor-pointer dark:hover:bg-gray-500/50"
+                className="cursor-pointer"
               >
                 Estado {getSortIcon("estado")}
               </th>
-              <th className="cursor-pointer dark:hover:bg-gray-500/50">
+              <th className="cursor-pointer">
                 Acciones
               </th>
             </tr>
           </thead>
-          <tbody className="dark:bg-zinc-900/80 text-foreground">
+          <tbody>
             {serviciosActuales.length > 0 ? (
               serviciosActuales.map((servicio) => {
                 const tieneDescuento = servicio.tipoServicio?.descuento > 0;
@@ -579,8 +579,8 @@ const TablaServicios = () => {
                       <span
                         className={`universal-estado-badge ${
                           servicio.estado
-                            ? "activo bg-emerald-300/70 dark:bg-emerald-500"
-                            : "inactivo bg-red-500/80"
+                            ? "activo"
+                            : "inactivo"
                         }`}
                       >
                         {servicio.estado ? "Activo" : "Inactivo"}
@@ -589,14 +589,14 @@ const TablaServicios = () => {
                     <td>
                       <div className="flex space-x-2">
                         <button
-                          className="btn-edit-1 dark:bg-indigo-900/50 dark:hover:bg-indigo-800/90"
+                          className="btn-edit-1"
                           onClick={() => manejarEditar(servicio)}
                           title="Editar"
                         >
                           <FontAwesomeIcon icon={faEdit} />
                         </button>
                         <button
-                          className="btn-delete-1 dark:bg-rose-950/100 dark:hover:bg-rose-800/90"
+                          className="btn-delete-1"
                           onClick={() => manejarEliminar(servicio._id)}
                           title="Eliminar"
                         >

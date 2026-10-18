@@ -459,12 +459,12 @@ export default function TablaPermisos() {
   }
 
   return (
-    <div className="content dark:bg-primary">
-      <h2 className="text-3xl font-semibold mb-8 text-foreground px-4 pt-4">
+    <div className="content">
+      <h2 className="pagina-titulo">
         Gestión de Permisos
       </h2>
 
-      <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 px-4">
+      <div className="pagina-acciones">
         <div className="flex space-x-2">
           <button
             className="btn-add"
@@ -529,33 +529,33 @@ export default function TablaPermisos() {
         </div>
       </div>
 
-      <div className="overflow-x-auto rounded-lg shadow mx-4 w-full mx-auto">
+      <div className="tabla-contenedor">
         <table className="universal-tabla-moderna w-full dark:bg-foreground"
         style={{ width: "100%", tableLayout: "fixed" }}
         >
-          <thead className="bg-pink-200 text-black dark:card-gradient-4">
+          <thead className="tabla-cabecera">
             <tr className="text-foreground">
               <th
                 onClick={() => handleSort("nombrePermiso")}
-                className="dark:hover:bg-gray-500/50"
+               
               >
                 Nombre {getSortIcon("nombrePermiso")}
               </th>
               <th
                 onClick={() => handleSort("descripcion")}
-                className="dark:hover:bg-gray-500/50"
+               
               >
                 Descripción {getSortIcon("descripcion")}
               </th>
               <th
                 onClick={() => handleSort("categoria")}
-                className="dark:hover:bg-gray-500/50"
+               
               >
                 Categoría {getSortIcon("categoria")}
               </th>
               <th
                 onClick={() => handleSort("nivel")}
-                className="dark:hover:bg-gray-500/50"
+               
               >
                 Nivel {getSortIcon("nivel")}
               </th>
@@ -568,7 +568,7 @@ export default function TablaPermisos() {
               <th className="text-center">Acciones</th>
             </tr>
           </thead>
-          <tbody className="dark:bg-zinc-900/80 text-foreground">
+          <tbody>
             {permisosActuales.length > 0 ? (
               permisosActuales.map((permiso) => (
                 <tr
@@ -583,8 +583,8 @@ export default function TablaPermisos() {
                     <span
                       className={`universal-estado-badge ${
                         permiso.activo
-                          ? "activo bg-emerald-300/70 dark:bg-emerald-500"
-                          : "inactivo bg-red-500/80"
+                          ? "activo"
+                          : "inactivo"
                       }`}
                     >
                       {permiso.activo ? "Activo" : "Inactivo"}
@@ -593,14 +593,14 @@ export default function TablaPermisos() {
                   <td>
                     <div className="flex justify-center space-x-2">
                       <button
-                        className="btn-edit-1 dark:bg-indigo-900/50 dark:hover:bg-indigo-800/90"
+                        className="btn-edit-1"
                         onClick={() => manejarEditar(permiso)}
                         title="Editar permiso"
                       >
                         <FontAwesomeIcon icon={faEdit} />
                       </button>
                       <button
-                        className="btn-delete-1 dark:bg-rose-950/100 dark:hover:bg-rose-800/90"
+                        className="btn-delete-1"
                         onClick={() => manejarEliminar(permiso._id)}
                         title="Eliminar permiso"
                       >
@@ -704,7 +704,7 @@ export default function TablaPermisos() {
           >
             &times;
           </button>
-          <h2 className="text-2xl font-semibold mb-6 text-center text-pink-600">
+          <h2 className="modal-titulo">
             {editMode ? "Editar Permiso" : "Agregar Nuevo Permiso"}
           </h2>
           <FormularioPermiso
@@ -729,7 +729,7 @@ export default function TablaPermisos() {
           >
             &times;
           </button>
-          <h2 className="text-2xl font-semibold mb-6 text-center text-pink-600">
+          <h2 className="modal-titulo">
             Detalles del Permiso
           </h2>
           {permisoSeleccionado ? (
@@ -760,7 +760,7 @@ export default function TablaPermisos() {
                 <p className="text-sm font-medium text-gray-500">Estado:</p>
                 <span
                   className={`universal-estado-badge ${
-                    permisoSeleccionado.activo ? "activo " : "inactivo"
+                    permisoSeleccionado.activo ? "activo" : "inactivo"
                   }`}
                 >
                   {permisoSeleccionado.activo ? "Activo" : "Inactivo"}
