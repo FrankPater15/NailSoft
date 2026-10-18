@@ -2,7 +2,7 @@ const { Router } = require('express');
 const { validarJWT } = require('../middlewares/verificartoken');
 const verificarPermisos = require('../middlewares/verificarPermisos');
 const { cargarPersona } = require('../middlewares/cargarPersona');
-const { crearCita, obtenerCitas, obtenerCitaPorId, actualizarCita, cancelarCita, eliminarCita, verificarDisponibilidad, iniciarCita, obtenerCitasPorCliente } = require('../controllers/cita');
+const { crearCita, obtenerCitas, obtenerCitaPorId, actualizarCita, cancelarCita, eliminarCita, verificarDisponibilidad, iniciarCita, obtenerCitasPorCliente, obtenerHorariosOcupados } = require('../controllers/cita');
 
 const router = Router();
 
@@ -17,7 +17,9 @@ const cancelar = verificarPermisos(['actualizarCitas', 'actualizarCitasPropias',
 router.post('/', crear, crearCita);
 router.get('/', ver, obtenerCitas);
 router.get('/cliente', ver, obtenerCitasPorCliente);
-router.post('/verificar-disponibilidad', verificarPermisos(['crearCitas', 'crearCitasPropias', 'actualizarCitas', 'actualizarCitasPropias']), verificarDisponibilidad);
+const agendar = verificarPermisos(['crearCitas', 'crearCitasPropias', 'actualizarCitas', 'actualizarCitasPropias']);
+router.post('/verificar-disponibilidad', agendar, verificarDisponibilidad);
+router.get('/ocupados', agendar, obtenerHorariosOcupados);
 router.get('/:id', ver, obtenerCitaPorId);
 router.put('/:id', actualizar, actualizarCita);
 router.delete('/:id', verificarPermisos(['eliminarCitas']), eliminarCita);

@@ -1,12 +1,20 @@
 const Cita = require('../modules/cita');
 const Cliente = require('../modules/cliente');
-const Empleado = require('../modules/empleado');
-const Servicio = require('../modules/servicio'); // Importar el modelo de servicio
-const Contador = require('../modules/contador');
-const VentaServicio = require('../modules/ventaservicio');
 const { isValidObjectId } = require('mongoose');
 const { tienePermiso } = require('../middlewares/verificarPermisos');
 const { alcanceCitas } = require('../middlewares/alcance');
+const { ErrorNegocio, responderError } = require('../utils/errores');
+const {
+    inicioDeCita,
+    inicioDelDia,
+    finDelDia,
+    validarSinChoque,
+    validarHorarioAtencion,
+    prepararServiciosCita,
+    validarEmpleadoActivo,
+    horariosDisponibles,
+    ESTADOS_LIBRES,
+} = require('../services/agenda');
 
 // Busca una cita solo entre las que el usuario puede tocar según `permisoTotal`
 const buscarCitaEnAlcance = (req, id, permisoTotal) => {
@@ -15,72 +23,58 @@ const buscarCitaEnAlcance = (req, id, permisoTotal) => {
     return Cita.findOne({ _id: id, ...filtro });
 };
 
-// Modificar el controlador crearCita en controllers/cita.js
+// Estados desde los que una cita ya no puede cambiar a otro
+const ESTADOS_FINALES = ['Completada', 'Cancelada'];
 
 const crearCita = async (req, res) => {
     try {
-        let {
-            nombreempleado,
-            nombrecliente,
-            fechacita,
-            horacita,
-            duracionTotal,
-            montototal,
-            estadocita,
-            servicios
-        } = req.body;
+        let { nombreempleado, nombrecliente, fechacita, horacita, estadocita, servicios } = req.body;
+        const esPersonal = tienePermiso(req, 'crearCitas');
 
         // Sin crearCitas, el usuario solo agenda para sí mismo como cliente
-        if (!tienePermiso(req, 'crearCitas')) {
+        if (!esPersonal) {
             if (!req.cliente) {
-                return res.status(403).json({ message: 'Solo puedes agendar citas a tu nombre como cliente' });
+                throw new ErrorNegocio('Solo puedes agendar citas a tu nombre como cliente', 403);
             }
             nombrecliente = req.cliente._id;
             if (estadocita && !['Pendiente', 'Confirmada'].includes(estadocita)) {
                 estadocita = 'Pendiente';
             }
         }
-
-        // Verificar que el empleado y cliente existen
-        const empleado = await Empleado.findById(nombreempleado);
-        const cliente = await Cliente.findById(nombrecliente);
-
-        if (!empleado || !cliente) {
-            return res.status(400).json({ message: 'Empleado o cliente no encontrados' });
+        if (estadocita && ESTADOS_FINALES.includes(estadocita)) {
+            throw new ErrorNegocio('Una cita nueva no puede crearse completada ni cancelada');
         }
 
-        // Verificar que los servicios existen y son válidos
-        if (!servicios || servicios.length === 0) {
-            return res.status(400).json({ message: 'Debe proporcionar al menos un servicio' });
+        await validarEmpleadoActivo(nombreempleado);
+        const cliente = isValidObjectId(nombrecliente) && await Cliente.findById(nombrecliente);
+        if (!cliente) throw new ErrorNegocio('Cliente no encontrado');
+
+        // Precio y duración salen de la base de datos, no de lo que envía el navegador
+        const calculado = await prepararServiciosCita(servicios);
+        const inicio = inicioDeCita(fechacita, horacita);
+
+        if (!esPersonal) {
+            // El personal puede agendar fuera de horario o en el pasado (p. ej. registrar una cita ya hecha)
+            if (inicio < new Date()) throw new ErrorNegocio('No puedes agendar citas en el pasado');
+            validarHorarioAtencion(horacita, calculado.duracionTotal);
         }
+        await validarSinChoque({ empleadoId: nombreempleado, fechacita: inicio, horacita, duracion: calculado.duracionTotal });
 
-        // Crear fecha y hora combinadas
-        // const fechaHoraCompleta = new Date(`${fechacita}T${horacita}`);
-
-        // Crear una nueva instancia de Cita
-        const nuevaCita = new Cita({
+        const nuevaCita = await Cita.create({
             nombreempleado,
             nombrecliente,
-            fechacita,
+            fechacita: inicio,
             horacita,
-            duracionTotal,
-            montototal,
             estadocita: estadocita || 'Confirmada',
-            servicios
+            ...calculado,
         });
 
-        // Guardar la cita en la base de datos
-        await nuevaCita.save();
-        res.status(201).json({ 
-            message: 'Cita creada con éxito', 
-            cita: nuevaCita 
+        res.status(201).json({
+            message: 'Cita creada con éxito',
+            cita: nuevaCita
         });
     } catch (error) {
-        console.error('Error al crear la cita:', error);
-        res.status(500).json({ 
-            message: 'Error al crear la cita', 
-            error: error.message 
-        });
+        responderError(res, error, 'Error al crear la cita');
     }
 };
 
@@ -121,30 +115,66 @@ const obtenerCitaPorId = async (req, res) => {
 const actualizarCita = async (req, res) => {
     try {
         const { id } = req.params;
-        const { nombreempleado, nombrecliente, fechacita, montototal, estadocita, servicios } = req.body;
+        const { nombreempleado, nombrecliente, fechacita, horacita, estadocita, servicios, horarioLiberado, motivo } = req.body;
 
-        const existente = await buscarCitaEnAlcance(req, id, 'actualizarCitas');
-        if (!existente) {
-            return res.status(404).json({ message: 'Cita no encontrada' });
-        }
-
-        const cambios = { fechacita, montototal, estadocita, servicios };
-        // Solo con actualizarCitas se puede reasignar la cita a otro cliente o empleado
-        if (tienePermiso(req, 'actualizarCitas')) {
-            Object.assign(cambios, { nombreempleado, nombrecliente });
-        }
-
-        const cita = await Cita.findByIdAndUpdate(id, cambios, { new: true })
-        .populate('nombreempleado', 'nombreempleado')
-        .populate('nombrecliente', 'nombrecliente')
-        .populate('servicios', 'nombreServicio precio'); // Asegúrate de hacer populate para los servicios
-
+        const cita = await buscarCitaEnAlcance(req, id, 'actualizarCitas');
         if (!cita) {
             return res.status(404).json({ message: 'Cita no encontrada' });
         }
+
+        // Una cita completada o cancelada no vuelve a otro estado
+        if (estadocita && estadocita !== cita.estadocita && ESTADOS_FINALES.includes(cita.estadocita)) {
+            throw new ErrorNegocio(`La cita ya está ${cita.estadocita.toLowerCase()} y no puede cambiar de estado`);
+        }
+
+        // Solo con actualizarCitas se puede reasignar la cita a otro cliente o empleado
+        if (tienePermiso(req, 'actualizarCitas')) {
+            if (nombreempleado && String(nombreempleado) !== String(cita.nombreempleado)) {
+                await validarEmpleadoActivo(nombreempleado);
+                cita.nombreempleado = nombreempleado;
+            }
+            if (nombrecliente && String(nombrecliente) !== String(cita.nombrecliente)) {
+                if (!isValidObjectId(nombrecliente) || !(await Cliente.exists({ _id: nombrecliente }))) {
+                    throw new ErrorNegocio('Cliente no encontrado');
+                }
+                cita.nombrecliente = nombrecliente;
+            }
+        }
+
+        if (servicios !== undefined) Object.assign(cita, await prepararServiciosCita(servicios));
+        if (horacita !== undefined) cita.horacita = horacita;
+        if (fechacita !== undefined || horacita !== undefined) {
+            cita.fechacita = inicioDeCita(fechacita ?? cita.fechacita, cita.horacita);
+        }
+        if (estadocita !== undefined) cita.estadocita = estadocita;
+        if (horarioLiberado !== undefined) cita.horarioLiberado = Boolean(horarioLiberado);
+        if (cita.estadocita === 'Cancelada' && motivo) {
+            cita.motivo = motivo;
+            cita.fechacancelacion = cita.fechacancelacion || new Date();
+        }
+
+        // Si la cita sigue ocupando el horario y cambió de hora, día, empleado o servicios, no debe chocar
+        const ocupaHorario = !ESTADOS_LIBRES.includes(cita.estadocita) && !cita.horarioLiberado;
+        const cambioHorario = ['fechacita', 'horacita', 'nombreempleado', 'duracionTotal'].some((campo) => cita.isModified(campo));
+        if (ocupaHorario && cambioHorario) {
+            await validarSinChoque({
+                empleadoId: cita.nombreempleado,
+                fechacita: cita.fechacita,
+                horacita: cita.horacita,
+                duracion: cita.duracionTotal,
+                excluirId: cita._id,
+            });
+        }
+
+        await cita.save();
+        await cita.populate([
+            { path: 'nombreempleado', select: 'nombreempleado' },
+            { path: 'nombrecliente', select: 'nombrecliente' },
+        ]);
+
         res.json({ message: 'Cita actualizada con éxito', cita });
     } catch (error) {
-        res.status(500).json({ message: 'Error al actualizar la cita', error });
+        responderError(res, error, 'Error al actualizar la cita');
     }
 };
 
@@ -217,141 +247,52 @@ const eliminarCita = async (req, res) => {
 // Verificar disponibilidad del empleado
 const verificarDisponibilidad = async (req, res) => {
     try {
-        console.log('Datos recibidos:', req.body); // Log para depuración
-        
         const { nombreempleado, fecha, servicios } = req.body;
-        
-        // Validar que todos los campos requeridos estén presentes
-        if (!nombreempleado || !fecha || !servicios || !Array.isArray(servicios)) {
-            return res.status(400).json({ 
-                message: 'Datos incompletos o inválidos',
-                detalles: 'Se requiere nombreempleado, fecha y un array de servicios' 
-            });
+        if (!nombreempleado || !fecha || !Array.isArray(servicios)) {
+            throw new ErrorNegocio('Se requiere nombreempleado, fecha y un array de servicios');
         }
-        
-        // Verificar que el empleado existe
-        const empleado = await Empleado.findById(nombreempleado);
-        if (!empleado) {
-            return res.status(404).json({ 
-                message: 'Empleado no encontrado',
-                detalles: `No se encontró un empleado con ID: ${nombreempleado}` 
-            });
-        }
-        
-        // Obtener la duración total de los servicios
-        const serviciosInfo = await Servicio.find({ '_id': { $in: servicios } });
-        
-        if (serviciosInfo.length === 0) {
-            return res.status(404).json({ 
-                message: 'Servicios no encontrados',
-                detalles: 'No se encontraron los servicios especificados' 
-            });
-        }
-        
-        if (serviciosInfo.length !== servicios.length) {
-            return res.status(400).json({ 
-                message: 'Servicios inválidos',
-                detalles: 'Uno o más IDs de servicios no existen en la base de datos' 
-            });
-        }
-        
-        const duracionTotal = serviciosInfo.reduce((total, servicio) => total + servicio.tiempo, 0);
-        console.log('Duración total calculada:', duracionTotal); // Log para depuración
-        
-        // Obtener las citas del empleado para esa fecha
-        const fechaInicio = new Date(fecha);
-        fechaInicio.setHours(0, 0, 0, 0);
-        
-        const fechaFin = new Date(fecha);
-        fechaFin.setHours(23, 59, 59, 999);
-        
-        const citasEmpleado = await Cita.find({
-            nombreempleado: nombreempleado,
-            fechacita: { $gte: fechaInicio, $lte: fechaFin },
-            estadocita: { $in: ['Confirmada', 'En Progreso'] }
-        });
-        
-        console.log('Citas encontradas:', citasEmpleado.length); // Log para depuración
-        
-        // Generar horarios disponibles (de 9:00 a 19:00 cada 30 minutos)
-        const horariosDisponibles = [];
-        for (let hora = 9; hora < 19; hora++) {
-            for (let minuto of [0, 30]) {
-                const horaStr = `${hora.toString().padStart(2, '0')}:${minuto.toString().padStart(2, '0')}`;
-                
-                // Verificar si este horario está disponible
-                const horaInicio = new Date(fecha);
-                horaInicio.setHours(hora, minuto, 0, 0);
-                
-                const horaFin = new Date(fecha);
-                const minutosFin = minuto + Math.floor(duracionTotal);
-                const horaAdicional = Math.floor(minutosFin / 60);
-                horaFin.setHours(hora + horaAdicional, minutosFin % 60, 0, 0);
-                
-                // Verificar si hay conflicto con otras citas
-                let hayConflicto = false;
-                
-                for (const cita of citasEmpleado) {
-                    const citaInicio = new Date(cita.fechacita);
-                    const citaHora = citaInicio.getHours();
-                    const citaMinuto = citaInicio.getMinutes();
-                    
-                    // Calcular la duración de la cita basada en sus servicios
-                    let citaDuracion = 0;
-                    if (cita.servicios && cita.servicios.length > 0) {
-                        // Necesitamos obtener la información de los servicios
-                        const citaServiciosInfo = await Servicio.find({ '_id': { $in: cita.servicios } });
-                        citaDuracion = citaServiciosInfo.reduce((total, s) => total + s.tiempo, 0);
-                    } else {
-                        citaDuracion = 60; // 1 hora por defecto si no hay servicios
-                    }
-                    
-                    const citaFin = new Date(citaInicio);
-                    const citaMinutosFin = citaMinuto + Math.floor(citaDuracion);
-                    const citaHoraAdicional = Math.floor(citaMinutosFin / 60);
-                    citaFin.setHours(citaHora + citaHoraAdicional, citaMinutosFin % 60, 0, 0);
-                    
-                    // Verificar si hay solapamiento
-                    if (
-                        (horaInicio >= citaInicio && horaInicio < citaFin) ||
-                        (horaFin > citaInicio && horaFin <= citaFin) ||
-                        (horaInicio <= citaInicio && horaFin >= citaFin)
-                    ) {
-                        hayConflicto = true;
-                        break;
-                    }
-                }
-                
-                if (!hayConflicto) {
-                    horariosDisponibles.push({
-                        hora: horaStr,
-                        duracion: duracionTotal,
-                        inicio: horaInicio,
-                        fin: horaFin
-                    });
-                }
-            }
-        }
-        
-        console.log('Horarios disponibles encontrados:', horariosDisponibles.length); // Log para depuración
-        
-        res.json({ 
-            horariosDisponibles,
-            duracionTotal,
-            servicios: serviciosInfo.map(s => ({
-                id: s._id,
+        await validarEmpleadoActivo(nombreempleado);
+        const calculado = await prepararServiciosCita(servicios);
+        const libres = await horariosDisponibles({ empleadoId: nombreempleado, fecha, duracion: calculado.duracionTotal });
+
+        res.json({
+            horariosDisponibles: libres,
+            duracionTotal: calculado.duracionTotal,
+            servicios: calculado.servicios.map((s) => ({
+                id: s.servicio,
                 nombreServicio: s.nombreServicio,
                 precio: s.precio,
                 tiempo: s.tiempo
             }))
         });
     } catch (error) {
-        console.error('Error en verificarDisponibilidad:', error);
-        res.status(500).json({ 
-            message: 'Error al verificar disponibilidad', 
-            error: error.message || 'Error desconocido',
-            stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
-        });
+        responderError(res, error, 'Error al verificar disponibilidad');
+    }
+};
+
+// Horarios ocupados desde una fecha (por defecto hoy), sin datos de los clientes,
+// para que cualquier usuario que agenda vea qué franjas están tomadas.
+// Query: desde (YYYY-MM-DD), hasta (YYYY-MM-DD, opcional), empleado (opcional)
+const obtenerHorariosOcupados = async (req, res) => {
+    try {
+        const { desde, hasta, empleado } = req.query;
+        const filtro = {
+            fechacita: { $gte: inicioDelDia(desde || new Date()) },
+            estadocita: { $nin: ESTADOS_LIBRES },
+            horarioLiberado: { $ne: true },
+        };
+        if (hasta) filtro.fechacita.$lte = finDelDia(inicioDelDia(hasta));
+        if (empleado) {
+            if (!isValidObjectId(empleado)) throw new ErrorNegocio('Empleado no válido');
+            filtro.nombreempleado = empleado;
+        }
+        const citas = await Cita.find(filtro)
+            .select('nombreempleado fechacita horacita duracionTotal estadocita')
+            .sort({ fechacita: 1 })
+            .lean();
+        res.json({ citas });
+    } catch (error) {
+        responderError(res, error, 'Error al obtener los horarios ocupados');
     }
 };
 
@@ -366,50 +307,22 @@ const iniciarCita = async (req, res) => {
         const cita = consulta && await consulta
             .populate('nombreempleado', 'nombreempleado')
             .populate('nombrecliente', 'nombrecliente apellidocliente correocliente celularcliente');
-            
+
         if (!cita) {
             return res.status(404).json({ message: 'Cita no encontrada' });
         }
-        
+
         if (cita.estadocita !== 'Confirmada') {
             return res.status(400).json({ message: 'La cita debe estar confirmada para iniciarla' });
         }
-        
+
+        // La venta se registra al finalizar la atención (ventas unificadas en /api/ventas)
         cita.estadocita = 'En Progreso';
         await cita.save();
-        
-        // Obtener el siguiente código de venta
-        const contador = await Contador.findOneAndUpdate(
-            { nombre: "venta" },
-            { $inc: { secuencia: 1 } },
-            { new: true, upsert: true }
-        );
-        const codigoVenta = `V${contador.secuencia.toString().padStart(4, "0")}`;
-        
-        // Crear una venta de servicio inicial con los servicios de la cita
-        const ventaServicio = new VentaServicio({
-            codigoVenta,
-            cliente: cita.nombrecliente._id,
-            cita: cita._id,
-            empleado: cita.nombreempleado._id,
-            servicios: cita.servicios,
-            precioTotal: cita.montototal,
-            estado: true
-        });
-        
-        await ventaServicio.save();
-        
-        res.json({ 
-            message: 'Cita iniciada con éxito', 
-            cita,
-            ventaServicio
-        });
+
+        res.json({ message: 'Cita iniciada con éxito', cita });
     } catch (error) {
-        console.error('Error al iniciar la cita:', error);
-        res.status(500).json({ 
-            message: 'Error al iniciar la cita', 
-            error: error.message 
-        });
+        responderError(res, error, 'Error al iniciar la cita');
     }
 };
 
@@ -447,5 +360,6 @@ module.exports = {
     eliminarCita,
     verificarDisponibilidad,
     iniciarCita,
-    obtenerCitasPorCliente
+    obtenerCitasPorCliente,
+    obtenerHorariosOcupados
 };

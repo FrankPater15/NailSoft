@@ -154,7 +154,8 @@ const useEmpleadosYCitas = (currentStep) => {
 
     try {
       const headers = { Authorization: `Bearer ${user.token}` };
-      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/citas`, {
+      // Horarios ocupados de todos los empleados desde hoy (sin datos de otros clientes)
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/citas/ocupados`, {
         headers,
         timeout: 8000,
       });
@@ -351,7 +352,9 @@ const SeleccionarServicios = () => {
       }`;
 
       const citasDelDia = citasExistentes.filter((cita) => {
-        const fechaCita = new Date(cita.fechacita).toISOString().split("T")[0];
+        // Día local de la cita (toISOString daría el día en UTC)
+        const inicioCita = new Date(cita.fechacita);
+        const fechaCita = `${inicioCita.getFullYear()}-${String(inicioCita.getMonth() + 1).padStart(2, "0")}-${String(inicioCita.getDate()).padStart(2, "0")}`;
         const citaEmpleadoId =
           typeof cita.nombreempleado === "object" &&
           cita.nombreempleado !== null
