@@ -14,6 +14,8 @@ const UsuarioSchema = Schema({
         type: String,
         required: [true, 'El email es obligatorio'], // Cambiar mensaje de error para el email
         unique: true, // Asegurar que el email sea único
+        lowercase: true,
+        trim: true,
         match: [/^\S+@\S+\.\S+$/, 'Por favor, ingrese un email válido'] // Validación de formato de email
     },
     celular: {  // Nuevo campo agregado
@@ -30,7 +32,8 @@ const UsuarioSchema = Schema({
     rol: {
         type: Schema.Types.ObjectId,
         ref: 'Rol',
-        default: 'defaultRoleId', 
+        required: [true, 'El rol es obligatorio'],
+        index: true
     },
     estado: {
         type: Boolean,
@@ -40,6 +43,20 @@ const UsuarioSchema = Schema({
     resetPasswordToken: String,
     resetPasswordExpires: Date,
     resetPasswordAttempts: { type: Number, default: 0 }, // Intentos fallidos del código actual
+    // Los tokens emitidos antes de esta fecha dejan de ser válidos (se actualiza al cambiar la contraseña)
+    passwordChangedAt: Date,
+});
+
+// Marca el cambio de contraseña para invalidar las sesiones abiertas
+UsuarioSchema.pre('save', function (next) {
+    if (this.isModified('password') && !this.isNew) this.passwordChangedAt = new Date();
+    next();
+});
+
+UsuarioSchema.pre('findOneAndUpdate', function (next) {
+    const cambios = this.getUpdate() || {};
+    if (cambios.password || cambios.$set?.password) this.set({ passwordChangedAt: new Date() });
+    next();
 });
 
 module.exports = model('Usuario', UsuarioSchema);

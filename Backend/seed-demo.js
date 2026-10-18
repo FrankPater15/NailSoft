@@ -7,8 +7,6 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const Rol = require('./modules/rol');
 const Usuario = require('./modules/usuario');
-const Empleado = require('./modules/empleado');
-const Cliente = require('./modules/cliente');
 const TipoServicios = require('./modules/tiposervicios');
 const TipoServ = require('./modules/tiposerv');
 const Servicio = require('./modules/servicio');
@@ -19,6 +17,8 @@ const Insumo = require('./modules/insumo');
 const Cita = require('./modules/cita');
 const Venta = require('./modules/venta');
 const Contador = require('./modules/contador');
+const { inicioDeCita } = require('./services/agenda');
+const { asegurarCliente, asegurarEmpleado } = require('./services/personas');
 
 const PASSWORD = process.env.SEED_DEMO_PASSWORD || 'Prueba123!';
 
@@ -53,19 +53,11 @@ const crearUsuarios = async () => {
         const rol = await Rol.findOne({ nombreRol });
         if (!rol) throw new Error(`No existe el rol ${nombreRol}. Corre primero: npm run seed`);
 
-        await crearSiNoExiste(Usuario, { email }, { nombre, apellido, celular, password: hash, rol: rol._id, estado: true });
+        const usuario = await crearSiNoExiste(Usuario, { email }, { nombre, apellido, celular, password: hash, rol: rol._id, estado: true });
 
-        // Empleados y clientes se enlazan con su usuario por el correo
-        if (nombreRol === 'Empleado') {
-            empleados.push(await crearSiNoExiste(Empleado, { correoempleado: email }, {
-                nombreempleado: nombre, apellidoempleado: apellido, telefonoempleado: celular, estadoempleado: true,
-            }));
-        }
-        if (nombreRol === 'Cliente') {
-            clientes.push(await crearSiNoExiste(Cliente, { correocliente: email }, {
-                nombrecliente: nombre, apellidocliente: apellido, celularcliente: celular, estadocliente: true,
-            }));
-        }
+        // Empleados y clientes quedan enlazados a su usuario
+        if (nombreRol === 'Empleado') empleados.push(await asegurarEmpleado(usuario));
+        if (nombreRol === 'Cliente') clientes.push(await asegurarCliente(usuario));
     }
     console.log(`Usuarios de prueba: ${usuarios.length} (contraseña ${PASSWORD})`);
     return { empleados, clientes };
@@ -152,7 +144,7 @@ const crearCitasYVentas = async ({ empleados, clientes }, servicios, productos) 
     const nuevaCita = (empleado, cliente, dias, horacita, estadocita, items) => Cita.create({
         nombreempleado: empleado._id,
         nombrecliente: cliente._id,
-        fechacita: fechaRelativa(dias),
+        fechacita: inicioDeCita(fechaRelativa(dias), horacita),
         horacita,
         estadocita,
         servicios: items.map(lineaServicio),

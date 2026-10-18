@@ -15,12 +15,11 @@ const validarJWT = async (req, res, next) => {
     })
   }
 
-  let userId
+  let payload
   try {
-    const payload = jwt.verify(token, process.env.JWT_SECRET)
+    payload = jwt.verify(token, process.env.JWT_SECRET)
     // El token temporal de recuperación de contraseña no sirve como sesión
     if (payload.resetVerified) throw new Error("Token de recuperación")
-    userId = payload.userId
   } catch {
     return res.status(401).json({
       msg: "Tu sesión no es válida o expiró. Inicia sesión de nuevo.",
@@ -28,11 +27,18 @@ const validarJWT = async (req, res, next) => {
   }
 
   try {
-    const usuario = await User.findById(userId).populate({ path: "rol", populate: { path: "permisoRol" } })
+    const usuario = await User.findById(payload.userId).populate({ path: "rol", populate: { path: "permisoRol" } })
 
     if (!usuario) {
       return res.status(401).json({
         msg: "Token no válido - usuario no existe en DB",
+      })
+    }
+
+    // Un cambio de contraseña cierra las sesiones abiertas antes de él (iat va en segundos)
+    if (usuario.passwordChangedAt && payload.iat * 1000 < usuario.passwordChangedAt.getTime() - 1000) {
+      return res.status(401).json({
+        msg: "Tu contraseña cambió. Inicia sesión de nuevo.",
       })
     }
 

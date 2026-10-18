@@ -57,4 +57,8 @@ const CitaSchema = Schema({
 },
 { timestamps: true },);
 
+// Agenda de cada empleado por día y citas de cada cliente
+CitaSchema.index({ nombreempleado: 1, fechacita: 1 });
+CitaSchema.index({ nombrecliente: 1, fechacita: -1 });
+
 module.exports = model('Cita', CitaSchema);

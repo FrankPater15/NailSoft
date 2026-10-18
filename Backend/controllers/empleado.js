@@ -1,6 +1,7 @@
 const Empleado = require('../modules/empleado');
 const { isValidObjectId } = require('mongoose');
 const { tienePermiso } = require('../middlewares/verificarPermisos');
+const { tieneHistorialEmpleado } = require('../services/personas');
 
 // Crear un nuevo empleado
 const crearEmpleado = async (req, res) => {
@@ -98,7 +99,12 @@ const actualizarEmpleado = async (req, res) => {
 const eliminarEmpleado = async (req, res) => {
     try {
         const { id } = req.params;
-        const empleadoEliminado = await Empleado.findByIdAndDelete(id);
+        if (isValidObjectId(id) && await tieneHistorialEmpleado(id)) {
+            return res.status(409).json({
+                message: 'El empleado tiene citas o ventas registradas. Desactívalo en lugar de eliminarlo.'
+            });
+        }
+        const empleadoEliminado = isValidObjectId(id) && await Empleado.findByIdAndDelete(id);
         if (!empleadoEliminado) {
             return res.status(404).json({ message: 'Empleado no encontrado' });
         }

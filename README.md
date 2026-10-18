@@ -75,6 +75,12 @@ Para tener datos con los que probar, `npm run seed:demo` agrega servicios, produ
 
 > `npm run seed` vuelve a asignar a cada rol sus permisos iniciales: los cambios de permisos hechos desde la aplicación se pierden.
 
+Si ya tenías una base de datos de una versión anterior, actualiza sus datos al modelo actual (stock numérico, fichas enlazadas a su usuario, fechas de citas e índices). Se puede correr varias veces:
+
+```bash
+npm run migrar
+```
+
 ### Permisos
 
 Cada ruta de la API exige un permiso. Los permisos terminados en `Propias` (por ejemplo `verCitasPropias`) limitan la acción a los registros del propio usuario: un cliente solo ve sus citas y un empleado solo las que tiene asignadas. Los roles se configuran desde la aplicación, sin depender de nombres fijos en el código.

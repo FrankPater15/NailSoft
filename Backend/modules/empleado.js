@@ -9,10 +9,16 @@ const EmpleadoSchema = Schema({
         type: String,
         required: true
     },
-    correoempleado: {  // Nuevo campo agregado
+    correoempleado: {
         type: String,
         required: true,
-        unique: true // Asegura que no haya duplicados de correo de empleado
+        unique: true, // Asegura que no haya duplicados de correo de empleado
+        lowercase: true,
+        trim: true
+    },
+    usuario: { // Cuenta con la que el empleado inicia sesión (opcional)
+        type: Schema.Types.ObjectId,
+        ref: 'Usuario'
     },
     telefonoempleado: {
         type: String,
@@ -24,5 +30,8 @@ const EmpleadoSchema = Schema({
         required: [true, 'El estado es obligatorio']
     }
 });
+
+// Un usuario corresponde a lo sumo a un empleado
+EmpleadoSchema.index({ usuario: 1 }, { unique: true, partialFilterExpression: { usuario: { $type: 'objectId' } } });
 
 module.exports = model('Empleado', EmpleadoSchema);

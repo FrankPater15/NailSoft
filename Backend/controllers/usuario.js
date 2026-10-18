@@ -10,7 +10,8 @@ const { createUser } = require("./userHelper")
 const { isValidObjectId } = require("mongoose")
 const { tienePermiso } = require("../middlewares/verificarPermisos")
 
-const SIN_MAYUSCULAS = { locale: "es", strength: 2 }
+const { asegurarCliente, asegurarEmpleado, retirarCliente, retirarEmpleado, sincronizarCorreo } = require("../services/personas")
+const { buscarEnlazado } = require("../middlewares/cargarPersona")
 
 const esElMismo = (req, id) => String(req.userId) === String(id)
 
@@ -53,7 +54,7 @@ const usuarioGetById = async (req, res = response) => {
     let infoAdicional = {}
 
     if (usuario.rol.nombreRol === "Cliente") {
-      const cliente = await Cliente.findOne({ correocliente: usuario.email }).collation(SIN_MAYUSCULAS)
+      const cliente = await buscarEnlazado(Cliente, "correocliente", usuario)
       if (cliente) {
         infoAdicional = {
           nombrecliente: cliente.nombrecliente,
@@ -64,7 +65,7 @@ const usuarioGetById = async (req, res = response) => {
         }
       }
     } else if (usuario.rol.nombreRol === "Empleado") {
-      const empleado = await Empleado.findOne({ correoempleado: usuario.email }).collation(SIN_MAYUSCULAS)
+      const empleado = await buscarEnlazado(Empleado, "correoempleado", usuario)
       if (empleado) {
         infoAdicional = {
           nombreempleado: empleado.nombreempleado,
@@ -137,48 +138,10 @@ const usuariosPost = async (req, res = response) => {
     await nuevoUsuario.save()
     console.log("Usuario creado directamente:", nuevoUsuario.email)
 
-    // Asociar con Cliente o Empleado según el rol
-    if (rolAsignado.nombreRol === "Cliente") {
-      const clienteExistente = await Cliente.findOne({ usuario: nuevoUsuario._id })
-      if (!clienteExistente) {
-        await new Cliente({
-          nombrecliente: nombre,
-          apellidocliente: apellido,
-          correocliente: email,
-          celularcliente: celular,
-          estadocliente: estado !== undefined ? estado : true,
-          usuario: nuevoUsuario._id,
-        }).save()
-        console.log(`Cliente creado para el usuario: ${email}`)
-      }
-      await Empleado.deleteMany({ usuario: nuevoUsuario._id }) // Evita duplicidad
-    }
-
-    if (rolAsignado.nombreRol === "Empleado") {
-      const empleadoExistente = await Empleado.findOne({ usuario: nuevoUsuario._id })
-      if (!empleadoExistente) {
-        await new Empleado({
-          nombreempleado: nombre,
-          apellidoempleado: apellido,
-          correoempleado: email,
-          celularempleado: celular,
-          telefonoempleado: celular,
-          estadoempleado: estado !== undefined ? estado : true,
-          especialidad: req.body.especialidad || "General",
-          salario: req.body.salario || 0,
-          usuario: nuevoUsuario._id,
-        }).save()
-        console.log(`Empleado creado para el usuario: ${email}`)
-      }
-      await Cliente.deleteMany({ usuario: nuevoUsuario._id })
-    }
-
-    // Generar token para la respuesta
-    const token = jwt.sign(
-      { userId: nuevoUsuario._id, role: rolAsignado.nombreRol },
-      process.env.JWT_SECRET,
-      { expiresIn: "1h" },
-    )
+    // Los roles "Cliente" y "Empleado" tienen ficha propia; si ya existía una con ese correo
+    // (p. ej. un cliente atendido antes de tener cuenta) se enlaza en vez de duplicarla
+    if (rolAsignado.nombreRol === "Cliente") await asegurarCliente(nuevoUsuario)
+    if (rolAsignado.nombreRol === "Empleado") await asegurarEmpleado(nuevoUsuario)
 
     // Eliminar la contraseña de la respuesta
     const usuarioResponse = nuevoUsuario.toObject()
@@ -187,7 +150,6 @@ const usuariosPost = async (req, res = response) => {
     res.status(201).json({
       msg: "Usuario registrado correctamente",
       usuario: usuarioResponse,
-      token,
       role: rolAsignado.nombreRol,
     })
   } catch (err) {
@@ -513,10 +475,19 @@ const usuariosPut = async (req, res = response) => {
 
     const updates = value
 
-    // El correo enlaza al usuario con su cliente o empleado: por ahora solo lo cambia un administrador
+    // Un correo nuevo no puede estar en uso por otro usuario ni por otra ficha de cliente o empleado
     const nuevoEmail = updates.email?.toLowerCase().trim()
-    if (!puedeEditarOtros && nuevoEmail && nuevoEmail !== usuario.email.toLowerCase()) {
-      return res.status(400).json({ msg: 'Por ahora el correo solo lo puede cambiar un administrador' })
+    const cambiaEmail = Boolean(nuevoEmail) && nuevoEmail !== usuario.email.toLowerCase()
+    if (cambiaEmail) {
+      const enUso = await Promise.all([
+        Usuario.exists({ email: nuevoEmail, _id: { $ne: id } }),
+        Cliente.exists({ correocliente: nuevoEmail, usuario: { $ne: usuario._id } }),
+        Empleado.exists({ correoempleado: nuevoEmail, usuario: { $ne: usuario._id } }),
+      ])
+      if (enUso.some(Boolean)) {
+        return res.status(400).json({ msg: 'El correo ya está registrado.' })
+      }
+      updates.email = nuevoEmail
     }
 
     if (updates.password) {
@@ -528,7 +499,15 @@ const usuariosPut = async (req, res = response) => {
       .select('-password -resetPasswordToken -resetPasswordExpires')
       .populate('rol', 'nombreRol')
 
-    res.json({ msg: 'Usuario actualizado correctamente', usuario: actualizado })
+    if (cambiaEmail) await sincronizarCorreo(usuario._id, nuevoEmail)
+
+    const respuesta = { msg: 'Usuario actualizado correctamente', usuario: actualizado }
+    // Cambiar la contraseña cierra las demás sesiones; quien la cambió recibe un token nuevo
+    if (updates.password && esElMismo(req, id)) {
+      respuesta.token = jwt.sign({ userId: usuario._id, role: actualizado.rol?.nombreRol }, process.env.JWT_SECRET, { expiresIn: '24h' })
+    }
+
+    res.json(respuesta)
   } catch (err) {
     console.error(err)
     res.status(500).json({ msg: 'Error al actualizar el usuario' })
@@ -699,51 +678,17 @@ const usuariosUpdateRol = async (req, res = response) => {
       })
     }
 
-    // Determinar si está cambiando de cliente a empleado o viceversa
+    // Los roles "Cliente" y "Empleado" tienen ficha propia: al cambiar de rol se crea o reactiva
+    // la nueva y se retira la anterior (si tiene historial se desactiva en vez de borrarse)
     const eraCliente = usuario.rol.nombreRol === "Cliente"
     const eraEmpleado = usuario.rol.nombreRol === "Empleado"
     const seraCliente = nuevoRol.nombreRol === "Cliente"
     const seraEmpleado = nuevoRol.nombreRol === "Empleado"
 
-    // Si cambia de cliente a empleado
-    if (eraCliente && seraEmpleado) {
-      // Eliminar de la tabla de clientes
-      await Cliente.findOneAndDelete({
-        $or: [{ correocliente: usuario.email || usuario.correo }, { usuario: id }],
-      })
-
-      // Crear en la tabla de empleados
-      const empleado = new Empleado({
-        nombreempleado: usuario.nombre,
-        apellidoempleado: usuario.apellido || "",
-        correoempleado: usuario.email || usuario.correo,
-        celularempleado: usuario.celular || "",
-        telefonoempleado: usuario.celular || "",
-        estadoempleado: true,
-        especialidad: req.body.especialidad || "General",
-        salario: req.body.salario || 0,
-        usuario: usuario._id,
-      })
-      await empleado.save()
-    }
-    // Si cambia de empleado a cliente
-    else if (eraEmpleado && seraCliente) {
-      // Eliminar de la tabla de empleados
-      await Empleado.findOneAndDelete({
-        $or: [{ correoempleado: usuario.email || usuario.correo }, { usuario: id }],
-      })
-
-      // Crear en la tabla de clientes
-      const cliente = new Cliente({
-        nombrecliente: usuario.nombre,
-        apellidocliente: usuario.apellido || "",
-        correocliente: usuario.email || usuario.correo,
-        celularcliente: usuario.celular || "",
-        estadocliente: true,
-        usuario: usuario._id,
-      })
-      await cliente.save()
-    }
+    if (eraCliente && !seraCliente) await retirarCliente(usuario)
+    if (eraEmpleado && !seraEmpleado) await retirarEmpleado(usuario)
+    if (seraCliente) await asegurarCliente(usuario)
+    if (seraEmpleado) await asegurarEmpleado(usuario)
 
     // Actualizar el rol del usuario
     const usuarioActualizado = await Usuario.findByIdAndUpdate(id, { rol: nuevoRol._id }, { new: true })
@@ -776,16 +721,9 @@ const usuariosDelete = async (req, res = response) => {
       })
     }
 
-    // Eliminar registros relacionados según el rol
-    if (usuario.rol.nombreRol === "Cliente") {
-      await Cliente.findOneAndDelete({
-        $or: [{ correocliente: usuario.email || usuario.correo }, { usuario: id }],
-      })
-    } else if (usuario.rol.nombreRol === "Empleado") {
-      await Empleado.findOneAndDelete({
-        $or: [{ correoempleado: usuario.email || usuario.correo }, { usuario: id }],
-      })
-    }
+    // Retira sus fichas de cliente y empleado (si tienen historial quedan desactivadas)
+    await retirarCliente(usuario)
+    await retirarEmpleado(usuario)
 
     // Eliminar el usuario
     const usuarioEliminado = await Usuario.findByIdAndDelete(id)

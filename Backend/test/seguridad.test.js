@@ -1,10 +1,6 @@
 // Pruebas de seguridad de la API contra una base de datos de prueba real (MongoDB local).
 // Verifican autenticación, permisos por rol, alcance "solo lo propio" y escalamiento de privilegios.
-const request = require('supertest');
-const mongoose = require('mongoose');
-const Server = require('../modules/server');
-const { sembrarBase } = require('../seed');
-const { sembrarDemo, PASSWORD } = require('../seed-demo');
+const { app, request, prepararBase, cerrarBase, iniciarSesiones } = require('./ayuda');
 const Usuario = require('../modules/usuario');
 const Cliente = require('../modules/cliente');
 const Empleado = require('../modules/empleado');
@@ -12,44 +8,22 @@ const Cita = require('../modules/cita');
 const Venta = require('../modules/venta');
 const Rol = require('../modules/rol');
 
-const app = new Server({ conectarDb: false }).app;
-
-const credenciales = {
-    admin: ['admin@nailsoft.local', 'Admin123!'],
-    empleado: ['empleado1@nailsoft.local', PASSWORD],
-    cliente: ['cliente1@nailsoft.local', PASSWORD],
-    cliente2: ['cliente2@nailsoft.local', PASSWORD],
-    recepcion: ['recepcion@nailsoft.local', PASSWORD],
-    inventario: ['inventario@nailsoft.local', PASSWORD],
-};
-const tokens = {};
+let tokens = {};
 const ids = { usuario: {} };
 
 const conToken = (quien) => ({ Authorization: `Bearer ${tokens[quien]}` });
 const get = (ruta, quien) => request(app).get(ruta).set(quien ? conToken(quien) : {});
 
 beforeAll(async () => {
-    await mongoose.connect(process.env.MONGODB_CNN);
-    await mongoose.connection.dropDatabase();
-    await sembrarBase();
-    await sembrarDemo();
-
-    for (const [quien, [email, password]] of Object.entries(credenciales)) {
-        const res = await request(app).post('/api/auth/login').send({ email, password });
-        expect(res.status).toBe(200);
-        tokens[quien] = res.body.token;
-        ids.usuario[quien] = res.body.user.id;
-    }
+    await prepararBase('seguridad');
+    ({ tokens, usuarios: ids.usuario } = await iniciarSesiones());
     ids.cliente1 = (await Cliente.findOne({ correocliente: 'cliente1@nailsoft.local' }))._id;
     ids.cliente2 = (await Cliente.findOne({ correocliente: 'cliente2@nailsoft.local' }))._id;
     ids.empleado1 = (await Empleado.findOne({ correoempleado: 'empleado1@nailsoft.local' }))._id;
     ids.rolAdmin = (await Rol.findOne({ nombreRol: 'Admin' }))._id;
 }, 60000);
 
-afterAll(async () => {
-    await mongoose.connection.dropDatabase();
-    await mongoose.disconnect();
-});
+afterAll(cerrarBase);
 
 describe('sin iniciar sesión', () => {
     const rutas = [

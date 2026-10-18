@@ -1,20 +1,24 @@
 const Cliente = require("../modules/cliente")
 const Empleado = require("../modules/empleado")
 
+// Busca el registro enlazado al usuario; si no hay enlace (datos anteriores a la migración),
+// lo busca por correo.
+const buscarEnlazado = async (Modelo, campoCorreo, usuario) =>
+  (await Modelo.findOne({ usuario: usuario._id })) ||
+  (await Modelo.findOne({ [campoCorreo]: usuario.email.toLowerCase(), usuario: { $exists: false } }))
+
 // Deja en req.cliente y req.empleado el registro que corresponde al usuario autenticado
-// (o null). Hoy se enlazan por correo; debe ir después de validarJWT.
+// (o null). Debe ir después de validarJWT.
 const cargarPersona = async (req, res, next) => {
   try {
-    const email = req.usuario?.email?.toLowerCase()
-    if (!email) {
+    if (!req.usuario) {
       req.cliente = null
       req.empleado = null
       return next()
     }
-    const sinMayusculas = { locale: "es", strength: 2 }
     const [cliente, empleado] = await Promise.all([
-      Cliente.findOne({ correocliente: email }).collation(sinMayusculas),
-      Empleado.findOne({ correoempleado: email }).collation(sinMayusculas),
+      buscarEnlazado(Cliente, "correocliente", req.usuario),
+      buscarEnlazado(Empleado, "correoempleado", req.usuario),
     ])
     req.cliente = cliente
     req.empleado = empleado
@@ -25,4 +29,4 @@ const cargarPersona = async (req, res, next) => {
   }
 }
 
-module.exports = { cargarPersona }
+module.exports = { cargarPersona, buscarEnlazado }

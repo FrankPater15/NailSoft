@@ -8,7 +8,8 @@
     "dev": "node --watch index.js",
     "seed": "node seed.js",
     "seed:demo": "node seed-demo.js",
-    "test": "jest --detectOpenHandles --forceExit"
+    "test": "jest --detectOpenHandles --forceExit",
+    "migrar": "node migrar.js"
   },
   "keywords": [],
   "author": "",
@@ -27,7 +28,7 @@
     "helmet": "^8.3.0",
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^7.8.1",
+    "mongoose": "^8.24.5",
     "multer": "^2.4.0",
     "nodemailer": "^10.1.7"
   },

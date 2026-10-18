@@ -272,4 +272,10 @@ VentaSchema.virtual("tipoVenta").get(function () {
   }
 })
 
+// Ventas por cliente, empleado y cita, y listados por fecha
+VentaSchema.index({ cliente: 1, fechaCreacion: -1 });
+VentaSchema.index({ empleado: 1, fechaCreacion: -1 });
+VentaSchema.index({ cita: 1 });
+VentaSchema.index({ fechaCreacion: -1 });
+
 module.exports = model("Venta", VentaSchema)

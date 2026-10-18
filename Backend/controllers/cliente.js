@@ -1,6 +1,7 @@
 const Cliente = require('../modules/cliente');
 const { isValidObjectId } = require('mongoose');
 const { tienePermiso } = require('../middlewares/verificarPermisos');
+const { tieneHistorialCliente } = require('../services/personas');
 
 // Crear un nuevo cliente
 const crearCliente = async (req, res) => {
@@ -134,7 +135,12 @@ const actualizarCliente = async (req, res) => {
 const eliminarCliente = async (req, res) => {
     try {
         const { id } = req.params;
-        const clienteEliminado = await Cliente.findByIdAndDelete(id);
+        if (isValidObjectId(id) && await tieneHistorialCliente(id)) {
+            return res.status(409).json({
+                message: 'El cliente tiene citas o ventas registradas. Desactívalo en lugar de eliminarlo.'
+            });
+        }
+        const clienteEliminado = isValidObjectId(id) && await Cliente.findByIdAndDelete(id);
         if (!clienteEliminado) {
             return res.status(404).json({ message: 'Cliente no encontrado' });
         }
