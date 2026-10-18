@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:mobile/config.dart';
 import 'package:mobile/models/empleado.dart';
 
 class ApiEmpleado {
-  static const String baseUrl = "https://gitbf.onrender.com/api/empleados";
+  static const String baseUrl = '$apiUrl/api/empleados';
 
   // Método para obtener todos los empleados
   Future<List<Empleado>> getEmpleados(String token) async {

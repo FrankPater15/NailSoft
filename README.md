@@ -73,7 +73,19 @@ cp .env.example .env   # VITE_BACKEND_URL apunta al backend (http://localhost:30
 npm run dev            # http://localhost:5173
 ```
 
-### 4. Pruebas del backend
+### 4. App móvil (opcional)
+
+Requiere [Flutter](https://docs.flutter.dev/get-started/install). La URL del backend se pasa al compilar:
+
+```bash
+cd mobile
+flutter pub get
+flutter run -d chrome --dart-define=API_URL=http://localhost:3000
+# En el emulador de Android, el PC se ve como 10.0.2.2:
+# flutter run --dart-define=API_URL=http://10.0.2.2:3000
+```
+
+### 5. Pruebas del backend
 
 ```bash
 cd Backend
