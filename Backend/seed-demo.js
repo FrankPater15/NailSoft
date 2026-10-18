@@ -203,19 +203,23 @@ const crearCitasYVentas = async ({ empleados, clientes }, servicios, productos) 
     console.log('Ventas: 2 finalizadas');
 };
 
-const seedDemo = async () => {
-    await mongoose.connect(process.env.MONGODB_CNN);
-    console.log(`Conectado a ${mongoose.connection.name}`);
-
+// Carga los datos de ejemplo. Usa la conexión de mongoose abierta.
+const sembrarDemo = async () => {
     const personas = await crearUsuarios();
     const servicios = await crearCatalogo();
     const productos = await crearInventario();
     await crearCitasYVentas(personas, servicios, productos);
 };
 
-seedDemo()
-    .catch((error) => {
-        console.error('Error en el seed de demo:', error.message);
-        process.exitCode = 1;
-    })
-    .finally(() => mongoose.disconnect());
+module.exports = { sembrarDemo, PASSWORD };
+
+if (require.main === module) {
+    mongoose.connect(process.env.MONGODB_CNN)
+        .then(() => console.log(`Conectado a ${mongoose.connection.name}`))
+        .then(sembrarDemo)
+        .catch((error) => {
+            console.error('Error en el seed de demo:', error.message);
+            process.exitCode = 1;
+        })
+        .finally(() => mongoose.disconnect());
+}

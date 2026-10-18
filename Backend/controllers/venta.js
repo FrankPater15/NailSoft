@@ -6,6 +6,9 @@ const Cliente = require("../modules/cliente");
 const Servicio = require("../modules/servicio");
 const Producto = require("../modules/producto");
 const Empleado = require("../modules/empleado");
+const { isValidObjectId } = require("mongoose");
+const { tienePermiso } = require("../middlewares/verificarPermisos");
+const { alcanceVentas } = require("../middlewares/alcance");
 
 // Función para obtener el siguiente código de venta
 const obtenerSiguienteCodigoVenta = async () => {
@@ -17,10 +20,12 @@ const obtenerSiguienteCodigoVenta = async () => {
   return `V${contador.secuencia.toString().padStart(4, "0")}`;
 };
 
-// Obtener todas las ventas
+// Obtener las ventas: todas con verVentas, si no solo las propias
 const obtenerVentas = async (req, res = response) => {
   try {
-    const ventas = await Venta.find()
+    const filtro = alcanceVentas(req, "verVentas");
+    if (!filtro) return res.json({ ventas: [] });
+    const ventas = await Venta.find(filtro)
       .populate("cliente", "nombrecliente apellidocliente correocliente celularcliente")
       .populate("empleado", "nombreempleado")
       .populate({
@@ -923,14 +928,16 @@ const agregarServiciosVenta = async (req, res = response) => {
 // Obtener ventas por cliente
 const obtenerVentasPorCliente = async (req, res) => {
   try {
-    const clienteId = req.query.clienteId || req.usuario?.id;
-    
-    if (!clienteId) {
-      return res.status(400).json({ message: "ID de cliente no proporcionado" });
+    // Con verVentas se puede consultar cualquier cliente; si no, solo el propio
+    let clienteId = req.cliente?._id;
+    if (tienePermiso(req, "verVentas") && req.query.clienteId) {
+      clienteId = req.query.clienteId;
     }
-    
-    // Buscar ventas donde el cliente coincida con el ID proporcionado
-    let ventas = await Venta.find({ cliente: clienteId })
+    if (!clienteId || !isValidObjectId(clienteId)) {
+      return res.status(200).json([]);
+    }
+
+    const ventas = await Venta.find({ cliente: clienteId })
       .populate("cliente")
       .populate("empleado")
       .populate("cita")
@@ -938,23 +945,7 @@ const obtenerVentasPorCliente = async (req, res) => {
       .populate("servicios.servicio")
       .populate("descuentos.servicioId")
       .sort({ fechaCreacion: -1 });
-    
-    // Si no hay resultados, intentar buscar por usuario (si es un ID de usuario)
-    if (ventas.length === 0) {
-      const cliente = await Cliente.findOne({ usuario: clienteId });
-      
-      if (cliente) {
-        ventas = await Venta.find({ cliente: cliente._id })
-          .populate("cliente")
-          .populate("empleado")
-          .populate("cita")
-          .populate("productos.producto")
-          .populate("servicios.servicio")
-          .populate("descuentos.servicioId")
-          .sort({ fechaCreacion: -1 });
-      }
-    }
-    
+
     res.status(200).json(ventas);
   } catch (error) {
     console.error("Error al obtener ventas del cliente:", error);
@@ -966,7 +957,9 @@ const obtenerVentasPorCliente = async (req, res) => {
 const obtenerVentasPorCita = async (req, res = response) => {
   const { citaId } = req.params;
   try {
-    const ventas = await Venta.find({ cita: citaId })
+    const filtro = alcanceVentas(req, "verVentas");
+    if (!filtro || !isValidObjectId(citaId)) return res.json([]);
+    const ventas = await Venta.find({ cita: citaId, ...filtro })
       .populate("cliente")
       .populate("empleado")
       .populate("cita")

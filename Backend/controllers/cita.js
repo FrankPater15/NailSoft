@@ -2,21 +2,44 @@ const Cita = require('../modules/cita');
 const Cliente = require('../modules/cliente');
 const Empleado = require('../modules/empleado');
 const Servicio = require('../modules/servicio'); // Importar el modelo de servicio
+const Contador = require('../modules/contador');
+const VentaServicio = require('../modules/ventaservicio');
+const { isValidObjectId } = require('mongoose');
+const { tienePermiso } = require('../middlewares/verificarPermisos');
+const { alcanceCitas } = require('../middlewares/alcance');
+
+// Busca una cita solo entre las que el usuario puede tocar según `permisoTotal`
+const buscarCitaEnAlcance = (req, id, permisoTotal) => {
+    const filtro = alcanceCitas(req, permisoTotal);
+    if (!filtro || !isValidObjectId(id)) return null;
+    return Cita.findOne({ _id: id, ...filtro });
+};
 
 // Modificar el controlador crearCita en controllers/cita.js
 
 const crearCita = async (req, res) => {
     try {
-        const { 
-            nombreempleado, 
-            nombrecliente, 
-            fechacita, 
-            horacita, 
+        let {
+            nombreempleado,
+            nombrecliente,
+            fechacita,
+            horacita,
             duracionTotal,
-            montototal, 
-            estadocita, 
-            servicios 
+            montototal,
+            estadocita,
+            servicios
         } = req.body;
+
+        // Sin crearCitas, el usuario solo agenda para sí mismo como cliente
+        if (!tienePermiso(req, 'crearCitas')) {
+            if (!req.cliente) {
+                return res.status(403).json({ message: 'Solo puedes agendar citas a tu nombre como cliente' });
+            }
+            nombrecliente = req.cliente._id;
+            if (estadocita && !['Pendiente', 'Confirmada'].includes(estadocita)) {
+                estadocita = 'Pendiente';
+            }
+        }
 
         // Verificar que el empleado y cliente existen
         const empleado = await Empleado.findById(nombreempleado);
@@ -61,10 +84,12 @@ const crearCita = async (req, res) => {
     }
 };
 
-// Obtener todas las citas
+// Obtener las citas: todas con verCitas, si no solo las propias
 const obtenerCitas = async (req, res) => {
     try {
-        const citas = await Cita.find()
+        const filtro = alcanceCitas(req, 'verCitas');
+        if (!filtro) return res.json({ citas: [] });
+        const citas = await Cita.find(filtro)
             .populate('nombreempleado', 'nombreempleado') // Puedes incluir más campos si es necesario
             .populate('nombrecliente', 'nombrecliente') // Idem
             .populate('servicios', 'nombreServicio precio'); // Asegúrate de que los campos existan en el modelo Servicio
@@ -78,7 +103,8 @@ const obtenerCitas = async (req, res) => {
 const obtenerCitaPorId = async (req, res) => {
     try {
         const { id } = req.params;
-        const cita = await Cita.findById(id)
+        const consulta = buscarCitaEnAlcance(req, id, 'verCitas');
+        const cita = consulta && await consulta
             .populate('nombreempleado', 'nombreempleado')
             .populate('nombrecliente', 'nombrecliente')
             .populate('servicios', 'nombreServicio precio'); // Asegúrate de hacer populate para los servicios
@@ -97,14 +123,18 @@ const actualizarCita = async (req, res) => {
         const { id } = req.params;
         const { nombreempleado, nombrecliente, fechacita, montototal, estadocita, servicios } = req.body;
 
-        const cita = await Cita.findByIdAndUpdate(id, {
-            nombreempleado,
-            nombrecliente,
-            fechacita,
-            montototal,
-            estadocita,
-            servicios // Incluir servicios en la actualización
-        }, { new: true })
+        const existente = await buscarCitaEnAlcance(req, id, 'actualizarCitas');
+        if (!existente) {
+            return res.status(404).json({ message: 'Cita no encontrada' });
+        }
+
+        const cambios = { fechacita, montototal, estadocita, servicios };
+        // Solo con actualizarCitas se puede reasignar la cita a otro cliente o empleado
+        if (tienePermiso(req, 'actualizarCitas')) {
+            Object.assign(cambios, { nombreempleado, nombrecliente });
+        }
+
+        const cita = await Cita.findByIdAndUpdate(id, cambios, { new: true })
         .populate('nombreempleado', 'nombreempleado')
         .populate('nombrecliente', 'nombrecliente')
         .populate('servicios', 'nombreServicio precio'); // Asegúrate de hacer populate para los servicios
@@ -130,6 +160,16 @@ const cancelarCita = async (req, res) => {
             });
         }
 
+        const existente = await buscarCitaEnAlcance(req, id, 'actualizarCitas');
+        if (!existente) {
+            return res.status(404).json({ message: 'Cita no encontrada' });
+        }
+        if (['Completada', 'Cancelada'].includes(existente.estadocita)) {
+            return res.status(400).json({
+                message: `No se puede cancelar una cita ${existente.estadocita.toLowerCase()}`
+            });
+        }
+
         // Buscar y actualizar la cita, incluyendo motivo y fecha de cancelación
         const cita = await Cita.findByIdAndUpdate(
             id,
@@ -144,18 +184,7 @@ const cancelarCita = async (req, res) => {
         .populate('nombrecliente', 'nombrecliente')
         .populate('servicios', 'nombreServicio precio');
 
-        if (!cita) {
-            return res.status(404).json({ message: 'Cita no encontrada' });
-        }
-
-        // Verificar que la cita no esté ya completada o cancelada
-        if (cita.estadocita === 'Completada') {
-            return res.status(400).json({ 
-                message: 'No se puede cancelar una cita ya completada' 
-            });
-        }
-
-        res.json({ 
+        res.json({
             message: 'Cita cancelada con éxito',
             cita: {
                 ...cita._doc,
@@ -332,8 +361,9 @@ const verificarDisponibilidad = async (req, res) => {
 const iniciarCita = async (req, res) => {
     try {
         const { id } = req.params;
-        
-        const cita = await Cita.findById(id)
+
+        const consulta = buscarCitaEnAlcance(req, id, 'actualizarCitas');
+        const cita = consulta && await consulta
             .populate('nombreempleado', 'nombreempleado')
             .populate('nombrecliente', 'nombrecliente apellidocliente correocliente celularcliente');
             
@@ -386,38 +416,21 @@ const iniciarCita = async (req, res) => {
 // En controllers/cita.js
 const obtenerCitasPorCliente = async (req, res) => {
     try {
-      const clienteId = req.query.clienteId || req.usuario?.id;
-      
-      if (!clienteId) {
-        return res.status(400).json({ message: "ID de cliente no proporcionado" });
+      // Con verCitas se puede consultar cualquier cliente; si no, solo el propio
+      let clienteId = req.cliente?._id;
+      if (tienePermiso(req, 'verCitas') && req.query.clienteId) {
+        clienteId = req.query.clienteId;
       }
-      
-      console.log("Buscando citas para el cliente/usuario ID:", clienteId);
-      
-      // Buscar citas donde el cliente coincida con el ID proporcionado
-      // Primero intentar buscar por nombrecliente (si es un ID de cliente)
-      let citas = await Cita.find({ nombrecliente: clienteId })
+      if (!clienteId || !isValidObjectId(clienteId)) {
+        return res.status(200).json([]);
+      }
+
+      const citas = await Cita.find({ nombrecliente: clienteId })
         .populate("nombreempleado")
         .populate("nombrecliente")
         .populate("servicios.servicio")
         .sort({ fechacita: 1 });
-      
-      // Si no hay resultados, intentar buscar por usuario (si es un ID de usuario)
-      if (citas.length === 0) {
-        // Primero intentar encontrar el cliente asociado al usuario
-        const cliente = await Cliente.findOne({ usuario: clienteId });
-        
-        if (cliente) {
-          citas = await Cita.find({ nombrecliente: cliente._id })
-            .populate("nombreempleado")
-            .populate("nombrecliente")
-            .populate("servicios.servicio")
-            .sort({ fechacita: 1 });
-        }
-      }
-      
-      console.log(`Se encontraron ${citas.length} citas para el cliente/usuario ID: ${clienteId}`);
-      
+
       res.status(200).json(citas);
     } catch (error) {
       console.error("Error al obtener citas del cliente:", error);

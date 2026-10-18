@@ -7,6 +7,12 @@ const Empleado = require("../modules/empleado")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const { createUser } = require("./userHelper")
+const { isValidObjectId } = require("mongoose")
+const { tienePermiso } = require("../middlewares/verificarPermisos")
+
+const SIN_MAYUSCULAS = { locale: "es", strength: 2 }
+
+const esElMismo = (req, id) => String(req.userId) === String(id)
 
 // Obtener todos los usuarios (sin mostrar contraseñas)
 const usuariosGet = async (req, res = response) => {
@@ -29,8 +35,13 @@ const usuariosGet = async (req, res = response) => {
 const usuarioGetById = async (req, res = response) => {
   const { id } = req.params
 
+  // Cada usuario puede ver sus propios datos; los de otros requieren verUsuarios
+  if (!esElMismo(req, id) && !tienePermiso(req, "verUsuarios")) {
+    return res.status(404).json({ msg: "Usuario no encontrado" })
+  }
+
   try {
-    const usuario = await Usuario.findById(id).select("-password").populate("rol", "nombreRol")
+    const usuario = isValidObjectId(id) && await Usuario.findById(id).select("-password -resetPasswordToken -resetPasswordExpires").populate("rol", "nombreRol")
 
     if (!usuario) {
       return res.status(404).json({
@@ -38,11 +49,11 @@ const usuarioGetById = async (req, res = response) => {
       })
     }
 
-    // Obtener información adicional según el rol
+    // Información adicional del cliente o empleado (enlazados con el usuario por correo)
     let infoAdicional = {}
 
     if (usuario.rol.nombreRol === "Cliente") {
-      const cliente = await Cliente.findOne({ usuario: id })
+      const cliente = await Cliente.findOne({ correocliente: usuario.email }).collation(SIN_MAYUSCULAS)
       if (cliente) {
         infoAdicional = {
           nombrecliente: cliente.nombrecliente,
@@ -53,7 +64,7 @@ const usuarioGetById = async (req, res = response) => {
         }
       }
     } else if (usuario.rol.nombreRol === "Empleado") {
-      const empleado = await Empleado.findOne({ usuario: id })
+      const empleado = await Empleado.findOne({ correoempleado: usuario.email }).collation(SIN_MAYUSCULAS)
       if (empleado) {
         infoAdicional = {
           nombreempleado: empleado.nombreempleado,
@@ -165,7 +176,7 @@ const usuariosPost = async (req, res = response) => {
     // Generar token para la respuesta
     const token = jwt.sign(
       { userId: nuevoUsuario._id, role: rolAsignado.nombreRol },
-      process.env.JWT_SECRET || "secret_key",
+      process.env.JWT_SECRET,
       { expiresIn: "1h" },
     )
 
@@ -261,7 +272,7 @@ const usuariosPost = async (req, res = response) => {
 
 //     const token = jwt.sign(
 //       { userId: nuevoUsuario._id, role: rolAsignado.nombreRol },
-//       process.env.JWT_SECRET || 'secret_key',
+//       process.env.JWT_SECRET,
 //       { expiresIn: '1h' }
 //     )
 
@@ -438,7 +449,7 @@ const usuariosPost = async (req, res = response) => {
 //   //   // Generar token JWT usando el mismo formato que en authController
 //   //   const token = jwt.sign(
 //   //     { userId: nuevoUsuario._id, role: rolAsignado.nombreRol },
-//   //     process.env.JWT_SECRET || "secret_key",
+//   //     process.env.JWT_SECRET,
 //   //     { expiresIn: "1h" },
 //   //   )
 
@@ -471,30 +482,53 @@ const usuariosPost = async (req, res = response) => {
 const usuariosPut = async (req, res = response) => {
 
   const { id } = req.params
+  const puedeEditarOtros = tienePermiso(req, 'actualizarUsuarios')
+
+  // Sin actualizarUsuarios, cada uno solo edita sus propios datos
+  if (!puedeEditarOtros && !esElMismo(req, id)) {
+    return res.status(403).json({
+      msg: 'No tienes el permiso "actualizarUsuarios" necesario para esta acción',
+      permisoNoAsignado: true,
+    })
+  }
 
   try {
-    const { value, error } = usuarioUpdateSchema.validate(req.body, { abortEarly: false })
+    // Solo los campos editables; el resto (p. ej. "correo" o "avatar" del perfil) se ignora.
+    // El rol y el estado propios solo los cambia alguien con permiso.
+    const editables = ['nombre', 'apellido', 'email', 'celular', 'password', 'confirmPassword', 'especialidad', 'salario']
+    if (puedeEditarOtros) editables.push('rol', 'estado')
+    const datos = Object.fromEntries(Object.entries(req.body).filter(([campo]) => editables.includes(campo)))
+
+    const { value, error } = usuarioUpdateSchema.validate(datos, { abortEarly: false })
 
     if (error) {
       const errores = error.details.map((err) => err.message)
       return res.status(400).json({ errores })
     }
 
-    const usuario = await Usuario.findById(id)
+    const usuario = isValidObjectId(id) && await Usuario.findById(id)
     if (!usuario) {
       return res.status(404).json({ msg: 'Usuario no encontrado' })
     }
 
     const updates = value
 
+    // El correo enlaza al usuario con su cliente o empleado: por ahora solo lo cambia un administrador
+    const nuevoEmail = updates.email?.toLowerCase().trim()
+    if (!puedeEditarOtros && nuevoEmail && nuevoEmail !== usuario.email.toLowerCase()) {
+      return res.status(400).json({ msg: 'Por ahora el correo solo lo puede cambiar un administrador' })
+    }
+
     if (updates.password) {
       const salt = bcrypt.genSaltSync()
       updates.password = bcrypt.hashSync(updates.password, salt)
     }
 
-    await Usuario.findByIdAndUpdate(id, updates, { new: true })
+    const actualizado = await Usuario.findByIdAndUpdate(id, updates, { new: true })
+      .select('-password -resetPasswordToken -resetPasswordExpires')
+      .populate('rol', 'nombreRol')
 
-    res.json({ msg: 'Usuario actualizado correctamente' })
+    res.json({ msg: 'Usuario actualizado correctamente', usuario: actualizado })
   } catch (err) {
     console.error(err)
     res.status(500).json({ msg: 'Error al actualizar el usuario' })
@@ -770,8 +804,13 @@ const usuariosDelete = async (req, res = response) => {
 }
 
 // Consultar usuarios con parámetros (PromGet)
+// Escapa el texto para usarlo literal dentro de una expresión regular
+const escaparRegex = (texto) => String(texto).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+
 const PromGet = async (req, res = response) => {
-  const { q, nombre, page = 1, limit = 10 } = req.query
+  const { page = 1, limit = 10 } = req.query
+  const q = req.query.q && escaparRegex(req.query.q)
+  const nombre = req.query.nombre && escaparRegex(req.query.nombre)
   const limitNum = Number(limit)
   const skip = (Number(page) - 1) * limitNum
 

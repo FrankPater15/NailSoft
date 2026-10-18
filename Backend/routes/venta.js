@@ -1,6 +1,9 @@
 const { Router } = require("express")
 const { validarJWT } = require("../middlewares/verificartoken")
 const verificarPermisos = require("../middlewares/verificarPermisos")
+const { cargarPersona } = require("../middlewares/cargarPersona")
+const { alcanceVentas, exigirEnAlcance } = require("../middlewares/alcance")
+const Venta = require("../modules/venta")
 const {
   obtenerVentas,
   obtenerVentaPorId,
@@ -17,54 +20,24 @@ const {
 
 const router = Router()
 
-// Aplicar middleware de autenticación a todas las rutas
-// router.use(validarJWT)
+router.use(validarJWT, cargarPersona)
 
-// Ruta para obtener todas las ventas
-router.get("/", obtenerVentas)
+// Los permisos "...Propias" limitan la acción a las ventas del propio cliente o empleado
+const ver = verificarPermisos(["verVentas", "verVentasPropias"])
+const actualizar = [
+  verificarPermisos(["actualizarVentas", "actualizarVentasPropias"]),
+  exigirEnAlcance(Venta, alcanceVentas, "actualizarVentas"),
+]
 
-//Obtener ventas por clientes
-router.get("/cliente", obtenerVentasPorCliente)
-
-// Ruta para obtener una venta específica por ID
-router.get("/:id",  obtenerVentaPorId)
-
-
-router.get("/cita/:citaId", obtenerVentasPorCita);
-
-router.post("/", validarVenta, crearVenta);
-
-// Ruta para crear una nueva venta
-router.post("/", crearVenta)
-
-// Ruta para actualizar una venta existente
-router.put(
-  "/:id",
-  actualizarVenta,
-)
-
-// Ruta para eliminar una venta
-router.delete(
-  "/:id",
-  eliminarVenta,
-)
-
-// Ruta para finalizar una venta
-router.put(
-  "/:id/finalizar",
-  finalizarVenta,
-)
-
-// Ruta para agregar productos a una venta existente
-router.put(
-  "/:id/agregar-productos",
-  agregarProductosVenta,
-)
-
-// Ruta para agregar servicios a una venta existente
-router.put(
-  "/:id/agregar-servicios",
-  agregarServiciosVenta,
-)
+router.get("/", ver, obtenerVentas)
+router.get("/cliente", ver, obtenerVentasPorCliente)
+router.get("/cita/:citaId", ver, obtenerVentasPorCita)
+router.get("/:id", ver, exigirEnAlcance(Venta, alcanceVentas, "verVentas"), obtenerVentaPorId)
+router.post("/", verificarPermisos(["crearVentas"]), validarVenta, crearVenta)
+router.put("/:id", actualizar, actualizarVenta)
+router.delete("/:id", verificarPermisos(["eliminarVentas"]), eliminarVenta)
+router.put("/:id/finalizar", actualizar, finalizarVenta)
+router.put("/:id/agregar-productos", actualizar, agregarProductosVenta)
+router.put("/:id/agregar-servicios", actualizar, agregarServiciosVenta)
 
 module.exports = router

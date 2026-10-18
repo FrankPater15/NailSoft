@@ -1,4 +1,6 @@
 const Empleado = require('../modules/empleado');
+const { isValidObjectId } = require('mongoose');
+const { tienePermiso } = require('../middlewares/verificarPermisos');
 
 // Crear un nuevo empleado
 const crearEmpleado = async (req, res) => {
@@ -33,10 +35,14 @@ const crearEmpleado = async (req, res) => {
     }
 };
 
+// Sin verEmpleados solo se exponen los datos necesarios para agendar (sin correo ni teléfono)
+const camposVisibles = (req) =>
+    tienePermiso(req, 'verEmpleados') ? undefined : 'nombreempleado apellidoempleado estadoempleado';
+
 // Obtener todos los empleados
 const obtenerEmpleados = async (req, res) => {
     try {
-        const empleados = await Empleado.find();
+        const empleados = await Empleado.find({}, camposVisibles(req));
         res.status(200).json(empleados);
     } catch (error) {
         res.status(500).json({ message: 'Error al obtener los empleados', error });
@@ -46,7 +52,7 @@ const obtenerEmpleados = async (req, res) => {
 // Obtener un empleado por ID
 const obtenerEmpleadoPorId = async (req, res) => {
     try {
-        const empleado = await Empleado.findById(req.params.id);
+        const empleado = isValidObjectId(req.params.id) && await Empleado.findById(req.params.id, camposVisibles(req));
         if (!empleado) {
             return res.status(404).json({ message: 'Empleado no encontrado' });
         }

@@ -9,11 +9,10 @@ const {
 } = require("../controllers/permiso")
 const { validarJWT } = require("../middlewares/verificartoken")
 const verificarPermisos = require("../middlewares/verificarPermisos")
-const verificarRolActivo = require("../middlewares/verificarRolActivo")
 
 // Aplicar middleware de autenticación y verificación de rol activo
 router.use(validarJWT)
-router.use(verificarRolActivo)
+
 
 // Rutas para permisos con permisos específicos
 router.get("/", verificarPermisos(["verPermisos"]), permisosGet)

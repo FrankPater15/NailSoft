@@ -15,8 +15,8 @@ router.put('/:id', verificarPermisos (['actualizarVentaServicio']), ventaservici
 
 router.delete('/:id', verificarPermisos (['eliminarVentaServicio']), ventaserviciosDelete)
 
-router.put('/:id/agregar-servicios', agregarServiciosVenta);
+router.put('/:id/agregar-servicios', verificarPermisos(['actualizarVentaServicio']), agregarServiciosVenta);
 
-router.put('/:id/finalizar', finalizarVenta);
+router.put('/:id/finalizar', verificarPermisos(['actualizarVentaServicio']), finalizarVenta);
 
 module.exports = router

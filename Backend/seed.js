@@ -27,6 +27,35 @@ const permisos = [
     ['crearCliente', 'clientes', 'write', 'Crear clientes nuevos'],
     ['actualizarCliente', 'clientes', 'write', 'Editar clientes existentes'],
     ['eliminarCliente', 'clientes', 'delete', 'Eliminar clientes'],
+    // Los permisos "...Propias" limitan la acción a los registros del propio cliente o empleado
+    ['verCitas', 'citas', 'read', 'Consultar todas las citas'],
+    ['verCitasPropias', 'citas', 'read', 'Consultar solo las citas propias'],
+    ['crearCitas', 'citas', 'write', 'Agendar citas para cualquier cliente'],
+    ['crearCitasPropias', 'citas', 'write', 'Agendar citas a nombre propio'],
+    ['actualizarCitas', 'citas', 'write', 'Editar, iniciar y cancelar cualquier cita'],
+    ['actualizarCitasPropias', 'citas', 'write', 'Editar, iniciar y cancelar las citas propias'],
+    ['cancelarCitasPropias', 'citas', 'write', 'Cancelar las citas propias'],
+    ['eliminarCitas', 'citas', 'delete', 'Eliminar citas'],
+    ['verVentas', 'ventas', 'read', 'Consultar todas las ventas'],
+    ['verVentasPropias', 'ventas', 'read', 'Consultar solo las ventas propias'],
+    ['crearVentas', 'ventas', 'write', 'Registrar ventas'],
+    ['actualizarVentas', 'ventas', 'write', 'Editar y finalizar cualquier venta'],
+    ['actualizarVentasPropias', 'ventas', 'write', 'Editar y finalizar las ventas propias'],
+    ['eliminarVentas', 'ventas', 'delete', 'Eliminar ventas'],
+    ['verEmpleados', 'empleados', 'read', 'Consultar los datos de contacto de los empleados'],
+    ['crearEmpleados', 'empleados', 'write', 'Crear empleados nuevos'],
+    ['actualizarEmpleados', 'empleados', 'write', 'Editar empleados existentes'],
+    ['eliminarEmpleados', 'empleados', 'delete', 'Eliminar empleados'],
+    ['verInsumos', 'insumos', 'read', 'Consultar los insumos'],
+    ['crearInsumos', 'insumos', 'write', 'Crear insumos nuevos'],
+    ['actualizarInsumos', 'insumos', 'write', 'Editar insumos y su stock'],
+    ['eliminarInsumos', 'insumos', 'delete', 'Eliminar insumos'],
+    ['crearTipoServicios', 'servicios', 'write', 'Crear categorías de servicio'],
+    ['actualizarTipoServicios', 'servicios', 'write', 'Editar categorías de servicio'],
+    ['eliminarTipoServicios', 'servicios', 'delete', 'Eliminar categorías de servicio'],
+    ['crearTipoDescuento', 'servicios', 'write', 'Crear tipos de descuento'],
+    ['actualizarTipoDescuento', 'servicios', 'write', 'Editar tipos de descuento'],
+    ['eliminarTipoDescuento', 'servicios', 'delete', 'Eliminar tipos de descuento'],
     ['verCompras', 'compras', 'read', 'Consultar las compras'],
     ['crearCompras', 'compras', 'write', 'Registrar compras nuevas'],
     ['actualizarCompras', 'compras', 'write', 'Editar compras existentes'],
@@ -83,6 +112,7 @@ const permisos = [
     ['visualizarRolesMenu', 'vistasSidebar', 'read', 'Ver el menú de roles'],
     ['verPermisosMenu', 'vistasSidebar', 'read', 'Ver el menú de permisos'],
     ['verConfiguracionMenu', 'vistasSidebar', 'read', 'Ver el menú de configuración'],
+    ['verPerfil', 'vistasSidebar', 'read', 'Ver y editar el propio perfil'],
 ];
 
 // Permisos iniciales de cada rol; luego se pueden cambiar desde la aplicación
@@ -91,25 +121,35 @@ const roles = {
     Empleado: {
         esAdmin: false,
         permisos: [
-            'visualizarCitaEnProgresoMenu', 'verAgendaEmpleadosMenu', 'verCitasMenu',
+            'verPerfil', 'visualizarCitaEnProgresoMenu', 'verAgendaEmpleadosMenu', 'verCitasMenu',
             'verServiciosMenu', 'verServicios', 'verCliente',
+            'verCitasPropias', 'actualizarCitasPropias',
+            'verVentasPropias', 'crearVentas', 'actualizarVentasPropias',
         ],
     },
-    Cliente: { esAdmin: false, permisos: ['verCatalogoMenu', 'verCitasMenu', 'verServicios'] },
+    Cliente: {
+        esAdmin: false,
+        permisos: [
+            'verPerfil', 'verCatalogoMenu', 'verCitasMenu', 'verServicios',
+            'verCitasPropias', 'crearCitasPropias', 'cancelarCitasPropias', 'verVentasPropias',
+        ],
+    },
     // Roles extra para probar permisos dinámicos con roles que el código no conoce por nombre
     Recepcionista: {
         esAdmin: false,
         permisos: [
-            'visualizarDashboardMenu', 'verCitasMenu', 'verAgendaEmpleadosMenu', 'visualizarCitaEnProgresoMenu',
+            'verPerfil', 'visualizarDashboardMenu', 'verCitasMenu', 'verAgendaEmpleadosMenu', 'visualizarCitaEnProgresoMenu',
             'verClientesMenu', 'verCliente', 'crearCliente', 'actualizarCliente',
             'verServiciosMenu', 'verServicios', 'verCatalogoMenu',
-            'verVentasUnificadasMenu', 'verVentasMenu', 'verVentaServicio', 'crearVentaServicio',
-            'verVentaProducto', 'crearVentaProducto',
+            'verCitas', 'crearCitas', 'actualizarCitas', 'verEmpleados',
+            'verVentasUnificadasMenu', 'verVentasMenu', 'verVentas', 'crearVentas', 'actualizarVentas',
+            'verVentaServicio', 'crearVentaServicio', 'verVentaProducto', 'crearVentaProducto',
         ],
     },
     Inventario: {
         esAdmin: false,
         permisos: [
+            'verPerfil', 'verInsumos', 'crearInsumos', 'actualizarInsumos',
             'verProductosMenu', 'verProducto', 'crearProducto', 'actualizarProducto', 'eliminarProducto',
             'verCategoriaProductosMenu', 'verCategoriaProducto', 'crearCategoriaProducto', 'actualizarCategoriaProducto',
             'verInsumosMenu', 'verBajaProductoMenu', 'verBajaProductos', 'crearBajaProducto',
@@ -127,10 +167,8 @@ const admin = {
     password: process.env.SEED_ADMIN_PASSWORD || 'Admin123!',
 };
 
-const seed = async () => {
-    await mongoose.connect(process.env.MONGODB_CNN);
-    console.log(`Conectado a ${mongoose.connection.name}`);
-
+// Crea o actualiza permisos, roles y el administrador. Usa la conexión de mongoose abierta.
+const sembrarBase = async () => {
     const idsPorNombre = {};
     for (const [nombrePermiso, categoria, nivel, descripcion] of permisos) {
         const permiso = await Permiso.findOneAndUpdate(
@@ -167,9 +205,15 @@ const seed = async () => {
     }
 };
 
-seed()
-    .catch((error) => {
-        console.error('Error en el seed:', error.message);
-        process.exitCode = 1;
-    })
-    .finally(() => mongoose.disconnect());
+module.exports = { sembrarBase };
+
+if (require.main === module) {
+    mongoose.connect(process.env.MONGODB_CNN)
+        .then(() => console.log(`Conectado a ${mongoose.connection.name}`))
+        .then(sembrarBase)
+        .catch((error) => {
+            console.error('Error en el seed:', error.message);
+            process.exitCode = 1;
+        })
+        .finally(() => mongoose.disconnect());
+}

@@ -1,49 +1,28 @@
 const express = require('express');
-const router = express.Router();
+const { validarJWT } = require('../middlewares/verificartoken');
+const verificarPermisos = require('../middlewares/verificarPermisos');
+const { cargarPersona } = require('../middlewares/cargarPersona');
 const {
     crearCliente,
     obtenerClientes,
     obtenerClientePorId,
+    obtenerPerfilCliente,
     actualizarCliente,
     eliminarCliente,
     cambiarEstadoCliente
 } = require('../controllers/cliente');
-//const { validarJWT } = require('../middlewares/verificartoken'); // Asegúrate de que la ruta sea correcta
-//const verificarPermisos = require('../middlewares/verificarPermisos'); 
-//router.use(validarJWT);
-// // Ruta para crear un nuevo cliente
-// router.post('/', verificarPermisos(['crearCliente']), crearCliente);
 
-// // Ruta para obtener todos los clientes
-// router.get('/', verificarPermisos(['verCliente']),obtenerClientes);
+const router = express.Router();
 
-// // Ruta para obtener un cliente por ID
-// router.get('/:id', verificarPermisos(['verCliente']),obtenerClientePorId);
+router.use(validarJWT, cargarPersona);
 
-// // Ruta para actualizar un cliente por ID
-// router.put('/:id', verificarPermisos(['actualizarCliente']),actualizarCliente);
-
-// // Ruta para eliminar un cliente por ID
-// router.delete('/:id',verificarPermisos(['eliminarCliente']), eliminarCliente);
-
-
-// Ruta para crear un nuevo cliente
-router.post('/',  crearCliente);
-
-// Ruta para obtener todos los clientes
+// Sin el permiso verCliente / actualizarCliente, cada cliente solo ve y edita su propio registro
+router.get('/perfil', obtenerPerfilCliente);
 router.get('/', obtenerClientes);
-
-// Ruta para obtener un cliente por ID
 router.get('/:id', obtenerClientePorId);
-
-// Ruta para actualizar un cliente por ID
+router.post('/', verificarPermisos(['crearCliente']), crearCliente);
 router.put('/:id', actualizarCliente);
-
-// Ruta para eliminar un cliente por ID
-router.delete('/:id', eliminarCliente);
-
-// Ruta para cambiar el estado de un cliente
-router.patch('/:id/toggle-estado', cambiarEstadoCliente);
-
+router.delete('/:id', verificarPermisos(['eliminarCliente']), eliminarCliente);
+router.patch('/:id/toggle-estado', verificarPermisos(['actualizarCliente']), cambiarEstadoCliente);
 
 module.exports = router;

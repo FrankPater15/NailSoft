@@ -1,4 +1,6 @@
 const Cliente = require('../modules/cliente');
+const { isValidObjectId } = require('mongoose');
+const { tienePermiso } = require('../middlewares/verificarPermisos');
 
 // Crear un nuevo cliente
 const crearCliente = async (req, res) => {
@@ -38,9 +40,15 @@ const crearCliente = async (req, res) => {
     }
 };
 
-// Obtener todos los clientes
+// ¿El cliente con este id es el del usuario autenticado?
+const esPropio = (req, id) => Boolean(req.cliente) && String(req.cliente._id) === String(id);
+
+// Obtener los clientes: todos con verCliente, si no solo el propio
 const obtenerClientes = async (req, res) => {
     try {
+        if (!tienePermiso(req, 'verCliente')) {
+            return res.status(200).json(req.cliente ? [req.cliente] : []);
+        }
         const clientes = await Cliente.find();
         res.status(200).json(clientes);
     } catch (error) {
@@ -48,10 +56,22 @@ const obtenerClientes = async (req, res) => {
     }
 };
 
+// Perfil de cliente del usuario autenticado
+const obtenerPerfilCliente = (req, res) => {
+    if (!req.cliente) {
+        return res.status(404).json({ message: 'Tu usuario no tiene un perfil de cliente' });
+    }
+    res.status(200).json({ cliente: req.cliente });
+};
+
 // Obtener un cliente por ID
 const obtenerClientePorId = async (req, res) => {
     try {
-        const cliente = await Cliente.findById(req.params.id);
+        const { id } = req.params;
+        if (!tienePermiso(req, 'verCliente') && !esPropio(req, id)) {
+            return res.status(404).json({ message: 'Cliente no encontrado' });
+        }
+        const cliente = isValidObjectId(id) && await Cliente.findById(id);
         if (!cliente) {
             return res.status(404).json({ message: 'Cliente no encontrado' });
         }
@@ -65,10 +85,20 @@ const obtenerClientePorId = async (req, res) => {
 const actualizarCliente = async (req, res) => {
     try {
         const { id } = req.params;
-        const { nombrecliente, apellidocliente, correocliente, celularcliente, estadocliente } = req.body;
+        let { nombrecliente, apellidocliente, correocliente, celularcliente, estadocliente } = req.body;
+
+        // Sin actualizarCliente solo se edita el propio registro, sin tocar correo (enlaza con
+        // el usuario) ni estado
+        if (!tienePermiso(req, 'actualizarCliente')) {
+            if (!esPropio(req, id)) {
+                return res.status(404).json({ message: 'Cliente no encontrado' });
+            }
+            correocliente = undefined;
+            estadocliente = undefined;
+        }
 
         // Verificar si el cliente existe
-        const clienteExistente = await Cliente.findById(id);
+        const clienteExistente = isValidObjectId(id) && await Cliente.findById(id);
         if (!clienteExistente) {
             return res.status(404).json({ message: 'Cliente no encontrado' });
         }
@@ -151,6 +181,7 @@ module.exports = {
     crearCliente,
     obtenerClientes,
     obtenerClientePorId,
+    obtenerPerfilCliente,
     actualizarCliente,
     eliminarCliente,
     cambiarEstadoCliente

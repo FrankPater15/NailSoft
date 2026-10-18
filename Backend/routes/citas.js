@@ -1,27 +1,27 @@
 const { Router } = require('express');
+const { validarJWT } = require('../middlewares/verificartoken');
+const verificarPermisos = require('../middlewares/verificarPermisos');
+const { cargarPersona } = require('../middlewares/cargarPersona');
+const { crearCita, obtenerCitas, obtenerCitaPorId, actualizarCita, cancelarCita, eliminarCita, verificarDisponibilidad, iniciarCita, obtenerCitasPorCliente } = require('../controllers/cita');
 
-
-const { crearCita, obtenerCitas, obtenerCitaPorId, actualizarCita, cancelarCita, eliminarCita, verificarDisponibilidad, iniciarCita,obtenerCitasPorCliente} = require('../controllers/cita');
-//const { validarJWT } = require('../middlewares/verificartoken'); // Asegúrate de que la ruta sea correcta
-//const verificarPermisos = require('../middlewares/verificarPermisos'); // Asegúrate de que la ruta sea correcta
 const router = Router();
-//router.use(validarJWT);
-// Definir las rutas para citas
-// router.post('/', verificarPermisos (['crearCita']), crearCita);
-// router.get('/', verificarPermisos (['verCita']),obtenerCitas);
-// router.get('/:id', verificarPermisos (['verCita']), obtenerCitaPorId);
-// router.put('/:id', verificarPermisos (['actualizarCita']), actualizarCita);
-// router.delete('/:id', verificarPermisos (['eliminarCita']),eliminarCita);
 
+router.use(validarJWT, cargarPersona);
 
-router.post('/',   crearCita);
-router.get('/', obtenerCitas);
-router.get('/cliente', obtenerCitasPorCliente);
-router.get('/:id',  obtenerCitaPorId);
-router.put('/:id',  actualizarCita);
-router.delete('/:id', eliminarCita);
-router.post('/verificar-disponibilidad', verificarDisponibilidad);
-router.put('/:id/iniciar', iniciarCita);
-router.put('/:id/cancelar', cancelarCita);  // Nueva ruta para cancelar citas
+// Los permisos "...Propias" limitan la acción a las citas del propio cliente o empleado
+const ver = verificarPermisos(['verCitas', 'verCitasPropias']);
+const crear = verificarPermisos(['crearCitas', 'crearCitasPropias']);
+const actualizar = verificarPermisos(['actualizarCitas', 'actualizarCitasPropias']);
+const cancelar = verificarPermisos(['actualizarCitas', 'actualizarCitasPropias', 'cancelarCitasPropias']);
+
+router.post('/', crear, crearCita);
+router.get('/', ver, obtenerCitas);
+router.get('/cliente', ver, obtenerCitasPorCliente);
+router.post('/verificar-disponibilidad', verificarPermisos(['crearCitas', 'crearCitasPropias', 'actualizarCitas', 'actualizarCitasPropias']), verificarDisponibilidad);
+router.get('/:id', ver, obtenerCitaPorId);
+router.put('/:id', actualizar, actualizarCita);
+router.delete('/:id', verificarPermisos(['eliminarCitas']), eliminarCita);
+router.put('/:id/iniciar', actualizar, iniciarCita);
+router.put('/:id/cancelar', cancelar, cancelarCita);
 
 module.exports = router;
