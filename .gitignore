@@ -9,3 +9,6 @@ node_modules/
 # Archivos generados al compilar la app móvil
 mobile/android/app/.cxx/
 mobile/build/
+
+# Copias de respaldo comprimidas
+*.zip

@@ -318,7 +318,7 @@ const handleLogin = async (e) => {
               className="logo-container-login"
             >
               <img
-                src={`${import.meta.env.VITE_BACKEND_URL}/uploads/LogoLogin.webp`}
+                src={`${import.meta.env.VITE_BACKEND_URL}/uploads/logo1Navbar.webp`}
                 alt="SPA Y BELLEZA"
                 className="logo-image-login"
               />
