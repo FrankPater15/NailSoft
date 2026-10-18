@@ -52,7 +52,7 @@ const TablaClientes = () => {
       }
 
       const respuesta = await axios.get(
-        "https://gitbf.onrender.com/api/clientes",
+        `${import.meta.env.VITE_BACKEND_URL}/api/clientes`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -103,7 +103,7 @@ const TablaClientes = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.patch(
-        `https://gitbf.onrender.com/api/clientes/${id}/toggle-estado`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/clientes/${id}/toggle-estado`,
         {},
         {
           headers: {
@@ -160,7 +160,7 @@ const TablaClientes = () => {
     if (result.isConfirmed) {
       try {
         const token = localStorage.getItem("token");
-        await axios.delete(`https://gitbf.onrender.com/api/clientes/${id}`, {
+        await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/clientes/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

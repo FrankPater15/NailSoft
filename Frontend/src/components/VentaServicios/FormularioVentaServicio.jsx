@@ -30,22 +30,22 @@ const FormularioVentaServicio = ({ venta, onGuardar, onCancelar }) => {
       const token = localStorage.getItem("token")
 
       const [clientesResponse, serviciosResponse, citasResponse, empleadosResponse] = await Promise.all([
-        fetch("https://gitbf.onrender.com/api/clientes", {
+        fetch(`${import.meta.env.VITE_BACKEND_URL}/api/clientes`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }),
-        fetch("https://gitbf.onrender.com/api/servicios", {
+        fetch(`${import.meta.env.VITE_BACKEND_URL}/api/servicios`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }),
-        fetch("https://gitbf.onrender.com/api/citas", {
+        fetch(`${import.meta.env.VITE_BACKEND_URL}/api/citas`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }),
-        fetch("https://gitbf.onrender.com/api/empleados", {
+        fetch(`${import.meta.env.VITE_BACKEND_URL}/api/empleados`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

@@ -30,7 +30,7 @@ const ArticlesGrid = () => {
     cargarServicios()
   }, [])
 
-  const baseUrl = "https://gitbf.onrender.com/uploads"
+  const baseUrl = `${import.meta.env.VITE_BACKEND_URL}/uploads`
 
   const manejarClickServicio = (servicio) => {
     setSelectedService(servicio)

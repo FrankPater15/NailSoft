@@ -33,7 +33,7 @@ const GestionVentaServicio = () => {
   const [error, setError] = useState(null)
   const [cambiosSinGuardar, setCambiosSinGuardar] = useState(false)
   const [activeTab, setActiveTab] = useState("servicios") // servicios, productos
-  const API_URL = "https://gitbf.onrender.com/api"
+  const API_URL = `${import.meta.env.VITE_BACKEND_URL}/api`
   const [duracionTotal, setDuracionTotal] = useState(0)
   const [tiempoTotal, setTiempoTotal] = useState(0)
 

@@ -366,12 +366,12 @@ const Index = () => {
 
   // Optimizamos las URLs de las imágenes para usar versiones más pequeñas o WebP si están disponibles
   const images = [
-    "http://gitbf.onrender.com/uploads/ImgFdo14.jpg",
-    "http://gitbf.onrender.com/uploads/ImgFdo15.jpg",
-    "http://gitbf.onrender.com/uploads/imgFdo3.jpg",
-    "http://gitbf.onrender.com/uploads/ImgFdo5.jpeg",
-    "http://gitbf.onrender.com/uploads/ImgFdo6.jpg",
-    "http://gitbf.onrender.com/uploads/ImgFdo7.jpg",
+    `${import.meta.env.VITE_BACKEND_URL}/uploads/ImgFdo14.jpg`,
+    `${import.meta.env.VITE_BACKEND_URL}/uploads/ImgFdo15.jpg`,
+    `${import.meta.env.VITE_BACKEND_URL}/uploads/imgFdo3.jpg`,
+    `${import.meta.env.VITE_BACKEND_URL}/uploads/ImgFdo5.jpeg`,
+    `${import.meta.env.VITE_BACKEND_URL}/uploads/ImgFdo6.jpg`,
+    `${import.meta.env.VITE_BACKEND_URL}/uploads/ImgFdo7.jpg`,
   ]
 
   const stats = [

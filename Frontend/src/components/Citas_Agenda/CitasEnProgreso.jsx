@@ -14,7 +14,7 @@ const CitasEnProgreso = () => {
   const [error, setError] = useState(null)
   const navigate = useNavigate()
   const location = useLocation()
-  const API_URL = "https://gitbf.onrender.com/api"
+  const API_URL = `${import.meta.env.VITE_BACKEND_URL}/api`
 
   // Función para obtener los datos de citas y ventas
   const fetchData = async () => {

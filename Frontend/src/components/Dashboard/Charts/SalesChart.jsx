@@ -52,7 +52,7 @@ const SalesChart = () => {
         const headers = { Authorization: `Bearer ${token}` }
 
         // Obtener datos solo del endpoint de ventas
-        const response = await axios.get("https://gitbf.onrender.com/api/ventas", { headers })
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/ventas`, { headers })
         const ventas = response.data.ventas || []
 
         console.log("Datos de ventas:", ventas)

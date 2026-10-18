@@ -152,7 +152,7 @@ const FormularioProducto = ({ producto, onClose, onProductoActualizado }) => {
           return
         }
 
-        const respuesta = await axios.get("https://gitbf.onrender.com/api/categoriaproductos", {
+        const respuesta = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/categoriaproductos`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -295,7 +295,7 @@ const FormularioProducto = ({ producto, onClose, onProductoActualizado }) => {
       }
 
       if (producto) {
-        await axios.put(`https://gitbf.onrender.com/api/productos/${producto._id}`, data, config)
+        await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/productos/${producto._id}`, data, config)
         Swal.fire({
           icon: "success",
           title: "¡Éxito!",
@@ -303,7 +303,7 @@ const FormularioProducto = ({ producto, onClose, onProductoActualizado }) => {
           confirmButtonColor: "#db2777",
         })
       } else {
-        await axios.post("https://gitbf.onrender.com/api/productos", data, config)
+        await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/productos`, data, config)
         Swal.fire({
           icon: "success",
           title: "¡Éxito!",

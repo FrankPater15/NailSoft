@@ -38,7 +38,7 @@ const AppointmentsChart = () => {
         }
 
         const headers = { Authorization: `Bearer ${token}` }
-        const response = await axios.get("https://gitbf.onrender.com/api/citas", { headers })
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/citas`, { headers })
         const citas = response.data.citas || []
 
         // Procesar datos según el rango de tiempo seleccionado

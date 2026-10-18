@@ -124,7 +124,7 @@ const useEmpleadosYCitas = (currentStep) => {
     try {
       const headers = { Authorization: `Bearer ${user.token}` };
       const response = await axios.get(
-        "https://gitbf.onrender.com/api/empleados",
+        `${import.meta.env.VITE_BACKEND_URL}/api/empleados`,
         {
           headers,
           timeout: 8000,
@@ -154,7 +154,7 @@ const useEmpleadosYCitas = (currentStep) => {
 
     try {
       const headers = { Authorization: `Bearer ${user.token}` };
-      const response = await axios.get("https://gitbf.onrender.com/api/citas", {
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/citas`, {
         headers,
         timeout: 8000,
       });
@@ -190,7 +190,7 @@ const useClienteCompleto = (currentStep) => {
     try {
       const headers = { Authorization: `Bearer ${user.token}` };
       const response = await axios.get(
-        "https://gitbf.onrender.com/api/clientes",
+        `${import.meta.env.VITE_BACKEND_URL}/api/clientes`,
         {
           headers,
           timeout: 8000,
@@ -614,7 +614,7 @@ const SeleccionarServicios = () => {
       try {
         const headers = { Authorization: `Bearer ${user.token}` };
         const response = await axios.post(
-          "https://gitbf.onrender.com/api/citas",
+          `${import.meta.env.VITE_BACKEND_URL}/api/citas`,
           dataToSend,
           { headers }
         );

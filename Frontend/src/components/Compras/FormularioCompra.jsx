@@ -24,9 +24,9 @@ const FormularioCompra = ({ compra, onClose, onSuccess }) => {
     insumos: "",
   })
 
-  const apiUrl = "https://gitbf.onrender.com/api/compras"
-  const proveedoresUrl = "https://gitbf.onrender.com/api/proveedores"
-  const insumosUrl = "https://gitbf.onrender.com/api/insumos"
+  const apiUrl = `${import.meta.env.VITE_BACKEND_URL}/api/compras`
+  const proveedoresUrl = `${import.meta.env.VITE_BACKEND_URL}/api/proveedores`
+  const insumosUrl = `${import.meta.env.VITE_BACKEND_URL}/api/insumos`
 
   // Funciones de validación del lado del cliente
   const validarProveedor = (proveedor) => {

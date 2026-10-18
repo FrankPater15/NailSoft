@@ -54,7 +54,7 @@ const TablaCompras = () => {
         return
       }
 
-      const respuesta = await axios.get("https://gitbf.onrender.com/api/compras", {
+      const respuesta = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/compras`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -128,7 +128,7 @@ const TablaCompras = () => {
           return
         }
 
-        await axios.delete(`https://gitbf.onrender.com/api/compras/${id}`, {
+        await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/compras/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

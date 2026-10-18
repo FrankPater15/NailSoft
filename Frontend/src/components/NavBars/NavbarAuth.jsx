@@ -41,7 +41,7 @@
 //               <Heart className="h-8 w-8 text-pink-600" />
 //             </motion.div>
 //             <motion.img
-//               src="https://gitbf.onrender.com/uploads/logo1Navbar.webp"
+//               src={`${import.meta.env.VITE_BACKEND_URL}/uploads/logo1Navbar.webp`}
 //               alt="NailsSoft Logo"
 //               className="h-10 w-10 rounded-full object-cover"
 //               initial={{ rotate: -180, opacity: 0 }}
@@ -139,7 +139,7 @@ const NavbarAuth = () => {
               <Heart className="h-8 w-8 text-pink-600" />
             </motion.div>
             <motion.img
-              src="https://gitbf.onrender.com/uploads/logo1Navbar.webp"
+              src={`${import.meta.env.VITE_BACKEND_URL}/uploads/logo1Navbar.webp`}
               alt="NailsSoft Logo"
               className="h-10 w-10 rounded-full object-cover"
               initial={{ rotate: -180, opacity: 0 }}

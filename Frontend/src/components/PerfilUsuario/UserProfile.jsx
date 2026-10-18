@@ -124,7 +124,7 @@ const UserProfile = () => {
         throw new Error("No se encontró la información de autenticación")
       }
 
-      const response = await axios.get(`https://gitbf.onrender.com/api/usuarios/${userId}`, {
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/usuarios/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -261,7 +261,7 @@ const UserProfile = () => {
       // Realizar la petición con axios
       const response = await axios({
         method: "PUT",
-        url: `https://gitbf.onrender.com/api/usuarios/${userId}`,
+        url: `${import.meta.env.VITE_BACKEND_URL}/api/usuarios/${userId}`,
         data: updateData,
         headers: {
           "Content-Type": "application/json",

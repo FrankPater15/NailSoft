@@ -94,7 +94,7 @@ const handleSubmit = async (e) => {
     return
   }
   try {
-    const response = await axios.post("https://gitbf.onrender.com/api/auth/reset-password", { 
+    const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/reset-password`, { 
       token: resetToken, 
       password, 
       confirmPassword 

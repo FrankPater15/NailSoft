@@ -154,7 +154,7 @@ export default function FormularioCita({ cita, fechaSeleccionada, servicioSelecc
             const headers = { Authorization: `Bearer ${token}` }
             const fechaStr = fecha.toISOString().split("T")[0]
 
-            const citasResponse = await axios.get(`https://gitbf.onrender.com/api/citas`, { headers })
+            const citasResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/citas`, { headers })
             const citasDelDia = citasResponse.data.citas.filter((c) => {
               if (!c.fechacita || !c.nombreempleado) return false
               const citaFecha = new Date(c.fechacita).toISOString().split("T")[0]
@@ -275,8 +275,8 @@ export default function FormularioCita({ cita, fechaSeleccionada, servicioSelecc
 
       // Usar Promise.allSettled para manejar mejor los errores parciales
       const resultados = await Promise.allSettled([
-        axios.get("https://gitbf.onrender.com/api/empleados", { headers }),
-        axios.get("https://gitbf.onrender.com/api/clientes", { headers }),
+        axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/empleados`, { headers }),
+        axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/clientes`, { headers }),
         obtenerServiciosConDescuento(),
       ])
 
@@ -624,7 +624,7 @@ export default function FormularioCita({ cita, fechaSeleccionada, servicioSelecc
       const headers = { Authorization: `Bearer ${token}` }
 
       if (cita) {
-        const response = await axios.put(`https://gitbf.onrender.com/api/citas/${cita._id}`, dataToSend, { headers })
+        const response = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/citas/${cita._id}`, dataToSend, { headers })
         // console.log("RESPUESTA DEL SERVIDOR (ACTUALIZACIÓN):", response.data)
         Swal.fire({
           title: "¡Éxito!",
@@ -633,7 +633,7 @@ export default function FormularioCita({ cita, fechaSeleccionada, servicioSelecc
           confirmButtonColor: "#ff69b4",
         })
       } else {
-        const response = await axios.post("https://gitbf.onrender.com/api/citas", dataToSend, { headers })
+        const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/citas`, dataToSend, { headers })
         // console.log("RESPUESTA DEL SERVIDOR (CREACIÓN):", response.data)
         Swal.fire({
           title: "¡Éxito!",
@@ -698,7 +698,7 @@ export default function FormularioCita({ cita, fechaSeleccionada, servicioSelecc
 
         const headers = { Authorization: `Bearer ${token}` }
 
-        await axios.delete(`https://gitbf.onrender.com/api/citas/${cita._id}`, { headers })
+        await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/citas/${cita._id}`, { headers })
         Swal.fire({
           title: "Eliminado",
           text: "La cita ha sido eliminada correctamente.",

@@ -285,7 +285,7 @@ export default function Register() {
 
     try {
       const response = await axios.post(
-        "https://gitbf.onrender.com/api/auth/register",
+        `${import.meta.env.VITE_BACKEND_URL}/api/auth/register`,
         {
           nombre: formData.nombre.trim(),
           apellido: formData.apellido.trim(),

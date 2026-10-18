@@ -54,8 +54,8 @@ const ServicesChart = () => {
 
         // Obtener citas y empleados
         const [citasResponse, empleadosResponse] = await Promise.all([
-          axios.get("https://gitbf.onrender.com/api/citas", { headers }),
-          axios.get("https://gitbf.onrender.com/api/empleados", { headers }),
+          axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/citas`, { headers }),
+          axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/empleados`, { headers }),
         ])
 
         const citas = citasResponse.data.citas || []
