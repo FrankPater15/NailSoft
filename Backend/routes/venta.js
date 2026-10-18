@@ -14,8 +14,7 @@ const {
   agregarProductosVenta,
   agregarServiciosVenta,
   obtenerVentasPorCliente,
-  obtenerVentasPorCita,
-  validarVenta
+  obtenerVentasPorCita
 } = require("../controllers/venta")
 
 const router = Router()
@@ -33,7 +32,7 @@ router.get("/", ver, obtenerVentas)
 router.get("/cliente", ver, obtenerVentasPorCliente)
 router.get("/cita/:citaId", ver, obtenerVentasPorCita)
 router.get("/:id", ver, exigirEnAlcance(Venta, alcanceVentas, "verVentas"), obtenerVentaPorId)
-router.post("/", verificarPermisos(["crearVentas"]), validarVenta, crearVenta)
+router.post("/", verificarPermisos(["crearVentas"]), crearVenta)
 router.put("/:id", actualizar, actualizarVenta)
 router.delete("/:id", verificarPermisos(["eliminarVentas"]), eliminarVenta)
 router.put("/:id/finalizar", actualizar, finalizarVenta)

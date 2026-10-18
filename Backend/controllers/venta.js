@@ -3,12 +3,19 @@ const Venta = require("../modules/venta");
 const Contador = require("../modules/contador");
 const Cita = require("../modules/cita");
 const Cliente = require("../modules/cliente");
-const Servicio = require("../modules/servicio");
-const Producto = require("../modules/producto");
 const Empleado = require("../modules/empleado");
 const { isValidObjectId } = require("mongoose");
 const { tienePermiso } = require("../middlewares/verificarPermisos");
 const { alcanceVentas } = require("../middlewares/alcance");
+const { ErrorNegocio, responderError } = require("../utils/errores");
+const {
+  normalizarDescuentos,
+  lineasProductos,
+  lineasServicios,
+  resumenDescuentos,
+  reservarStock,
+  devolverStock,
+} = require("../services/calculoVenta");
 
 // Función para obtener el siguiente código de venta
 const obtenerSiguienteCodigoVenta = async () => {
@@ -86,842 +93,275 @@ const obtenerVentaPorId = async (req, res = response) => {
   }
 };
 
-// Crear una nueva venta con soporte para descuentos
-const crearVenta = async (req, res = response) => {
-  try {
-    const { cliente, empleado, cita, productos, servicios, metodoPago, estado, observaciones, descuentos = [] } = req.body;
+// Venta con todas las referencias pobladas, como la devuelven las rutas que la modifican
+const ventaPoblada = (id) =>
+  Venta.findById(id)
+    .populate("cliente", "nombrecliente apellidocliente correocliente celularcliente")
+    .populate("empleado", "nombreempleado")
+    .populate({ path: "cita", select: "fechacita estadocita" })
+    .populate("productos.producto", "nombreProducto categoria stock")
+    .populate("servicios.servicio", "nombreServicio categoria")
+    .populate("descuentos.servicioId", "nombreServicio");
 
-    // Validación básica
-    if ((!productos || productos.length === 0) && (!servicios || servicios.length === 0)) {
-      return res.status(400).json({
-        msg: "La venta debe incluir al menos un producto o un servicio",
-      });
-    }
+// Los descuentos manuales requieren el permiso aplicarDescuentos
+const descuentosPermitidos = (req, descuentos) => {
+  const normalizados = normalizarDescuentos(descuentos);
+  if (normalizados.length > 0 && !tienePermiso(req, "aplicarDescuentos")) {
+    throw new ErrorNegocio('No tienes el permiso "aplicarDescuentos" para dar descuentos manuales', 403);
+  }
+  return normalizados;
+};
 
-    // Verificar cliente y empleado
-    const [existeCliente, existeEmpleado] = await Promise.all([
-      Cliente.findById(cliente),
-      Empleado.findById(empleado)
-    ]);
-
-    if (!existeCliente || !existeEmpleado) {
-      return res.status(400).json({
-        msg: "El cliente o el empleado especificado no existe en la base de datos",
-      });
-    }
-
-    // Verificar cita si se proporciona
-    let existeCita = null;
-    if (cita) {
-      existeCita = await Cita.findById(cita);
-      if (!existeCita) {
-        return res.status(400).json({
-          msg: "La cita especificada no existe en la base de datos",
-        });
-      }
-    }
-
-    // Procesar productos
-    const productosValidados = [];
-    if (productos && productos.length > 0) {
-      const productosIds = productos.map((p) => p.producto);
-      const productosDB = await Producto.find({ _id: { $in: productosIds } });
-
-      if (productosDB.length !== productosIds.length) {
-        return res.status(400).json({
-          msg: "Uno o más productos no existen en la base de datos",
-        });
-      }
-
-      for (const productoItem of productos) {
-        const productoDB = productosDB.find((p) => p._id.toString() === productoItem.producto);
-
-        if (productoDB.stock < productoItem.cantidad) {
-          return res.status(400).json({
-            msg: `Stock insuficiente para el producto ${productoDB.nombreProducto}. Disponible: ${productoDB.stock}`,
-          });
-        }
-
-        const precio = productoItem.precio || productoDB.precio;
-        const subtotal = precio * productoItem.cantidad;
-
-        productosValidados.push({
-          producto: productoDB._id,
-          nombreProducto: productoDB.nombreProducto,
-          precio: precio,
-          cantidad: productoItem.cantidad,
-          subtotal: subtotal,
-        });
-
-        // Actualizar stock
-        productoDB.stock -= productoItem.cantidad;
-        await productoDB.save();
-      }
-    }
-
-    // Procesar servicios con descuentos
-    const serviciosValidados = [];
-    if (servicios && servicios.length > 0) {
-      const serviciosIds = servicios.map((s) => s.servicio);
-      const serviciosDB = await Servicio.find({ _id: { $in: serviciosIds } })
-        .populate('tipoServicio', 'descuento esPromocional');
-
-      if (serviciosDB.length !== serviciosIds.length) {
-        return res.status(400).json({
-          msg: "Uno o más servicios no existen en la base de datos",
-        });
-      }
-
-      for (const servicioItem of servicios) {
-        const servicioDB = serviciosDB.find((s) => s._id.toString() === servicioItem.servicio);
-        const precioOriginal = servicioItem.precio || servicioDB.precio;
-        
-        // Buscar descuento aplicado a este servicio
-        const descuentoServicio = descuentos.find(d => d.tipo === 'servicio' && d.servicioId === servicioItem.servicio);
-        
-        // Calcular descuento
-        let descuentoAplicado = 0;
-        let tipoDescuento = null;
-        
-        if (descuentoServicio) {
-          descuentoAplicado = descuentoServicio.esPorcentaje ? 
-            (precioOriginal * descuentoServicio.valor / 100) : 
-            descuentoServicio.valor;
-          tipoDescuento = descuentoServicio.tipo;
-        } else if (servicioDB.tipoServicio?.descuento) {
-          descuentoAplicado = precioOriginal * servicioDB.tipoServicio.descuento / 100;
-          tipoDescuento = servicioDB.tipoServicio.esPromocional ? 'promocional' : 'tipo-servicio';
-        }
-
-        const precioFinal = precioOriginal - descuentoAplicado;
-
-        serviciosValidados.push({
-          servicio: servicioDB._id,
-          nombreServicio: servicioDB.nombreServicio,
-          precio: precioOriginal,
-          precioFinal: precioFinal,
-          tiempo: servicioDB.tiempo,
-          descuentoAplicado: descuentoAplicado,
-          tipoDescuento: tipoDescuento
-        });
-      }
-    }
-
-    // Procesar descuentos globales
-    const descuentosValidados = [];
-    let descuentoTotalGlobal = 0;
-
-    if (descuentos && descuentos.length > 0) {
-      for (const descuento of descuentos) {
-        if (descuento.tipo === 'global') {
-          let montoDescontado = 0;
-          const subtotalServicios = serviciosValidados.reduce((total, item) => total + item.precio, 0);
-          const subtotalProductos = productosValidados.reduce((total, item) => total + item.subtotal, 0);
-          const precioOriginal = subtotalServicios + subtotalProductos;
-
-          if (descuento.esPorcentaje) {
-            montoDescontado = precioOriginal * descuento.valor / 100;
-          } else {
-            montoDescontado = Math.min(descuento.valor, precioOriginal);
-          }
-
-          descuentoTotalGlobal += montoDescontado;
-
-          descuentosValidados.push({
-            ...descuento,
-            montoDescontado: montoDescontado
-          });
-        } else if (descuento.tipo === 'servicio') {
-          // Ya procesados en los servicios
-          descuentosValidados.push(descuento);
-        }
-      }
-    }
-
-    // Calcular totales
-    const subtotalProductos = productosValidados.reduce((total, item) => total + item.subtotal, 0);
-    const subtotalServicios = serviciosValidados.reduce((total, item) => total + item.precio, 0);
-    const precioOriginal = subtotalProductos + subtotalServicios;
-    const descuentoTotalServicios = serviciosValidados.reduce((total, item) => total + item.descuentoAplicado, 0);
-    const descuentoTotal = descuentoTotalServicios + descuentoTotalGlobal;
-    const total = Math.max(0, precioOriginal - descuentoTotal);
-
-    // Crear la venta
-    const venta = new Venta({
-      codigoVenta: await obtenerSiguienteCodigoVenta(),
-      cliente,
-      empleado,
-      cita,
-      productos: productosValidados,
-      servicios: serviciosValidados,
-      descuentos: descuentosValidados,
-      subtotalProductos,
-      subtotalServicios,
-      precioOriginal,
-      descuentoTotal,
-      total,
-      metodoPago: metodoPago || 'Efectivo',
-      estado: estado !== undefined ? estado : false,
-      observaciones,
-    });
-
-    // Si la venta está completada, actualizar la cita
-    if (estado && cita) {
-      await Cita.findByIdAndUpdate(
-        cita,
-        { estadocita: "Completada" },
-        { new: true, runValidators: false }
-      );
-      venta.fechaFinalizacion = new Date();
-    }
-
-    await venta.save();
-
-    // Obtener la venta con los datos populados
-    const ventaCompleta = await Venta.findById(venta._id)
-      .populate("cliente", "nombrecliente apellidocliente correocliente celularcliente")
-      .populate("empleado", "nombreempleado")
-      .populate({
-        path: "cita",
-        select: "fechacita estadocita",
-      })
-      .populate("productos.producto", "nombreProducto categoria stock")
-      .populate("servicios.servicio", "nombreServicio categoria")
-      .populate("descuentos.servicioId", "nombreServicio")
-      .exec();
-    res.status(201).json({
-      msg: "Venta creada correctamente",
-      venta: ventaCompleta,
-    });
-  } catch (error) {
-    console.error("Error al crear la venta:", error);
-    res.status(500).json({
-      msg: "Error al crear la venta",
-      error: error.message,
-    });
+const validarClienteEmpleado = async (cliente, empleado) => {
+  const [existeCliente, existeEmpleado] = await Promise.all([
+    isValidObjectId(cliente) && Cliente.exists({ _id: cliente }),
+    isValidObjectId(empleado) && Empleado.exists({ _id: empleado }),
+  ]);
+  if (!existeCliente || !existeEmpleado) {
+    throw new ErrorNegocio("El cliente o el empleado especificado no existe en la base de datos");
   }
 };
 
-// Actualizar una venta con soporte para descuentos
+const validarCita = async (cita) => {
+  if (cita && !(isValidObjectId(cita) && (await Cita.exists({ _id: cita })))) {
+    throw new ErrorNegocio("La cita especificada no existe en la base de datos");
+  }
+};
+
+const marcarCitaCompletada = (cita) =>
+  Cita.findByIdAndUpdate(cita, { estadocita: "Completada" }, { runValidators: false });
+
+const exigirNoFinalizada = (venta) => {
+  if (venta.estado) throw new ErrorNegocio("La venta ya está finalizada y no se puede modificar");
+};
+
+// Crear una nueva venta. Precios desde la base de datos; el stock se reserva al final.
+const crearVenta = async (req, res = response) => {
+  try {
+    const { cliente, empleado, cita, productos = [], servicios = [], metodoPago, estado, observaciones } = req.body;
+
+    if (productos.length === 0 && servicios.length === 0) {
+      throw new ErrorNegocio("La venta debe incluir al menos un producto o un servicio");
+    }
+    const descuentos = descuentosPermitidos(req, req.body.descuentos);
+    await validarClienteEmpleado(cliente, empleado);
+    await validarCita(cita);
+
+    const lineasP = await lineasProductos(productos);
+    const lineasS = await lineasServicios(servicios, descuentos);
+
+    await reservarStock(lineasP);
+    let venta;
+    try {
+      venta = new Venta({
+        codigoVenta: await obtenerSiguienteCodigoVenta(),
+        cliente,
+        empleado,
+        cita,
+        productos: lineasP,
+        servicios: lineasS,
+        descuentos: resumenDescuentos(descuentos, lineasP, lineasS),
+        total: 0, // lo calcula el pre("save") del modelo
+        metodoPago: metodoPago || "Efectivo",
+        estado: Boolean(estado),
+        observaciones,
+      });
+      if (venta.estado) venta.fechaFinalizacion = new Date();
+      await venta.save();
+    } catch (error) {
+      await devolverStock(lineasP);
+      throw error;
+    }
+
+    if (venta.estado && cita) await marcarCitaCompletada(cita);
+
+    res.status(201).json({
+      msg: "Venta creada correctamente",
+      venta: await ventaPoblada(venta._id),
+    });
+  } catch (error) {
+    responderError(res, error, "Error al crear la venta");
+  }
+};
+
+// Actualizar una venta pendiente: recalcula todo y ajusta el stock
 const actualizarVenta = async (req, res = response) => {
   const { id } = req.params;
-  const { cliente, empleado, cita, productos, servicios, metodoPago, estado, observaciones, descuentos = [] } = req.body;
-
   try {
-    const ventaExistente = await Venta.findById(id).populate("productos.producto").populate("servicios.servicio");
+    const { cliente, empleado, cita, productos = [], servicios = [], metodoPago, estado, observaciones } = req.body;
 
-    if (!ventaExistente) {
-      return res.status(404).json({
-        msg: "Venta no encontrada",
-      });
+    const venta = await Venta.findById(id);
+    if (!venta) return res.status(404).json({ msg: "Venta no encontrada" });
+    exigirNoFinalizada(venta);
+
+    if (productos.length === 0 && servicios.length === 0) {
+      throw new ErrorNegocio("La venta debe incluir al menos un producto o un servicio");
+    }
+    const descuentos = descuentosPermitidos(req, req.body.descuentos);
+    await validarClienteEmpleado(cliente || venta.cliente, empleado || venta.empleado);
+    await validarCita(cita);
+
+    // El stock se verifica al reservarlo, después de devolver el de la venta original
+    const lineasP = await lineasProductos(productos, { verificarStock: false });
+    const lineasS = await lineasServicios(servicios, descuentos);
+
+    const anteriores = venta.productos.map((p) => ({ producto: p.producto, cantidad: p.cantidad }));
+    await devolverStock(anteriores);
+    try {
+      await reservarStock(lineasP);
+    } catch (error) {
+      await reservarStock(anteriores).catch(() => {});
+      throw error;
     }
 
-    // Validación básica
-    if ((!productos || productos.length === 0) && (!servicios || servicios.length === 0)) {
-      return res.status(400).json({
-        msg: "La venta debe incluir al menos un producto o un servicio",
-      });
+    Object.assign(venta, {
+      cliente: cliente || venta.cliente,
+      empleado: empleado || venta.empleado,
+      cita: cita || venta.cita,
+      productos: lineasP,
+      servicios: lineasS,
+      descuentos: resumenDescuentos(descuentos, lineasP, lineasS),
+      metodoPago: metodoPago || venta.metodoPago,
+      observaciones: observaciones !== undefined ? observaciones : venta.observaciones,
+    });
+    if (estado) {
+      venta.estado = true;
+      venta.fechaFinalizacion = new Date();
     }
+    await venta.save();
 
-    // Verificar cliente y empleado si se proporcionan
-    if (cliente) {
-      const existeCliente = await Cliente.findById(cliente);
-      if (!existeCliente) {
-        return res.status(400).json({
-          msg: "El cliente especificado no existe en la base de datos",
-        });
-      }
-    }
-
-    if (empleado) {
-      const existeEmpleado = await Empleado.findById(empleado);
-      if (!existeEmpleado) {
-        return res.status(400).json({
-          msg: "El empleado especificado no existe en la base de datos",
-        });
-      }
-    }
-
-    // Verificar cita si se proporciona
-    if (cita) {
-      const existeCita = await Cita.findById(cita);
-      if (!existeCita) {
-        return res.status(400).json({
-          msg: "La cita especificada no existe en la base de datos",
-        });
-      }
-    }
-
-    // Restaurar stock de productos anteriores
-    if (ventaExistente.productos && ventaExistente.productos.length > 0) {
-      for (const productoItem of ventaExistente.productos) {
-        const producto = await Producto.findById(productoItem.producto._id);
-        if (producto) {
-          producto.stock += productoItem.cantidad;
-          await producto.save();
-        }
-      }
-    }
-
-    // Procesar nuevos productos
-    const productosValidados = [];
-    if (productos && productos.length > 0) {
-      const productosIds = productos.map((p) => p.producto);
-      const productosDB = await Producto.find({ _id: { $in: productosIds } });
-
-      if (productosDB.length !== productosIds.length) {
-        // Restaurar el estado original en caso de error
-        if (ventaExistente.productos && ventaExistente.productos.length > 0) {
-          for (const productoItem of ventaExistente.productos) {
-            const producto = await Producto.findById(productoItem.producto._id);
-            if (producto) {
-              producto.stock -= productoItem.cantidad;
-              await producto.save();
-            }
-          }
-        }
-
-        return res.status(400).json({
-          msg: "Uno o más productos no existen en la base de datos",
-        });
-      }
-
-      for (const productoItem of productos) {
-        const productoDB = productosDB.find((p) => p._id.toString() === productoItem.producto);
-
-        if (productoDB.stock < productoItem.cantidad) {
-          // Restaurar el estado original en caso de error
-          if (ventaExistente.productos && ventaExistente.productos.length > 0) {
-            for (const productoItem of ventaExistente.productos) {
-              const producto = await Producto.findById(productoItem.producto._id);
-              if (producto) {
-                producto.stock -= productoItem.cantidad;
-                await producto.save();
-              }
-            }
-          }
-
-          return res.status(400).json({
-            msg: `Stock insuficiente para el producto ${productoDB.nombreProducto}. Disponible: ${productoDB.stock}`,
-          });
-        }
-
-        const precio = productoItem.precio || productoDB.precio;
-        const subtotal = precio * productoItem.cantidad;
-
-        productosValidados.push({
-          producto: productoDB._id,
-          nombreProducto: productoDB.nombreProducto,
-          precio: precio,
-          cantidad: productoItem.cantidad,
-          subtotal: subtotal,
-        });
-
-        productoDB.stock -= productoItem.cantidad;
-        await productoDB.save();
-      }
-    }
-
-    // Procesar servicios con descuentos
-    const serviciosValidados = [];
-    if (servicios && servicios.length > 0) {
-      const serviciosIds = servicios.map((s) => s.servicio);
-      const serviciosDB = await Servicio.find({ _id: { $in: serviciosIds } })
-        .populate('tipoServicio', 'descuento esPromocional');
-
-      if (serviciosDB.length !== serviciosIds.length) {
-        // Restaurar el estado original en caso de error
-        if (ventaExistente.productos && ventaExistente.productos.length > 0) {
-          for (const productoItem of ventaExistente.productos) {
-            const producto = await Producto.findById(productoItem.producto._id);
-            if (producto) {
-              producto.stock -= productoItem.cantidad;
-              await producto.save();
-            }
-          }
-        }
-
-        return res.status(400).json({
-          msg: "Uno o más servicios no existen en la base de datos",
-        });
-      }
-
-      for (const servicioItem of servicios) {
-        const servicioDB = serviciosDB.find((s) => s._id.toString() === servicioItem.servicio);
-        const precioOriginal = servicioItem.precio || servicioDB.precio;
-        
-        // Buscar descuento aplicado a este servicio
-        const descuentoServicio = descuentos.find(d => d.tipo === 'servicio' && d.servicioId === servicioItem.servicio);
-        
-        // Calcular descuento
-        let descuentoAplicado = 0;
-        let tipoDescuento = null;
-        
-        if (descuentoServicio) {
-          descuentoAplicado = descuentoServicio.esPorcentaje ? 
-            (precioOriginal * descuentoServicio.valor / 100) : 
-            descuentoServicio.valor;
-          tipoDescuento = descuentoServicio.tipo;
-        } else if (servicioDB.tipoServicio?.descuento) {
-          descuentoAplicado = precioOriginal * servicioDB.tipoServicio.descuento / 100;
-          tipoDescuento = servicioDB.tipoServicio.esPromocional ? 'promocional' : 'tipo-servicio';
-        }
-
-        const precioFinal = precioOriginal - descuentoAplicado;
-
-        serviciosValidados.push({
-          servicio: servicioDB._id,
-          nombreServicio: servicioDB.nombreServicio,
-          precio: precioOriginal,
-          precioFinal: precioFinal,
-          tiempo: servicioDB.tiempo,
-          descuentoAplicado: descuentoAplicado,
-          tipoDescuento: tipoDescuento
-        });
-      }
-    }
-
-    // Procesar descuentos globales
-    const descuentosValidados = [];
-    let descuentoTotalGlobal = 0;
-
-    if (descuentos && descuentos.length > 0) {
-      for (const descuento of descuentos) {
-        if (descuento.tipo === 'global') {
-          let montoDescontado = 0;
-          const subtotalServicios = serviciosValidados.reduce((total, item) => total + item.precio, 0);
-          const subtotalProductos = productosValidados.reduce((total, item) => total + item.subtotal, 0);
-          const precioOriginal = subtotalServicios + subtotalProductos;
-
-          if (descuento.esPorcentaje) {
-            montoDescontado = precioOriginal * descuento.valor / 100;
-          } else {
-            montoDescontado = Math.min(descuento.valor, precioOriginal);
-          }
-
-          descuentoTotalGlobal += montoDescontado;
-
-          descuentosValidados.push({
-            ...descuento,
-            montoDescontado: montoDescontado
-          });
-        } else if (descuento.tipo === 'servicio') {
-          // Ya procesados en los servicios
-          descuentosValidados.push(descuento);
-        }
-      }
-    }
-
-    // Calcular totales
-    const subtotalProductos = productosValidados.reduce((total, item) => total + item.subtotal, 0);
-    const subtotalServicios = serviciosValidados.reduce((total, item) => total + item.precio, 0);
-    const precioOriginal = subtotalProductos + subtotalServicios;
-    const descuentoTotalServicios = serviciosValidados.reduce((total, item) => total + item.descuentoAplicado, 0);
-    const descuentoTotal = descuentoTotalServicios + descuentoTotalGlobal;
-    const total = Math.max(0, precioOriginal - descuentoTotal);
-
-    // Actualizar la venta
-    const datosActualizados = {
-      cliente: cliente || ventaExistente.cliente,
-      empleado: empleado || ventaExistente.empleado,
-      cita: cita || ventaExistente.cita,
-      productos: productosValidados,
-      servicios: serviciosValidados,
-      descuentos: descuentosValidados,
-      subtotalProductos,
-      subtotalServicios,
-      precioOriginal,
-      descuentoTotal,
-      total,
-      metodoPago: metodoPago || ventaExistente.metodoPago,
-      observaciones: observaciones !== undefined ? observaciones : ventaExistente.observaciones,
-    };
-
-    // Actualizar estado y fecha de finalización si es necesario
-    if (estado !== undefined && estado !== ventaExistente.estado) {
-      datosActualizados.estado = estado;
-
-      if (estado && datosActualizados.cita) {
-        await Cita.findByIdAndUpdate(
-          datosActualizados.cita,
-          { estadocita: "Completada" },
-          { new: true, runValidators: false }
-        );
-        datosActualizados.fechaFinalizacion = new Date();
-      }
-    }
-
-    const ventaActualizada = await Venta.findByIdAndUpdate(id, datosActualizados, { new: true })
-      .populate("cliente", "nombrecliente apellidocliente correocliente celularcliente")
-      .populate("empleado", "nombreempleado")
-      .populate({
-        path: "cita",
-        select: "fechacita estadocita",
-      })
-      .populate("productos.producto", "nombreProducto categoria stock")
-      .populate("servicios.servicio", "nombreServicio categoria")
-      .populate("descuentos.servicioId", "nombreServicio");
+    if (venta.estado && venta.cita) await marcarCitaCompletada(venta.cita);
 
     res.json({
       msg: "Venta actualizada correctamente",
-      venta: ventaActualizada,
+      venta: await ventaPoblada(id),
     });
   } catch (error) {
-    console.error("Error al actualizar la venta:", error);
-    res.status(500).json({
-      msg: "Error al actualizar la venta",
-      error: error.message,
-    });
+    responderError(res, error, "Error al actualizar la venta");
   }
 };
 
-// Eliminar una venta
+// Eliminar una venta y devolver el stock de sus productos
 const eliminarVenta = async (req, res = response) => {
   const { id } = req.params;
-
   try {
-    const venta = await Venta.findById(id);
+    const venta = await Venta.findByIdAndDelete(id);
+    if (!venta) return res.status(404).json({ msg: "Venta no encontrada" });
 
-    if (!venta) {
-      return res.status(404).json({
-        msg: "Venta no encontrada",
-      });
-    }
+    await devolverStock(venta.productos);
 
-    // Restaurar stock de productos
-    if (venta.productos && venta.productos.length > 0) {
-      for (const productoItem of venta.productos) {
-        const producto = await Producto.findById(productoItem.producto);
-        if (producto) {
-          producto.stock += productoItem.cantidad;
-          await producto.save();
-        }
-      }
-    }
-
-    await Venta.findByIdAndDelete(id);
-
-    res.json({
-      msg: "Venta eliminada correctamente",
-    });
+    res.json({ msg: "Venta eliminada correctamente" });
   } catch (error) {
-    console.error("Error al eliminar la venta:", error);
-    res.status(500).json({
-      msg: "Error al eliminar la venta",
-      error: error.message,
-    });
+    responderError(res, error, "Error al eliminar la venta");
   }
 };
 
-// Finalizar una venta con descuentos
+// Finalizar una venta, opcionalmente con nuevos descuentos manuales.
+// Si ya estaba finalizada y no llegan descuentos, solo la devuelve (idempotente).
 const finalizarVenta = async (req, res = response) => {
   const { id } = req.params;
-  const { metodoPago, descuentos = [] } = req.body;
-
   try {
+    const { metodoPago } = req.body;
+    const descuentos = descuentosPermitidos(req, req.body.descuentos);
+
     const venta = await Venta.findById(id);
+    if (!venta) return res.status(404).json({ msg: "Venta no encontrada" });
 
-    if (!venta) {
-      return res.status(404).json({
-        msg: "Venta no encontrada",
-      });
+    if (venta.estado && descuentos.length === 0) {
+      return res.json({ msg: "La venta ya estaba finalizada", venta: await ventaPoblada(id) });
     }
+    exigirNoFinalizada(venta);
 
-    // Aplicar nuevos descuentos si se enviaron
     if (descuentos.length > 0) {
-      const serviciosConDescuento = await Promise.all(venta.servicios.map(async (servicio) => {
-        const servicioDB = await Servicio.findById(servicio.servicio).populate('tipoServicio');
-        const descuento = descuentos.find(d => d.tipo === 'servicio' && d.servicioId.equals(servicio.servicio));
-        
-        const descuentoAplicado = descuento ? 
-          (descuento.esPorcentaje ? (servicio.precio * descuento.valor / 100) : descuento.valor) :
-          (servicioDB.tipoServicio?.descuento ? (servicio.precio * servicioDB.tipoServicio.descuento / 100) : 0);
-        
-        return {
-          ...servicio.toObject(),
-          precioFinal: servicio.precio - descuentoAplicado,
-          descuentoAplicado,
-          tipoDescuento: servicioDB.tipoServicio?.esPromocional ? 'promocional' : 'tipo-servicio'
-        };
-      }));
-
-      // Procesar descuentos globales
-      let descuentoTotalGlobal = 0;
-      const descuentosGlobales = descuentos.filter(d => d.tipo === 'global');
-      
-      if (descuentosGlobales.length > 0) {
-        const subtotalServicios = serviciosConDescuento.reduce((total, item) => total + item.precio, 0);
-        const subtotalProductos = venta.productos.reduce((total, item) => total + item.subtotal, 0);
-        const precioOriginal = subtotalServicios + subtotalProductos;
-
-        descuentoTotalGlobal = descuentosGlobales.reduce((total, descuento) => {
-          return total + (descuento.esPorcentaje ? 
-            (precioOriginal * descuento.valor / 100) : 
-            descuento.valor);
-        }, 0);
-      }
-
-      // Actualizar venta con nuevos descuentos
-      venta.servicios = serviciosConDescuento;
-      venta.descuentos = descuentos;
-      venta.subtotalServicios = serviciosConDescuento.reduce((total, item) => total + item.precioFinal, 0);
-      venta.descuentoTotal = serviciosConDescuento.reduce((total, item) => total + item.descuentoAplicado, 0) + descuentoTotalGlobal;
-      venta.total = venta.subtotalProductos + venta.subtotalServicios - venta.descuentoTotal;
+      venta.servicios = await lineasServicios(venta.servicios, descuentos);
+      venta.descuentos = resumenDescuentos(descuentos, venta.productos, venta.servicios);
     }
 
-    // Actualizar la cita si existe
-    if (venta.cita) {
-      await Cita.findByIdAndUpdate(
-        venta.cita,
-        { estadocita: "Completada" },
-        { new: true, runValidators: false }
-      );
-    }
-
-    // Finalizar la venta
     venta.metodoPago = metodoPago || venta.metodoPago;
     venta.fechaFinalizacion = new Date();
     venta.estado = true;
-
     await venta.save();
 
-    // Obtener venta actualizada
-    const ventaActualizada = await Venta.findById(id)
-      .populate("cliente", "nombrecliente apellidocliente correocliente celularcliente")
-      .populate("empleado", "nombreempleado")
-      .populate({
-        path: "cita",
-        select: "fechacita estadocita",
-      })
-      .populate("productos.producto", "nombreProducto categoria stock")
-      .populate("servicios.servicio", "nombreServicio categoria")
-      .populate("descuentos.servicioId", "nombreServicio");
+    if (venta.cita) await marcarCitaCompletada(venta.cita);
 
     res.json({
       msg: "Venta finalizada correctamente",
-      venta: ventaActualizada,
+      venta: await ventaPoblada(id),
     });
   } catch (error) {
-    console.error("Error al finalizar la venta:", error);
-    res.status(500).json({
-      msg: "Error al finalizar la venta",
-      error: error.message,
-    });
+    responderError(res, error, "Error al finalizar la venta");
   }
 };
 
-// Agregar productos a una venta existente
+// Agregar productos a una venta pendiente
 const agregarProductosVenta = async (req, res = response) => {
   const { id } = req.params;
-  const { productos } = req.body;
-
-  if (!productos || !Array.isArray(productos) || productos.length === 0) {
-    return res.status(400).json({
-      msg: "Debe proporcionar al menos un producto para añadir",
-    });
-  }
-
   try {
+    const { productos } = req.body;
+    if (!Array.isArray(productos) || productos.length === 0) {
+      throw new ErrorNegocio("Debe proporcionar al menos un producto para añadir");
+    }
+
     const venta = await Venta.findById(id);
+    if (!venta) return res.status(404).json({ msg: "Venta no encontrada" });
+    exigirNoFinalizada(venta);
 
-    if (!venta) {
-      return res.status(404).json({
-        msg: "Venta no encontrada",
-      });
-    }
-
-    // Validar los productos nuevos
-    const productosIds = productos.map((p) => p.producto);
-    const productosDB = await Producto.find({ _id: { $in: productosIds } });
-
-    if (productosDB.length !== productosIds.length) {
-      return res.status(400).json({
-        msg: "Uno o más productos no existen en la base de datos",
-      });
-    }
-
-    // Verificar stock y preparar productos validados
-    const nuevosProductos = [];
-    for (const productoItem of productos) {
-      const productoDB = productosDB.find((p) => p._id.toString() === productoItem.producto);
-
-      if (productoDB.stock < productoItem.cantidad) {
-        return res.status(400).json({
-          msg: `Stock insuficiente para el producto ${productoDB.nombreProducto}. Disponible: ${productoDB.stock}`,
-        });
+    const nuevas = await lineasProductos(productos);
+    await reservarStock(nuevas);
+    try {
+      // Si el producto ya estaba en la venta, suma la cantidad a su línea
+      for (const linea of nuevas) {
+        const existente = venta.productos.find((p) => String(p.producto) === String(linea.producto));
+        if (existente) {
+          existente.cantidad += linea.cantidad;
+          existente.subtotal = existente.precio * existente.cantidad;
+        } else {
+          venta.productos.push(linea);
+        }
       }
-
-      const precio = productoItem.precio || productoDB.precio;
-      const subtotal = precio * productoItem.cantidad;
-
-      nuevosProductos.push({
-        producto: productoDB._id,
-        nombreProducto: productoDB.nombreProducto,
-        precio: precio,
-        cantidad: productoItem.cantidad,
-        subtotal: subtotal,
-      });
-
-      productoDB.stock -= productoItem.cantidad;
-      await productoDB.save();
+      await venta.save();
+    } catch (error) {
+      await devolverStock(nuevas);
+      throw error;
     }
-
-    // Añadir los nuevos productos a la venta
-    venta.productos = [...venta.productos, ...nuevosProductos];
-
-    // Recalcular subtotales y total
-    venta.subtotalProductos = venta.productos.reduce((total, item) => total + item.subtotal, 0);
-    venta.precioOriginal = venta.subtotalProductos + venta.servicios.reduce((total, item) => total + item.precio, 0);
-    venta.total = venta.precioOriginal - venta.descuentoTotal;
-
-    await venta.save();
-
-    // Obtener venta actualizada
-    const ventaActualizada = await Venta.findById(id)
-      .populate("cliente", "nombrecliente apellidocliente correocliente celularcliente")
-      .populate("empleado", "nombreempleado")
-      .populate({
-        path: "cita",
-        select: "fechacita estadocita",
-      })
-      .populate("productos.producto", "nombreProducto categoria stock")
-      .populate("servicios.servicio", "nombreServicio categoria")
-      .populate("descuentos.servicioId", "nombreServicio");
 
     res.json({
       msg: "Productos añadidos correctamente",
-      venta: ventaActualizada,
+      venta: await ventaPoblada(id),
     });
   } catch (error) {
-    console.error("Error al añadir productos a la venta:", error);
-    res.status(500).json({
-      msg: "Error al añadir productos a la venta",
-      error: error.message,
-    });
+    responderError(res, error, "Error al añadir productos a la venta");
   }
 };
 
-// Agregar servicios a una venta existente con descuentos
+// Agregar servicios a una venta pendiente
 const agregarServiciosVenta = async (req, res = response) => {
   const { id } = req.params;
-  const { servicios, descuentos = [] } = req.body;
-
-  if (!servicios || !Array.isArray(servicios) || servicios.length === 0) {
-    return res.status(400).json({
-      msg: "Debe proporcionar al menos un servicio para añadir",
-    });
-  }
-
   try {
+    const { servicios } = req.body;
+    if (!Array.isArray(servicios) || servicios.length === 0) {
+      throw new ErrorNegocio("Debe proporcionar al menos un servicio para añadir");
+    }
+    const descuentos = descuentosPermitidos(req, req.body.descuentos);
+
     const venta = await Venta.findById(id);
+    if (!venta) return res.status(404).json({ msg: "Venta no encontrada" });
+    exigirNoFinalizada(venta);
 
-    if (!venta) {
-      return res.status(404).json({
-        msg: "Venta no encontrada",
-      });
+    venta.servicios.push(...(await lineasServicios(servicios, descuentos)));
+    if (descuentos.length > 0) {
+      const anteriores = venta.descuentos.map((d) => d.toObject());
+      const nuevos = resumenDescuentos(descuentos, venta.productos, venta.servicios);
+      venta.descuentos = [...anteriores, ...nuevos];
     }
-
-    // Validar los servicios nuevos
-    const serviciosIds = servicios.map((s) => s.servicio);
-    const serviciosDB = await Servicio.find({ _id: { $in: serviciosIds } })
-      .populate('tipoServicio', 'descuento esPromocional');
-
-    if (serviciosDB.length !== serviciosIds.length) {
-      return res.status(400).json({
-        msg: "Uno o más servicios no existen en la base de datos",
-      });
-    }
-
-    // Preparar servicios validados con descuentos
-    const nuevosServicios = [];
-    for (const servicioItem of servicios) {
-      const servicioDB = serviciosDB.find((s) => s._id.toString() === servicioItem.servicio);
-      const precioOriginal = servicioItem.precio || servicioDB.precio;
-      
-      // Buscar descuento aplicado a este servicio
-      const descuentoServicio = descuentos.find(d => d.tipo === 'servicio' && d.servicioId === servicioItem.servicio);
-      
-      // Calcular descuento
-      let descuentoAplicado = 0;
-      let tipoDescuento = null;
-      
-      if (descuentoServicio) {
-        descuentoAplicado = descuentoServicio.esPorcentaje ? 
-          (precioOriginal * descuentoServicio.valor / 100) : 
-          descuentoServicio.valor;
-        tipoDescuento = descuentoServicio.tipo;
-      } else if (servicioDB.tipoServicio?.descuento) {
-        descuentoAplicado = precioOriginal * servicioDB.tipoServicio.descuento / 100;
-        tipoDescuento = servicioDB.tipoServicio.esPromocional ? 'promocional' : 'tipo-servicio';
-      }
-
-      const precioFinal = precioOriginal - descuentoAplicado;
-
-      nuevosServicios.push({
-        servicio: servicioDB._id,
-        nombreServicio: servicioDB.nombreServicio,
-        precio: precioOriginal,
-        precioFinal: precioFinal,
-        tiempo: servicioDB.tiempo,
-        descuentoAplicado: descuentoAplicado,
-        tipoDescuento: tipoDescuento
-      });
-    }
-
-    // Procesar descuentos globales si existen
-    let descuentosGlobales = [];
-    let descuentoTotalGlobal = 0;
-    
-    if (descuentos && descuentos.length > 0) {
-      descuentosGlobales = descuentos.filter(d => d.tipo === 'global');
-      
-      if (descuentosGlobales.length > 0) {
-        const subtotalServicios = nuevosServicios.reduce((total, item) => total + item.precio, 0);
-        const subtotalProductos = venta.productos.reduce((total, item) => total + item.subtotal, 0);
-        const precioOriginal = subtotalServicios + subtotalProductos;
-
-        descuentoTotalGlobal = descuentosGlobales.reduce((total, descuento) => {
-          return total + (descuento.esPorcentaje ? 
-            (precioOriginal * descuento.valor / 100) : 
-            descuento.valor);
-        }, 0);
-      }
-    }
-
-    // Añadir los nuevos servicios y descuentos a la venta
-    venta.servicios = [...venta.servicios, ...nuevosServicios];
-    venta.descuentos = [...venta.descuentos, ...descuentos];
-
-    // Recalcular subtotales y total
-    venta.subtotalServicios = venta.servicios.reduce((total, item) => total + item.precioFinal, 0);
-    venta.precioOriginal = venta.subtotalProductos + venta.servicios.reduce((total, item) => total + item.precio, 0);
-    venta.descuentoTotal = venta.servicios.reduce((total, item) => total + item.descuentoAplicado, 0) + descuentoTotalGlobal;
-    venta.total = venta.precioOriginal - venta.descuentoTotal;
-
     await venta.save();
-
-    // Obtener venta actualizada
-    const ventaActualizada = await Venta.findById(id)
-      .populate("cliente", "nombrecliente apellidocliente correocliente celularcliente")
-      .populate("empleado", "nombreempleado")
-      .populate({
-        path: "cita",
-        select: "fechacita estadocita",
-      })
-      .populate("productos.producto", "nombreProducto categoria stock")
-      .populate("servicios.servicio", "nombreServicio categoria")
-      .populate("descuentos.servicioId", "nombreServicio");
 
     res.json({
       msg: "Servicios añadidos correctamente",
-      venta: ventaActualizada,
+      venta: await ventaPoblada(id),
     });
   } catch (error) {
-    console.error("Error al añadir servicios a la venta:", error);
-    res.status(500).json({
-      msg: "Error al añadir servicios a la venta",
-      error: error.message,
-    });
+    responderError(res, error, "Error al añadir servicios a la venta");
   }
 };
 
@@ -973,24 +413,6 @@ const obtenerVentasPorCita = async (req, res = response) => {
   }
 };
 
-const validarVenta = (req, res, next) => {
-  const { servicios } = req.body;
-  if (servicios && servicios.length > 0) {
-    // Validar estructura de servicios
-    const serviciosValidos = servicios.every(s => 
-      s.servicio && s.nombreServicio && 
-      typeof s.precio === 'number' && 
-      typeof s.precioFinal === 'number'
-    );
-    if (!serviciosValidos) {
-      return res.status(400).json({
-        msg: "Estructura de servicios inválida",
-        detalles: "Cada servicio debe tener servicio, nombreServicio, precio y precioFinal"
-      });
-    }
-  }
-  next();
-};
 
 module.exports = {
   obtenerVentas,
@@ -1003,6 +425,5 @@ module.exports = {
   agregarServiciosVenta,
   obtenerVentasPorCliente,
   obtenerVentasPorCita,
-  validarVenta,
   obtenerSiguienteCodigoVenta
 };

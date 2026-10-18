@@ -12,8 +12,10 @@ const ProductoSchema = Schema({
         min: 0
     },
     stock: {
-        type: String,
-        required: true
+        type: Number,
+        required: true,
+        min: [0, 'El stock no puede ser negativo'],
+        validate: { validator: Number.isInteger, message: 'El stock debe ser un número entero' }
     },
     categoria: { 
         type: Schema.Types.ObjectId, 

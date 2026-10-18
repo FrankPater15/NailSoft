@@ -651,9 +651,10 @@ const AgendaEmpleado = () => {
       })
 
       const headers = { Authorization: `Bearer ${token}` }
-      const respuesta = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/ventaservicios`, { headers })
+      // Ventas unificadas de esta cita (las mismas que abre GestionVentaServicio)
+      const respuesta = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/ventas/cita/${citaId}`, { headers })
 
-      if (!respuesta.data || !respuesta.data.ventaservicios) {
+      if (!Array.isArray(respuesta.data)) {
         Swal.close()
         Swal.fire({
           title: "Error",
@@ -664,7 +665,7 @@ const AgendaEmpleado = () => {
         return
       }
 
-      const ventaExistente = respuesta.data.ventaservicios.find((venta) => venta.cita?._id === citaId)
+      const ventaExistente = respuesta.data[0]
 
       Swal.close()
 
