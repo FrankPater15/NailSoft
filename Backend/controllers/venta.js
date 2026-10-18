@@ -22,7 +22,7 @@ const obtenerSiguienteCodigoVenta = async () => {
   const contador = await Contador.findOneAndUpdate(
     { nombre: "venta" },
     { $inc: { secuencia: 1 } },
-    { new: true, upsert: true }
+    { new: true, upsert: true },
   );
   return `V${contador.secuencia.toString().padStart(4, "0")}`;
 };
@@ -45,19 +45,9 @@ const obtenerVentas = async (req, res = response) => {
       .sort({ fechaCreacion: -1 })
       .lean();
 
-    if (ventas.length === 0) {
-      return res.status(404).json({
-        msg: "No se encontraron ventas en la base de datos",
-      });
-    }
-
     res.json({ ventas });
   } catch (error) {
-    console.error("Error al obtener las ventas:", error);
-    res.status(500).json({
-      msg: "Error al obtener las ventas",
-      error: error.message,
-    });
+    responderError(res, error, "Error al obtener las ventas");
   }
 };
 
@@ -85,11 +75,7 @@ const obtenerVentaPorId = async (req, res = response) => {
 
     res.json({ venta });
   } catch (error) {
-    console.error("Error al obtener la venta:", error);
-    res.status(500).json({
-      msg: "Error al obtener la venta",
-      error: error.message,
-    });
+    responderError(res, error, "Error al obtener la venta");
   }
 };
 
@@ -388,8 +374,7 @@ const obtenerVentasPorCliente = async (req, res) => {
 
     res.status(200).json(ventas);
   } catch (error) {
-    console.error("Error al obtener ventas del cliente:", error);
-    res.status(500).json({ message: "Error al obtener las ventas", error: error.message });
+    responderError(res, error, "Error al obtener las ventas");
   }
 };
 
@@ -405,14 +390,12 @@ const obtenerVentasPorCita = async (req, res = response) => {
       .populate("cita")
       .populate("productos.producto")
       .populate("servicios.servicio");
-    
+
     res.json(ventas);
   } catch (error) {
-    console.error("Error al obtener ventas por cita:", error);
-    res.status(500).json({ msg: "Error al obtener ventas por cita" });
+    responderError(res, error, "Error al obtener ventas por cita");
   }
 };
-
 
 module.exports = {
   obtenerVentas,
@@ -425,5 +408,5 @@ module.exports = {
   agregarServiciosVenta,
   obtenerVentasPorCliente,
   obtenerVentasPorCita,
-  obtenerSiguienteCodigoVenta
+  obtenerSiguienteCodigoVenta,
 };

@@ -1,6 +1,6 @@
-const bcrypt = require("bcryptjs")
-const Usuario = require("../modules/usuario")
-const Rol = require("../modules/rol")
+const bcrypt = require("bcryptjs");
+const Usuario = require("../modules/usuario");
+const Rol = require("../modules/rol");
 
 /**
  * Crea un nuevo usuario en la base de datos
@@ -9,26 +9,25 @@ const Rol = require("../modules/rol")
  */
 const createUser = async (userData) => {
   try {
-
     // Verificar si el rol existe
-    let rolId = userData.rol
+    let rolId = userData.rol;
     if (rolId) {
-      const rolExiste = await Rol.findById(rolId)
+      const rolExiste = await Rol.findById(rolId);
       if (!rolExiste) {
-        throw new Error(`El rol con ID ${rolId} no existe`)
+        throw new Error(`El rol con ID ${rolId} no existe`);
       }
     } else {
       // Asignar rol por defecto (Cliente)
-      const defaultRol = await Rol.findOne({ nombreRol: "Cliente" })
+      const defaultRol = await Rol.findOne({ nombreRol: "Cliente" });
       if (!defaultRol) {
-        throw new Error("No se encontró el rol por defecto (Cliente)")
+        throw new Error("No se encontró el rol por defecto (Cliente)");
       }
-      rolId = defaultRol._id
+      rolId = defaultRol._id;
     }
 
     // Encriptar la contraseña
-    const salt = bcrypt.genSaltSync(10)
-    const hashedPassword = bcrypt.hashSync(userData.password, salt)
+    const salt = bcrypt.genSaltSync(10);
+    const hashedPassword = bcrypt.hashSync(userData.password, salt);
 
     // Crear el usuario con los datos proporcionados
     const nuevoUsuario = new Usuario({
@@ -40,23 +39,21 @@ const createUser = async (userData) => {
       password: hashedPassword,
       rol: rolId,
       estado: userData.estado !== undefined ? userData.estado : true,
-    })
+    });
 
     // Guardar el usuario en la base de datos
-    await nuevoUsuario.save()
+    await nuevoUsuario.save();
 
     // Obtener el usuario con el rol poblado
-    const usuarioGuardado = await Usuario.findById(nuevoUsuario._id).populate("rol")
+    const usuarioGuardado = await Usuario.findById(nuevoUsuario._id).populate("rol");
 
-
-    return usuarioGuardado
+    return usuarioGuardado;
   } catch (error) {
-    console.error("Error en createUser:", error)
-    throw error
+    console.error("Error en createUser:", error);
+    throw error;
   }
-}
+};
 
 module.exports = {
   createUser,
-}
-
+};

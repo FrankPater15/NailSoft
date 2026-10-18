@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose")
+const { Schema, model } = require("mongoose");
 
 const TipoServicioSchema = Schema({
   nombreTs: {
@@ -19,7 +19,6 @@ const TipoServicioSchema = Schema({
     type: Boolean,
     default: false,
   },
-})
+});
 
-module.exports = model("TipoServ", TipoServicioSchema)
-
+module.exports = model("TipoServ", TipoServicioSchema);

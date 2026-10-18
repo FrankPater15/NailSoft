@@ -1,4 +1,4 @@
-const { response } = require("express")
+const { response } = require("express");
 
 /**
  * Middleware que exige al menos uno de los permisos indicados.
@@ -12,34 +12,37 @@ const { response } = require("express")
  * @returns {Function} Middleware
  */
 const verificarPermisos = (permisosRequeridos) => {
-  return (req, res = response, next) => {
+  const middleware = (req, res = response, next) => {
     if (!req.permisos) {
       return res.status(401).json({
         msg: "Token no válido - usuario no existe en la petición",
-      })
+      });
     }
 
     if (permisosRequeridos.some((permiso) => req.permisos.has(permiso))) {
-      return next()
+      return next();
     }
 
-    const desactivado = permisosRequeridos.find((permiso) => req.permisosInactivos?.has(permiso))
+    const desactivado = permisosRequeridos.find((permiso) => req.permisosInactivos?.has(permiso));
     if (desactivado) {
       return res.status(403).json({
         msg: `El permiso "${desactivado}" está desactivado`,
         permisoDesactivado: true, // Flag para el interceptor de axios
         nombrePermiso: desactivado,
-      })
+      });
     }
 
     return res.status(403).json({
       msg: `No tienes el permiso "${permisosRequeridos.join('" o "')}" necesario para esta acción`,
       permisoNoAsignado: true,
-    })
-  }
-}
+    });
+  };
+  // Para la documentación generada de la API (scripts/generar-doc-api.js)
+  middleware.permisos = permisosRequeridos;
+  return middleware;
+};
 
-const tienePermiso = (req, permiso) => Boolean(req.permisos?.has(permiso))
+const tienePermiso = (req, permiso) => Boolean(req.permisos?.has(permiso));
 
-module.exports = verificarPermisos
-module.exports.tienePermiso = tienePermiso
+module.exports = verificarPermisos;
+module.exports.tienePermiso = tienePermiso;

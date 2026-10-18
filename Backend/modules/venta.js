@@ -62,12 +62,14 @@ const VentaSchema = Schema(
           required: true,
           trim: true,
         },
-        precio: { // Precio original
+        precio: {
+          // Precio original
           type: Number,
           required: true,
           min: 0,
         },
-        precioFinal: { // Precio después de descuento
+        precioFinal: {
+          // Precio después de descuento
           type: Number,
           required: true,
           min: 0,
@@ -77,11 +79,13 @@ const VentaSchema = Schema(
           required: true,
           min: 0,
         },
-        descuentoAplicado: { // Monto descontado
+        descuentoAplicado: {
+          // Monto descontado
           type: Number,
           default: 0,
         },
-        tipoDescuento: { // Tipo de descuento aplicado
+        tipoDescuento: {
+          // Tipo de descuento aplicado
           type: String,
           enum: ["promocional", "manual", "tipo-servicio", null],
           default: null,
@@ -96,7 +100,8 @@ const VentaSchema = Schema(
           enum: ["servicio", "global", "promocional"],
           required: true,
         },
-        servicioId: { // Solo para descuentos por servicio
+        servicioId: {
+          // Solo para descuentos por servicio
           type: Schema.Types.ObjectId,
           ref: "Servicio",
         },
@@ -104,7 +109,8 @@ const VentaSchema = Schema(
           type: String,
           required: true,
         },
-        valor: { // Puede ser porcentaje o monto fijo
+        valor: {
+          // Puede ser porcentaje o monto fijo
           type: Number,
           required: true,
           min: 0,
@@ -113,7 +119,8 @@ const VentaSchema = Schema(
           type: Boolean,
           default: true,
         },
-        montoDescontado: { // Monto real descontado
+        montoDescontado: {
+          // Monto real descontado
           type: Number,
           required: true,
           min: 0,
@@ -128,15 +135,18 @@ const VentaSchema = Schema(
       type: Number,
       default: 0,
     },
-    precioOriginal: { // Total antes de descuentos
+    precioOriginal: {
+      // Total antes de descuentos
       type: Number,
       default: 0,
     },
-    descuentoTotal: { // Suma de todos los descuentos
+    descuentoTotal: {
+      // Suma de todos los descuentos
       type: Number,
       default: 0,
     },
-    total: { // Precio final después de descuentos
+    total: {
+      // Precio final después de descuentos
       type: Number,
       required: true,
       min: 0,
@@ -165,7 +175,7 @@ const VentaSchema = Schema(
   {
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
-  }
+  },
 );
 
 // Middleware para calcular subtotales y total antes de guardar
@@ -184,12 +194,12 @@ VentaSchema.pre("save", function (next) {
     this.subtotalServicios = this.servicios.reduce((total, item) => {
       return total + (item.precioFinal || item.precio || 0);
     }, 0);
-    
+
     // Calcular descuentos totales en servicios
     const descuentosServicios = this.servicios.reduce((total, item) => {
       return total + (item.descuentoAplicado || 0);
     }, 0);
-    
+
     this.descuentoTotal = descuentosServicios;
   } else {
     this.subtotalServicios = 0;
@@ -198,15 +208,14 @@ VentaSchema.pre("save", function (next) {
   // Calcular descuentos globales
   if (this.descuentos && this.descuentos.length > 0) {
     const descuentosGlobales = this.descuentos
-      .filter(d => d.tipo === 'global')
+      .filter((d) => d.tipo === "global")
       .reduce((total, descuento) => total + (descuento.montoDescontado || 0), 0);
-    
+
     this.descuentoTotal += descuentosGlobales;
   }
 
   // Calcular precio original (sin descuentos)
-  this.precioOriginal = this.subtotalProductos + 
-    this.servicios.reduce((total, item) => total + (item.precio || 0), 0);
+  this.precioOriginal = this.subtotalProductos + this.servicios.reduce((total, item) => total + (item.precio || 0), 0);
 
   // Calcular total general (con descuentos)
   this.total = this.precioOriginal - this.descuentoTotal;
@@ -221,56 +230,56 @@ VentaSchema.pre("save", function (next) {
 
 // Virtuals para información del cliente
 VentaSchema.virtual("clienteNombre").get(function () {
-  return this.cliente ? this.cliente.nombrecliente : "Cliente no especificado"
-})
+  return this.cliente ? this.cliente.nombrecliente : "Cliente no especificado";
+});
 
 VentaSchema.virtual("clienteApellido").get(function () {
-  return this.cliente ? this.cliente.apellidocliente : "Apellido no especificado"
-})
+  return this.cliente ? this.cliente.apellidocliente : "Apellido no especificado";
+});
 
 VentaSchema.virtual("clienteEmail").get(function () {
-  return this.cliente ? this.cliente.correocliente : "Correo no especificado"
-})
+  return this.cliente ? this.cliente.correocliente : "Correo no especificado";
+});
 
 VentaSchema.virtual("clienteCelular").get(function () {
-  return this.cliente ? this.cliente.celularcliente : "Celular no especificado"
-})
+  return this.cliente ? this.cliente.celularcliente : "Celular no especificado";
+});
 
 // Virtual para información de la cita
 VentaSchema.virtual("citaFecha").get(function () {
-  return this.cita ? this.cita.fechacita : "Fecha no especificada"
-})
+  return this.cita ? this.cita.fechacita : "Fecha no especificada";
+});
 
 // Virtual para información del empleado
 VentaSchema.virtual("empleadoNombre").get(function () {
-  return this.empleado ? this.empleado.nombreempleado : "Empleado no especificado"
-})
+  return this.empleado ? this.empleado.nombreempleado : "Empleado no especificado";
+});
 
 // Virtual para determinar si la venta incluye productos
 VentaSchema.virtual("tieneProductos").get(function () {
-  return this.productos && this.productos.length > 0
-})
+  return this.productos && this.productos.length > 0;
+});
 
 // Virtual para determinar si la venta incluye servicios
 VentaSchema.virtual("tieneServicios").get(function () {
-  return this.servicios && this.servicios.length > 0
-})
+  return this.servicios && this.servicios.length > 0;
+});
 
 // Virtual para obtener el tipo de venta (mixta, solo productos, solo servicios)
 VentaSchema.virtual("tipoVenta").get(function () {
-  const tieneProductos = this.productos && this.productos.length > 0
-  const tieneServicios = this.servicios && this.servicios.length > 0
+  const tieneProductos = this.productos && this.productos.length > 0;
+  const tieneServicios = this.servicios && this.servicios.length > 0;
 
   if (tieneProductos && tieneServicios) {
-    return "mixta"
+    return "mixta";
   } else if (tieneProductos) {
-    return "productos"
+    return "productos";
   } else if (tieneServicios) {
-    return "servicios"
+    return "servicios";
   } else {
-    return "sin items"
+    return "sin items";
   }
-})
+});
 
 // Ventas por cliente, empleado y cita, y listados por fecha
 VentaSchema.index({ cliente: 1, fechaCreacion: -1 });
@@ -278,4 +287,4 @@ VentaSchema.index({ empleado: 1, fechaCreacion: -1 });
 VentaSchema.index({ cita: 1 });
 VentaSchema.index({ fechaCreacion: -1 });
 
-module.exports = model("Venta", VentaSchema)
+module.exports = model("Venta", VentaSchema);

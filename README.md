@@ -108,12 +108,17 @@ flutter run -d chrome --dart-define=API_URL=http://localhost:3000
 
 ### 5. Pruebas del backend
 
-Las pruebas de seguridad usan MongoDB local, en una base aparte (`NailsSoft_test`) que se crea y se borra en cada ejecución. Para usar otra, define `MONGODB_CNN_TEST`.
+Las pruebas usan MongoDB local, en bases aparte (`NailsSoft_test_*`) que se crean y se borran en cada ejecución. Para usar otro servidor, define `MONGODB_CNN_TEST`.
 
 ```bash
 cd Backend
-npm test
+npm test              # seguridad, reglas de negocio y robustez de todas las rutas
+npm run lint          # ESLint
+npm run format        # Prettier
+npm run docs:api      # regenera docs/API.md desde las rutas reales
 ```
+
+La referencia de la API (rutas, permisos y códigos de error) está en [Backend/docs/API.md](Backend/docs/API.md).
 
 ## Estado del proyecto
 
