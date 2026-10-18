@@ -96,6 +96,27 @@ const roles = {
         ],
     },
     Cliente: { esAdmin: false, permisos: ['verCatalogoMenu', 'verCitasMenu', 'verServicios'] },
+    // Roles extra para probar permisos dinámicos con roles que el código no conoce por nombre
+    Recepcionista: {
+        esAdmin: false,
+        permisos: [
+            'visualizarDashboardMenu', 'verCitasMenu', 'verAgendaEmpleadosMenu', 'visualizarCitaEnProgresoMenu',
+            'verClientesMenu', 'verCliente', 'crearCliente', 'actualizarCliente',
+            'verServiciosMenu', 'verServicios', 'verCatalogoMenu',
+            'verVentasUnificadasMenu', 'verVentasMenu', 'verVentaServicio', 'crearVentaServicio',
+            'verVentaProducto', 'crearVentaProducto',
+        ],
+    },
+    Inventario: {
+        esAdmin: false,
+        permisos: [
+            'verProductosMenu', 'verProducto', 'crearProducto', 'actualizarProducto', 'eliminarProducto',
+            'verCategoriaProductosMenu', 'verCategoriaProducto', 'crearCategoriaProducto', 'actualizarCategoriaProducto',
+            'verInsumosMenu', 'verBajaProductoMenu', 'verBajaProductos', 'crearBajaProducto',
+            'verProveedoresMenu', 'verProveedor', 'crearProveedor', 'actualizarProveedor',
+            'verComprasMenu', 'verCompras', 'crearCompras', 'actualizarCompras',
+        ],
+    },
 };
 
 const admin = {
