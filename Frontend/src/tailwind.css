@@ -94,6 +94,12 @@
     --st-completada: 63 125 92;
     --st-cancelada: var(--neutral-400);
 
+    /* Series de gráficos, en orden fijo (validadas: saturación, daltonismo y contraste) */
+    --graf-1: #9b1b4a;
+    --graf-2: #00809a;
+    --graf-3: #c2671f;
+    --graf-4: #6b4fa0;
+
     --radius: 0.625rem;
     --sombra-1: 0 1px 2px rgb(36 26 33 / 0.06), 0 1px 1px rgb(36 26 33 / 0.04);
     --sombra-2: 0 8px 24px -12px rgb(36 26 33 / 0.18), 0 2px 6px rgb(36 26 33 / 0.05);
@@ -144,6 +150,10 @@
     --c-danger: 236 110 98;
     --c-info: 130 165 215;
     --st-confirmada: 224 85 138;
+    --graf-1: #e0558a;
+    --graf-2: #1a98b0;
+    --graf-3: #cc7a30;
+    --graf-4: #8a6dc8;
 
     --sombra-1: 0 1px 2px rgb(0 0 0 / 0.4);
     --sombra-2: 0 8px 24px -12px rgb(0 0 0 / 0.6);

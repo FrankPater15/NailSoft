@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts"
+import { useColoresGrafico } from "../../../util/coloresGrafico"
 import { motion } from "framer-motion"
 
 const CustomTooltip = ({ active, payload, label }) => {
@@ -21,6 +22,7 @@ const CustomTooltip = ({ active, payload, label }) => {
 }
 
 const AppointmentsChart = () => {
+  const colores = useColoresGrafico()
   const [data, setData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -197,7 +199,7 @@ const AppointmentsChart = () => {
             onClick={() => handleTimeRangeChange("week")}
             className={`px-3 py-1 rounded-md text-sm  ${
               timeRange === "week"
-                ? "bg-pink-600 text-primary-foreground hover:bg-pink-500"
+                ? "bg-primary text-primary-foreground hover:bg-pink-500"
                 : "bg-muted text-muted-foreground hover:bg-muted/80"
             }`}
           >
@@ -207,7 +209,7 @@ const AppointmentsChart = () => {
             onClick={() => handleTimeRangeChange("month")}
             className={`px-3 py-1 rounded-md text-sm ${
               timeRange === "month"
-                ? "bg-pink-600 text-primary-foreground hover:bg-pink-500 "
+                ? "bg-primary text-primary-foreground hover:bg-pink-500 "
                 : "bg-muted text-muted-foreground hover:bg-muted/80"
             }`}
           >
@@ -217,7 +219,7 @@ const AppointmentsChart = () => {
             onClick={() => handleTimeRangeChange("year")}
             className={`px-3 py-1 rounded-md text-sm ${
               timeRange === "year"
-                ? "bg-pink-600 text-primary-foreground hover:bg-pink-500"
+                ? "bg-primary text-primary-foreground hover:bg-pink-500"
                 
                 : "bg-muted text-muted-foreground hover:bg-muted/80"
             }`}
@@ -235,55 +237,46 @@ const AppointmentsChart = () => {
         style={{ minHeight: "300px" }}
       >
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={data} margin={{ top: 20, right: 50, left: 20, bottom: 40 }} style={{ filter: "drop-shadow(0px 0px 10px hsl(330, 81%, 58%))" }}>
+          <AreaChart data={data} margin={{ top: 20, right: 50, left: 20, bottom: 40 }}>
             <defs>
               <linearGradient id="appointmentGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#F75EEFFF" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="#F40DA3FF" stopOpacity={0.2} />
+                <stop offset="0%" stopColor={colores.series[0]} stopOpacity={0.22} />
+                <stop offset="100%" stopColor={colores.series[0]} stopOpacity={0} />
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--muted))" vertical={false} />
+            <CartesianGrid stroke={colores.linea} vertical={false} />
             <XAxis
               dataKey="month"
-              tick={{ fill: "hsl(var(--foreground))", fontSize: 12 }}
-              axisLine={{ stroke: "hsl(var(--border))" }}
-              tickLine={{ stroke: "hsl(var(--border))" }}
+              tick={{ fill: colores.tintaTenue, fontSize: 12 }}
+              axisLine={{ stroke: colores.linea }}
+              tickLine={false}
             />
             <YAxis
               domain={[0, "dataMax + 5"]}
-              tick={{ fill: "hsl(var(--foreground))", fontSize: 12 }}
-              axisLine={{ stroke: "hsl(var(--border))" }}
-              tickLine={{ stroke: "hsl(var(--border))" }}
+              tick={{ fill: colores.tintaTenue, fontSize: 12 }}
+              axisLine={{ stroke: colores.linea }}
+              tickLine={false}
             />
             <Tooltip content={<CustomTooltip />} />
-            <Legend
-              verticalAlign="top"
-              align="right"
-              
-              wrapperStyle={{
-                paddingBottom: "20px",
-                fontSize: "12px",
-              }}
-            />
             <Area
               type="monotone"
               dataKey="appointments"
               name="Citas"
               
-              stroke="#FC00CAFF" 
+              stroke={colores.series[0]}
               strokeWidth={2}
               fill="url(#appointmentGradient)"
               dot={{
-                stroke: "#FFFFFFFF",
+                stroke: colores.superficie,
                 strokeWidth: 2,
                 r: 4,
-                fill: "white",
+                fill: colores.series[0],
               }}
               activeDot={{
-                stroke: "#F500C4FF",
+                stroke: colores.superficie,
                 strokeWidth: 2,
                 r: 6,
-                fill: "white",
+                fill: colores.series[0],
               }}
             />
           </AreaChart>

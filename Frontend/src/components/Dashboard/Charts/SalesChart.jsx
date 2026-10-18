@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts"
+import { useColoresGrafico } from "../../../util/coloresGrafico"
 import { motion } from "framer-motion"
 import { Button } from "../../ui/button"
 
@@ -30,6 +31,7 @@ const CustomTooltip = ({ active, payload, label }) => {
 }
 
 const SalesChart = () => {
+  const colores = useColoresGrafico()
   const [data, setData] = useState([])
   const [rawData, setRawData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -243,7 +245,7 @@ const SalesChart = () => {
             onClick={() => handleTimeRangeChange("week")}
             className={`px-3 py-1 rounded-md text-sm  ${
               timeRange === "week"
-                ? "bg-pink-600 text-primary-foreground hover:bg-pink-500  "
+                ? "bg-primary text-primary-foreground hover:bg-pink-500  "
                 : "bg-muted text-muted-foreground hover:bg-muted/80"
             }`}
           >
@@ -253,7 +255,7 @@ const SalesChart = () => {
             onClick={() => handleTimeRangeChange("month")}
             className={`px-3 py-1 rounded-md text-sm ${
               timeRange === "month"
-                ? "bg-pink-600 text-primary-foreground hover:bg-pink-500  "
+                ? "bg-primary text-primary-foreground hover:bg-pink-500  "
                 : "bg-muted text-muted-foreground hover:bg-muted/80"
             }`}
           >
@@ -263,7 +265,7 @@ const SalesChart = () => {
             onClick={() => handleTimeRangeChange("year")}
             className={`px-3 py-1 rounded-md text-sm ${
               timeRange === "year"
-                ? "bg-pink-600 text-primary-foreground hover:bg-pink-500  "
+                ? "bg-primary text-primary-foreground hover:bg-pink-500  "
                 : "bg-muted text-muted-foreground hover:bg-muted/80"
             }`}
           >
@@ -314,32 +316,18 @@ const SalesChart = () => {
         className="h-[250px] w-full"
       >
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 10 }} style={{ filter: "drop-shadow(0px 0px 10px hsl(330, 81%, 58%))" }}>
-            <defs>
-              <linearGradient id="productosGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#A105FBFF" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="#000000FF" stopOpacity={0.6} />
-              </linearGradient>
-              <linearGradient id="serviciosGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#0000BCFF" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="#000000FF" stopOpacity={0.6} />
-              </linearGradient>
-              <linearGradient id="totalGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#FF00D9FF" stopOpacity={0.8}  />
-                <stop offset="95%" stopColor="hsl(var(--accent))" stopOpacity={0.6}/>
-              </linearGradient>
-            </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--muted))" vertical={false} />
+          <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 10 }}>
+            <CartesianGrid stroke={colores.linea} vertical={false} />
             <XAxis
               dataKey="month"
-              tick={{ fill: "hsl(var(--foreground))", fontSize: 12 }}
-              axisLine={{ stroke: "hsl(var(--border))" }}
-              tickLine={{ stroke: "hsl(var(--border))" }}
+              tick={{ fill: colores.tintaTenue, fontSize: 12 }}
+              axisLine={{ stroke: colores.linea }}
+              tickLine={false}
             />
             <YAxis
-              tick={{ fill: "hsl(var(--foreground))", fontSize: 12 }}
-              axisLine={{ stroke: "hsl(var(--border))" }}
-              tickLine={{ stroke: "hsl(var(--border))" }}
+              tick={{ fill: colores.tintaTenue, fontSize: 12 }}
+              axisLine={{ stroke: colores.linea }}
+              tickLine={false}
             />
             <Tooltip content={<CustomTooltip />} />
             <Legend
@@ -355,7 +343,9 @@ const SalesChart = () => {
               <Bar
                 dataKey="total"
                 name="Total"
-                fill="url(#totalGradient)"
+                fill={colores.series[0]}
+                stroke={colores.superficie}
+                strokeWidth={2}
                 radius={[4, 4, 0, 0]}
                 animationDuration={1000}
                 animationBegin={0}
@@ -365,7 +355,9 @@ const SalesChart = () => {
                 <Bar
                   dataKey="productos"
                   name="Productos"
-                  fill="url(#productosGradient)"
+                  fill={colores.series[1]}
+                  stroke={colores.superficie}
+                  strokeWidth={2}
                   radius={[4, 4, 0, 0]}
                   animationDuration={1000}
                   animationBegin={0}
@@ -374,7 +366,9 @@ const SalesChart = () => {
                 <Bar
                   dataKey="servicios"
                   name="Servicios"
-                  fill="url(#serviciosGradient)"
+                  fill={colores.series[0]}
+                  stroke={colores.superficie}
+                  strokeWidth={2}
                   radius={[4, 4, 0, 0]}
                   animationDuration={1000}
                   animationBegin={200}

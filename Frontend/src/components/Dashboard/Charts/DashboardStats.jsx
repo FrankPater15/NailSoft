@@ -317,9 +317,9 @@ const DashboardStats = () => {
       title: "Ingresos Totales",
       value: `$${stats.ingresosTotales.valor.toLocaleString()}`,
       change: `${stats.ingresosTotales.cambio}%`,
-      icon: <DollarSign className="h-5 w-5 text-pink-600 dark:text-black" />,
+      icon: <DollarSign className="h-5 w-5 text-pink-600" />,
       trend: Number.parseFloat(stats.ingresosTotales.cambio) >= 0 ? "up" : "down",
-      className: "card-gradient-1 text-black dark:card-gradient-33 dark:text-foreground ",
+      className: "",
       details: [
         {
           label: "Productos",
@@ -341,25 +341,25 @@ const DashboardStats = () => {
       title: "Citas Totales",
       value: stats.citasTotales.valor.toString(),
       change: `${stats.citasTotales.cambio}%`,
-      icon: <CalendarHeart className="h-5 w-5 text-pink-600 dark:text-black" />,
+      icon: <CalendarHeart className="h-5 w-5 text-pink-600" />,
       trend: Number.parseFloat(stats.citasTotales.cambio) >= 0 ? "up" : "down",
-      className: "card-gradient-1 text-black dark:card-gradient-33 dark:text-black",
+      className: "",
     },
     {
       title: "Clientes Nuevos",
       value: stats.clientesNuevos.valor.toString(),
       change: `${stats.clientesNuevos.cambio}%`,
-      icon: <Users className="h-5 w-5 text-pink-600 dark:text-black" />,
+      icon: <Users className="h-5 w-5 text-pink-600" />,
       trend: Number.parseFloat(stats.clientesNuevos.cambio) >= 0 ? "up" : "down",
-      className: "card-gradient-1 dark:card-gradient-33 dark:text-black",
+      className: "",
     },
     {
       title: "Ventas",
       value: (stats.serviciosVendidos.valor + stats.productosVendidos.valor).toString(),
       change: `${((Number(stats.serviciosVendidos.cambio) + Number(stats.productosVendidos.cambio)) / 2).toFixed(1)}%`,
-      icon: <ShoppingBag className="h-5 w-5 text-pink-600 dark:text-black" />,
+      icon: <ShoppingBag className="h-5 w-5 text-pink-600" />,
       trend: (Number(stats.serviciosVendidos.cambio) + Number(stats.productosVendidos.cambio)) / 2 >= 0 ? "up" : "down",
-      className: "card-gradient-1 text-black dark:card-gradient-33 dark:text-black",
+      className: "",
       details: [
         {
           label: "Productos",
@@ -389,9 +389,9 @@ const DashboardStats = () => {
       {statsData.map((stat, index) => (
         <motion.div key={index} variants={item}>
           <Card className={`overflow-hidden border-none shadow-md ${stat.className} hover-glow`}>
-            <CardHeader className="pb-2 dark:text-black">
+            <CardHeader className="pb-2">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-sm font-medium text-muted-foreground dark:text-black">
+                <CardTitle className="text-sm font-medium text-muted-foreground">
                   {stat.title}
                 </CardTitle>
                 <div className="rounded-full bg-primary/20 p-1.5 dark:text-primary">{stat.icon}</div>
@@ -406,11 +406,11 @@ const DashboardStats = () => {
               </div>
             </CardContent>
             {stat.details && (
-              <CardFooter className="pt-0 pb-3 px-6 dark:text-black">
-                <div className="w-full grid grid-cols-2 gap-2 text-xs border-t pt-2 dark:text-black">
+              <CardFooter className="pt-0 pb-3 px-6">
+                <div className="w-full grid grid-cols-2 gap-2 text-xs border-t pt-2">
                   {stat.details.map((detail, idx) => (
                     <div key={idx} className="flex flex-col items-start">
-                      <div className="flex items-center gap-1 text-muted-foreground dark:text-black">
+                      <div className="flex items-center gap-1 text-muted-foreground">
                         {detail.icon}
                         <span>{detail.label}</span>
                       </div>

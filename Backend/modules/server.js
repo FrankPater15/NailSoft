@@ -46,14 +46,16 @@ const origenPermitido = (origen) =>
     ? origenesPermitidos.includes(origen)
     : /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origen));
 
-// Límite de peticiones por IP en una ventana de 15 minutos
-const limitar = (max, message) =>
+// Límite de peticiones por IP en una ventana de 15 minutos.
+// Con soloFallidas, las peticiones exitosas (p. ej. un login correcto) no cuentan.
+const limitar = (max, message, { soloFallidas = false } = {}) =>
   rateLimit({
     windowMs: 15 * 60 * 1000,
     max,
     standardHeaders: true,
     legacyHeaders: false,
     skip: () => esPrueba,
+    skipSuccessfulRequests: soloFallidas,
     message: { message, msg: message },
   });
 
@@ -94,7 +96,9 @@ class Server {
     // Límites contra fuerza bruta en autenticación y contra abuso general de la API
     this.app.use(
       "/api/auth/login",
-      limitar(10, "Demasiados intentos de inicio de sesión. Intenta de nuevo en 15 minutos."),
+      limitar(10, "Demasiados intentos fallidos de inicio de sesión. Intenta de nuevo en 15 minutos.", {
+        soloFallidas: true,
+      }),
     );
     this.app.use("/api/auth/register", limitar(10, "Demasiados registros desde esta conexión. Intenta más tarde."));
     this.app.use(

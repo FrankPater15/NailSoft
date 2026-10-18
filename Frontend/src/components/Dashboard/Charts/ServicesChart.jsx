@@ -3,20 +3,9 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from "recharts"
+import { useColoresGrafico } from "../../../util/coloresGrafico"
 import { motion } from "framer-motion"
 
-const COLORS = [
-  "hsl(var(--primary))",
-  "hsl(var(--accent))",
-  "hsl(var(--secondary))",
-  "hsl(300, 70%, 70%)",
-  "hsl(320, 70%, 75%)",
-  "hsl(340, 70%, 80%)",
-  "hsl(360, 70%, 85%)",
-  "hsl(20, 70%, 80%)",
-  "hsl(40, 70%, 75%)",
-  "hsl(60, 70%, 70%)",
-]
 
 const CustomTooltip = ({ active, payload }) => {
   if (active && payload && payload.length) {
@@ -34,6 +23,7 @@ const CustomTooltip = ({ active, payload }) => {
 }
 
 const ServicesChart = () => {
+  const colores = useColoresGrafico()
   const [data, setData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -159,6 +149,18 @@ const ServicesChart = () => {
     )
   }
 
+  // Orden fijo de colores: con más de 4 empleadas, las de menos servicios se agrupan en "Otras"
+  const datosGrafico =
+    data.length > 4
+      ? [
+          ...[...data].sort((a, b) => b.value - a.value).slice(0, 3),
+          {
+            employee: "Otras",
+            value: [...data].sort((a, b) => b.value - a.value).slice(3).reduce((t, d) => t + d.value, 0),
+          },
+        ]
+      : data
+
   return (
     <div className="h-full w-full">
       <div className="flex justify-end mb-4">
@@ -167,7 +169,7 @@ const ServicesChart = () => {
             onClick={() => handleTimeRangeChange("week")}
             className={`px-3 py-1 rounded-md text-sm  ${
               timeRange === "week"
-                ? "bg-pink-600 text-primary-foreground hover:bg-pink-500 hover:text-black"
+                ? "bg-primary text-primary-foreground hover:bg-pink-500 hover:text-black"
                 : "bg-muted text-muted-foreground hover:bg-muted/80 "
             }`}
           >
@@ -177,7 +179,7 @@ const ServicesChart = () => {
             onClick={() => handleTimeRangeChange("month")}
             className={`px-3 py-1 rounded-md text-sm  ${
               timeRange === "month"
-                ? "bg-pink-600 text-primary-foreground hover:bg-pink-500 hover:text-black"
+                ? "bg-primary text-primary-foreground hover:bg-pink-500 hover:text-black"
                 : "bg-muted text-muted-foreground hover:bg-muted/80 "
             }`}
           >
@@ -187,7 +189,7 @@ const ServicesChart = () => {
             onClick={() => handleTimeRangeChange("year")}
             className={`px-3 py-1 rounded-md text-sm  ${
               timeRange === "year"
-                ? "bg-pink-600 text-primary-foreground hover:bg-pink-500 hover:text-black"
+                ? "bg-primary text-primary-foreground hover:bg-pink-500 hover:text-black"
                 : "bg-muted text-muted-foreground hover:bg-muted/80"
             }`}
           >
@@ -205,15 +207,15 @@ const ServicesChart = () => {
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
-              data={data}
+              data={datosGrafico}
               dataKey="value"
               nameKey="employee"
               cx="50%"
               cy="50%"
               innerRadius={60}
               outerRadius={80}
-              paddingAngle={5}
-              style={{ filter: "drop-shadow(0px 0px 10px hsl(330, 81%, 58%))" }}
+              paddingAngle={0}
+             
               label={({ cx, cy, midAngle, innerRadius, outerRadius, value, index }) => {
                 const RADIAN = Math.PI / 180
                 const radius = 25 + innerRadius + (outerRadius - innerRadius)
@@ -224,23 +226,23 @@ const ServicesChart = () => {
                   <text
                     x={x}
                     y={y}
-                    fill="hsl(var(--foreground))"
+                    fill={colores.tintaSuave}
                     textAnchor={x > cx ? "start" : "end"}
                     dominantBaseline="central"
                     fontSize="11"
                   >
-                    {`${data[index].employee} (${value})`}
+                    {`${datosGrafico[index].employee} (${value})`}
                   </text>
                 )
               }}
             >
-              {data.map((entry, index) => (
+              {datosGrafico.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
-                  fill={COLORS[index % COLORS.length]}
-                  stroke="#ffffff"
-                  strokeWidth={4}
-                  style={{ filter: "drop-shadow(0px 0px 10px hsl(330, 81%, 58%))" }}
+                  fill={colores.series[index]}
+                  stroke={colores.superficie}
+                  strokeWidth={2}
+                 
                 />
               ))}
             </Pie>
@@ -253,10 +255,10 @@ const ServicesChart = () => {
               
               wrapperStyle={{
                 fontSize: "12px",
-                color: "hsl(var(--foreground))",
+                color: colores.tintaSuave,
                 paddingLeft: "20px",
               }}
-              style={{ filter: "drop-shadow(0px 0px 10px hsl(330, 81%, 58%))" }}
+             
 
             />
           </PieChart>
