@@ -39,6 +39,7 @@ const UsuarioSchema = Schema({
     },
     resetPasswordToken: String,
     resetPasswordExpires: Date,
+    resetPasswordAttempts: { type: Number, default: 0 }, // Intentos fallidos del código actual
 });
 
 module.exports = model('Usuario', UsuarioSchema);

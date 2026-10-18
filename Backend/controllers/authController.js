@@ -78,7 +78,7 @@
 //     }
 
 //     // Generar token
-//     const token = jwt.sign({ userId: user._id, role: user.rol.nombreRol }, process.env.JWT_SECRET || "secret_key", {
+//     const token = jwt.sign({ userId: user._id, role: user.rol.nombreRol }, process.env.JWT_SECRET, {
 //       expiresIn: "24h",
 //     })
 
@@ -107,7 +107,7 @@
 // }
 
 // const register = async (req, res) => {
-//   const { nombre, apellido, email, password, confirmPassword, rol, estado, celular } = req.body
+//   const { nombre, apellido, email, password, confirmPassword, celular } = req.body
 
 //   try {
 //     // Validaciones básicas
@@ -217,7 +217,7 @@
 //     // Generar token
 //     const token = jwt.sign(
 //       { userId: newUser._id, role: newUser.rol.nombreRol },
-//       process.env.JWT_SECRET || "secret_key",
+//       process.env.JWT_SECRET,
 //       { expiresIn: "24h" },
 //     )
 
@@ -381,7 +381,7 @@
 //         resetVerified: true,
 //         email: user.email,
 //       },
-//       process.env.JWT_SECRET || "secret_key",
+//       process.env.JWT_SECRET,
 //       { expiresIn: "15m" },
 //     )
 
@@ -421,7 +421,7 @@
 //     // Verificar token JWT
 //     let decoded
 //     try {
-//       decoded = jwt.verify(token, process.env.JWT_SECRET || "secret_key")
+//       decoded = jwt.verify(token, process.env.JWT_SECRET)
 //     } catch (jwtError) {
 //       if (jwtError.name === "TokenExpiredError") {
 //         return res.status(401).json({
@@ -553,33 +553,36 @@ const { createUser } = require("../controllers/userHelper")
 const nodemailer = require("nodemailer")
 const crypto = require("crypto")
 
-// 🔥 CORRECCIÓN: createTransport (sin "er" al final)
 const transporter = nodemailer.createTransport({
   service: process.env.EMAIL_SERVICE || "gmail",
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASSWORD,
   },
-  tls: {
-    rejectUnauthorized: false,
-  },
 })
 
-// Verificación del transporter
-transporter.verify((error, success) => {
-  if (error) {
-    console.error("Error al configurar el correo:", error)
-  } else {
-    console.log("Servidor de correo configurado correctamente")
-  }
-})
+// Verificación del transporter (solo si hay credenciales configuradas)
+if (process.env.EMAIL_USER && process.env.EMAIL_PASSWORD && process.env.NODE_ENV !== "test") {
+  transporter.verify((error) => {
+    if (error) {
+      console.error("Error al configurar el correo:", error.message)
+    } else {
+      console.log("Servidor de correo configurado correctamente")
+    }
+  })
+} else if (process.env.NODE_ENV !== "test") {
+  console.warn("Correo sin configurar (EMAIL_USER / EMAIL_PASSWORD): la recuperación de contraseña no enviará correos")
+}
+
+// Intentos fallidos permitidos para un código de recuperación antes de invalidarlo
+const MAX_INTENTOS_CODIGO = 5
 
 const login = async (req, res) => {
   const { email, password } = req.body
 
   try {
     // Validar entrada
-    if (!email || !password) {
+    if (typeof email !== "string" || typeof password !== "string" || !email || !password) {
       return res.status(400).json({
         message: "Email y contraseña son requeridos",
       })
@@ -592,10 +595,13 @@ const login = async (req, res) => {
       },
     })
 
-    console.log("Usuario:", user)
-    console.log("Permisos del rol:", user?.rol?.permisoRol)
-
     if (!user) {
+      return res.status(400).json({ message: "Credenciales inválidas" })
+    }
+
+    // Verificar contraseña antes que el estado, para no revelar qué cuentas existen
+    const isMatch = await bcrypt.compare(String(password).trim(), user.password)
+    if (!isMatch) {
       return res.status(400).json({ message: "Credenciales inválidas" })
     }
 
@@ -607,12 +613,6 @@ const login = async (req, res) => {
       })
     }
 
-    // Verificar contraseña
-    const isMatch = await bcrypt.compare(password.trim(), user.password)
-    if (!isMatch) {
-      return res.status(400).json({ message: "Credenciales inválidas" })
-    }
-
     // Verificar si el rol está activo
     if (!user.rol || !user.rol.estadoRol) {
       return res.status(403).json({
@@ -622,7 +622,7 @@ const login = async (req, res) => {
     }
 
     // Generar token
-    const token = jwt.sign({ userId: user._id, role: user.rol.nombreRol }, process.env.JWT_SECRET || "secret_key", {
+    const token = jwt.sign({ userId: user._id, role: user.rol.nombreRol }, process.env.JWT_SECRET, {
       expiresIn: "24h",
     })
 
@@ -630,7 +630,8 @@ const login = async (req, res) => {
       success: true,
       token,
       role: user.rol.nombreRol,
-      permisos: user.rol.permisoRol.map((p) => ({
+      // Solo los permisos activos: los desactivados no deben mostrar menús que el backend rechaza
+      permisos: user.rol.permisoRol.filter((p) => p.activo).map((p) => ({
         id: p._id,
         nombrePermiso: p.nombrePermiso,
         descripcion: p.descripcion,
@@ -651,11 +652,11 @@ const login = async (req, res) => {
 }
 
 const register = async (req, res) => {
-  const { nombre, apellido, email, password, confirmPassword, rol, estado, celular } = req.body
+  const { nombre, apellido, email, password, confirmPassword, celular } = req.body
 
   try {
     // Validaciones básicas
-    if (!nombre || !apellido || !email || !password || !confirmPassword || !celular) {
+    if (![nombre, apellido, email, password, confirmPassword, celular].every((campo) => typeof campo === "string" && campo)) {
       return res.status(400).json({
         message: "Todos los campos son obligatorios",
       })
@@ -685,24 +686,13 @@ const register = async (req, res) => {
       return res.status(400).json({ message: "El celular ya está registrado como cliente" })
     }
 
-    // Manejar rol
-    let rolId
-    if (rol) {
-      const existeRol = await Rol.findById(rol)
-      if (!existeRol || !existeRol.estadoRol) {
-        return res.status(400).json({
-          message: "El rol especificado no es válido o está desactivado",
-        })
-      }
-      rolId = rol
-    } else {
-      const defaultRol = await Rol.findOne({ nombreRol: "Cliente" })
-      if (!defaultRol || !defaultRol.estadoRol) {
-        return res.status(400).json({
-          message: "El rol por defecto no está disponible. Contacta al administrador.",
-        })
-      }
-      rolId = defaultRol._id
+    // El registro público siempre crea clientes activos: el rol y el estado
+    // solo los asigna un administrador desde la gestión de usuarios
+    const defaultRol = await Rol.findOne({ nombreRol: "Cliente" })
+    if (!defaultRol || !defaultRol.estadoRol) {
+      return res.status(400).json({
+        message: "El rol por defecto no está disponible. Contacta al administrador.",
+      })
     }
 
     // Crear usuario
@@ -711,8 +701,8 @@ const register = async (req, res) => {
       apellido,
       email: email.toLowerCase().trim(),
       password,
-      rol: rolId,
-      estado: estado !== undefined ? estado : true,
+      rol: defaultRol._id,
+      estado: true,
       celular,
     })
 
@@ -727,7 +717,7 @@ const register = async (req, res) => {
           apellidocliente: apellido,
           correocliente: email,
           celularcliente: celular,
-          estadocliente: estado !== undefined ? estado : true,
+          estadocliente: true,
           usuario: newUser._id,
         }).save()
         console.log(`Cliente creado automáticamente para el usuario: ${email}`)
@@ -745,7 +735,7 @@ const register = async (req, res) => {
           correoempleado: email,
           celularempleado: celular,
           telefonoempleado: celular,
-          estadoempleado: estado !== undefined ? estado : true,
+          estadoempleado: true,
           especialidad: "General", // Valor por defecto
           salario: 0, // Valor por defecto
           usuario: newUser._id,
@@ -759,7 +749,7 @@ const register = async (req, res) => {
     // Generar token
     const token = jwt.sign(
       { userId: newUser._id, role: newUser.rol.nombreRol },
-      process.env.JWT_SECRET || "secret_key",
+      process.env.JWT_SECRET,
       { expiresIn: "24h" },
     )
 
@@ -784,7 +774,7 @@ const requestPasswordReset = async (req, res) => {
 
   try {
     // Validar entrada
-    if (!email) {
+    if (typeof email !== "string" || !email) {
       return res.status(400).json({ message: "El email es requerido" })
     }
 
@@ -798,13 +788,14 @@ const requestPasswordReset = async (req, res) => {
       return res.status(200).json({ message: successMessage })
     }
 
-    // Generar código de 6 dígitos
-    const resetCode = Math.floor(100000 + Math.random() * 900000).toString()
+    // Generar código de 6 dígitos con un generador criptográficamente seguro
+    const resetCode = crypto.randomInt(100000, 1000000).toString()
 
     // Hashear el código y establecer expiración (15 minutos)
     const hashedCode = await bcrypt.hash(resetCode, 10)
     user.resetPasswordToken = hashedCode
     user.resetPasswordExpires = new Date(Date.now() + 15 * 60 * 1000) // 15 minutos
+    user.resetPasswordAttempts = 0
 
     await user.save({ validateBeforeSave: false })
 
@@ -882,7 +873,7 @@ const verifyResetToken = async (req, res) => {
 
   try {
     // Validar entrada
-    if (!token || !email) {
+    if (typeof token !== "string" || typeof email !== "string" || !token || !email) {
       return res.status(400).json({ message: "Código y email son requeridos" })
     }
 
@@ -904,9 +895,21 @@ const verifyResetToken = async (req, res) => {
       })
     }
 
-    // Verificar el código
-    const isValidToken = await bcrypt.compare(token, user.resetPasswordToken)
+    // Verificar el código; tras varios intentos fallidos se invalida para evitar adivinarlo
+    const isValidToken = await bcrypt.compare(String(token), user.resetPasswordToken)
     if (!isValidToken) {
+      user.resetPasswordAttempts = (user.resetPasswordAttempts || 0) + 1
+      if (user.resetPasswordAttempts >= MAX_INTENTOS_CODIGO) {
+        user.resetPasswordToken = undefined
+        user.resetPasswordExpires = undefined
+        user.resetPasswordAttempts = 0
+        await user.save({ validateBeforeSave: false })
+        return res.status(400).json({
+          message: "Demasiados intentos fallidos. Solicita un código nuevo.",
+          expired: true,
+        })
+      }
+      await user.save({ validateBeforeSave: false })
       return res.status(400).json({ message: "Código incorrecto" })
     }
 
@@ -917,7 +920,7 @@ const verifyResetToken = async (req, res) => {
         resetVerified: true,
         email: user.email,
       },
-      process.env.JWT_SECRET || "secret_key",
+      process.env.JWT_SECRET,
       { expiresIn: "15m" },
     )
 
@@ -937,7 +940,7 @@ const resetPassword = async (req, res) => {
 
   try {
     // Validar entrada
-    if (!token || !password || !confirmPassword) {
+    if (![token, password, confirmPassword].every((campo) => typeof campo === "string" && campo)) {
       return res.status(400).json({
         message: "Token, contraseña y confirmación son requeridos",
       })
@@ -957,7 +960,7 @@ const resetPassword = async (req, res) => {
     // Verificar token JWT
     let decoded
     try {
-      decoded = jwt.verify(token, process.env.JWT_SECRET || "secret_key")
+      decoded = jwt.verify(token, process.env.JWT_SECRET)
     } catch (jwtError) {
       if (jwtError.name === "TokenExpiredError") {
         return res.status(401).json({
@@ -982,6 +985,14 @@ const resetPassword = async (req, res) => {
     const user = await User.findById(decoded.userId).populate("rol")
     if (!user) {
       return res.status(400).json({ message: "Usuario no encontrado" })
+    }
+
+    // El código se borra al usarse, así que la autorización sirve una sola vez
+    if (!user.resetPasswordToken) {
+      return res.status(401).json({
+        message: "Esta autorización ya se usó. Solicita un código nuevo.",
+        expired: true,
+      })
     }
 
     // Verificar y corregir el rol si es necesario
@@ -1063,7 +1074,7 @@ const getUserData = async (req, res) => {
       nombre: user.nombre,
       correo: user.email, // Usar el campo correcto del modelo
       role: user.rol.nombreRol,
-      permisos: user.rol.permisoRol || [],
+      permisos: (user.rol.permisoRol || []).filter((p) => p.activo),
     })
   } catch (error) {
     console.error("Error al obtener usuario:", error)

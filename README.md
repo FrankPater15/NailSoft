@@ -64,6 +64,21 @@ npm run dev            # la API queda en http://localhost:3000 y se recarga al g
 
 El seed crea el administrador `admin@nailsoft.local` con contraseña `Admin123!`. Puedes cambiarlos con las variables `SEED_ADMIN_EMAIL` y `SEED_ADMIN_PASSWORD` antes de correrlo.
 
+Para tener datos con los que probar, `npm run seed:demo` agrega servicios, productos, citas, ventas y un usuario por rol (contraseña `Prueba123!`):
+
+| Rol | Usuario | Qué puede hacer |
+|-----|---------|-----------------|
+| Empleado | `empleado1@nailsoft.local`, `empleado2@nailsoft.local` | Su agenda, sus citas y sus ventas |
+| Cliente | `cliente1@nailsoft.local`, `cliente2@nailsoft.local` | Catálogo, agendar y cancelar sus citas |
+| Recepcionista | `recepcion@nailsoft.local` | Todas las citas, clientes y ventas |
+| Inventario | `inventario@nailsoft.local` | Productos, insumos, proveedores y compras |
+
+> `npm run seed` vuelve a asignar a cada rol sus permisos iniciales: los cambios de permisos hechos desde la aplicación se pierden.
+
+### Permisos
+
+Cada ruta de la API exige un permiso. Los permisos terminados en `Propias` (por ejemplo `verCitasPropias`) limitan la acción a los registros del propio usuario: un cliente solo ve sus citas y un empleado solo las que tiene asignadas. Los roles se configuran desde la aplicación, sin depender de nombres fijos en el código.
+
 ### 3. Frontend
 
 ```bash
@@ -86,6 +101,8 @@ flutter run -d chrome --dart-define=API_URL=http://localhost:3000
 ```
 
 ### 5. Pruebas del backend
+
+Las pruebas de seguridad usan MongoDB local, en una base aparte (`NailsSoft_test`) que se crea y se borra en cada ejecución. Para usar otra, define `MONGODB_CNN_TEST`.
 
 ```bash
 cd Backend

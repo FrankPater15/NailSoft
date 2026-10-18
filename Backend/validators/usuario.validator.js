@@ -15,50 +15,38 @@ const usuarioSchema = Joi.object({
     .min(3)
     .max(50)
     .required()
-    .pattern(/^[a-zA-Z\s]+$/)
+    .pattern(/^[\p{L}\s'-]+$/u)
     .messages({
         'string.empty': 'El campo nombreUsuario es obligatorio.',
         'string.min': 'El campo nombreUsuario debe tener entre 3 y 50 caracteres.',
         'string.max': 'El campo nombreUsuario debe tener entre 3 y 50 caracteres.',
-        'string.pattern.base': 'El campo nombreUsuario solo puede contener letras y espacios.',
+        'string.pattern.base': 'El campo nombreUsuario solo puede contener letras, espacios, apóstrofos y guiones.',
     }),
     apellido: Joi.string()
     .trim()
     .min(3)
     .max(50)
     .required()
-    .pattern(/^[a-zA-Z\s]+$/)
+    .pattern(/^[\p{L}\s'-]+$/u)
     .messages({
         'string.empty': 'El campo apellido de Usuario es obligatorio.',
         'string.min': 'El campo apellido de Usuario debe tener entre 3 y 50 caracteres.',
         'string.max': 'El campo apellido de Usuario debe tener entre 3 y 50 caracteres.',
-        'string.pattern.base': 'El campo apellido de Usuario solo puede contener letras y espacios.',
+        'string.pattern.base': 'El campo apellido de Usuario solo puede contener letras, espacios, apóstrofos y guiones.',
     }),
 
 
     email: Joi.string()
     .trim()
-    .email({ minDomainSegments: 2 })
+    .email({ minDomainSegments: 2, tlds: { allow: false } })
     .min(10)
     .max(80)
     .required()
     .pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
-    .custom((value, helpers) => {
-    const domain = value.split('@')[1]?.toLowerCase();
-    const allowedDomains = ['gmail.com', 'hotmail.com', 'outlook.com', 'yahoo.com','icloud.com','live.com','protonmail.com','tutanota.com','zoho.com','yandex.com'];
-    if (!domain || !allowedDomains.includes(domain)) {
-      return helpers.error('email.invalidDomain', { value });
-      // return helpers.error('any.invalid');
-    }
-
-    // Validar que el dominio no tenga caracteres inválidos
-    const invalidDomainChars = /[^a-zA-Z0-9.-]/;
-    if (invalidDomainChars.test(domain)) {
-      return helpers.error('email.invalidDomainChars', { value });
-    }
-
-    return value; // ✅ pasa la validación
-  }, 'Validación personalizada de dominio'),
+    .messages({
+        'string.email': 'El correo no tiene un formato válido.',
+        'string.pattern.base': 'El correo no tiene un formato válido.',
+    }),
 
 
 
