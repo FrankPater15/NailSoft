@@ -46,4 +46,3 @@ export const Table = ({ className, ...props }) => {
     return <caption className={`mt-4 text-sm text-muted-foreground ${className || ""}`} {...props} />
   }
   
-  

@@ -16,7 +16,6 @@ export const AuthProvider = ({ children }) => {
       // Usar axiosInstance (ya incluye el token automáticamente)
       const response = await axiosInstance.get("/auth/user");
 
-      // console.log("Datos usuario:", response.data);
       const { role, _id, nombre, correo, permisos } = response.data;
 
       setUser({

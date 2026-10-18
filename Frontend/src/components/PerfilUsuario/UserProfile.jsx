@@ -130,23 +130,16 @@ const UserProfile = () => {
         },
       })
 
-      // console.log("Respuesta completa de la API:", response.data)
-
       if (!response.data) {
         throw new Error("La respuesta de la API no contiene datos del usuario")
       }
 
       const { usuario, infoAdicional } = response.data
 
-      // Verificar si el servidor devuelve el campo avatar
-      // console.log("¿El servidor devuelve avatar?", usuario.hasOwnProperty("avatar"))
-
       // Obtener el avatar del servidor o del localStorage como respaldo
       const userIdFromStorage = localStorage.getItem("userId")
       const savedAvatar = localStorage.getItem(`userAvatar_${userIdFromStorage}`)
       const avatarToUse = usuario.avatar || savedAvatar || "avatar1"
-
-      // console.log("Avatar a usar:", avatarToUse)
 
       // Actualizar datos básicos del usuario
       setUserData({
@@ -256,8 +249,6 @@ const UserProfile = () => {
         updateData.rol = userData.rolId
       }
 
-      // console.log("Datos a enviar:", updateData)
-
       // Realizar la petición con axios
       const response = await axios({
         method: "PUT",
@@ -268,8 +259,6 @@ const UserProfile = () => {
           Authorization: `Bearer ${token}`,
         },
       })
-
-      // console.log("Respuesta del servidor:", response.data)
 
       if (response.data && response.data.usuario) {
         Swal.fire({
@@ -286,9 +275,6 @@ const UserProfile = () => {
 
         // Actualizamos el estado local con la respuesta del servidor
         const usuarioActualizado = response.data.usuario
-
-        // Verificar si el servidor devolvió el campo avatar en la respuesta
-        // console.log("¿El servidor devuelve avatar en la respuesta?", usuarioActualizado.hasOwnProperty("avatar"))
 
         // Usar el avatar del servidor o mantener el seleccionado si el servidor no lo devuelve
         const avatarToUse = usuarioActualizado.avatar || selectedAvatar

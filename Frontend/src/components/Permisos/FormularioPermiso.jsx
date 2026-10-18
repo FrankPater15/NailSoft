@@ -60,7 +60,6 @@ const FormularioPermiso = ({ permisoSeleccionado, editMode, onClose, onPermisoCr
           timer: 1500,
         })
       } else {
-        // console.log("Datos enviados:", formData)
 
         // Crear nuevo permiso
         response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/permisos`, formData, 
@@ -168,8 +167,6 @@ const FormularioPermiso = ({ permisoSeleccionado, editMode, onClose, onPermisoCr
         </select>
       </div>
          
-
-
       <div className="form-group">
         <label htmlFor="nivel" className="form-label">
           Nivel <span className="text-pink-500">*</span>
@@ -218,4 +215,3 @@ const FormularioPermiso = ({ permisoSeleccionado, editMode, onClose, onPermisoCr
 }
 
 export default FormularioPermiso
-

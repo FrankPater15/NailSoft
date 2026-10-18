@@ -1,14 +1,13 @@
 /* Estilos modernos para formularios de venta de servicios */
 .formulario-moderno {
-    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
-      "Helvetica Neue", sans-serif;
+    font-family: inherit;
     animation: fadeIn 0.3s ease-out;
     max-height: 80vh;
     overflow-y: auto;
     padding: 1.5rem;
     background-color: white;
     border-radius: 0.5rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 6px -1px rgb(36 26 33 / 0.06), 0 2px 4px -1px rgb(36 26 33 / 0.036);
   }
   
   .form-group {
@@ -19,7 +18,7 @@
     display: block;
     font-size: 0.875rem;
     font-weight: 500;
-    color: #374151;
+    color: rgb(var(--c-info));
     margin-bottom: 0.5rem;
   }
   
@@ -28,10 +27,10 @@
   .form-textarea {
     width: 100%;
     padding: 0.75rem;
-    border: 1px solid #e5e7eb;
+    border: 1px solid rgb(var(--c-line));
     border-radius: 0.5rem;
-    background-color: #f9fafb;
-    color: #1f2937;
+    background-color: rgb(var(--c-surface));
+    color: rgb(var(--c-info));
     font-size: 0.875rem;
     transition: all 0.2s ease;
   }
@@ -40,14 +39,14 @@
   .form-select:focus,
   .form-textarea:focus {
     outline: none;
-    border-color: #db2777;
-    box-shadow: 0 0 0 3px rgba(219, 39, 119, 0.1);
-    background-color: #fff;
+    border-color: rgb(var(--c-primary));
+    box-shadow: 0 0 0 3px rgb(var(--berry-600) / 0.06);
+    background-color: rgb(var(--c-surface));
   }
   
   .form-input::placeholder,
   .form-textarea::placeholder {
-    color: #9ca3af;
+    color: rgb(var(--c-ink-faint));
   }
   
   .form-input:disabled,
@@ -56,7 +55,7 @@
   .form-input[readonly],
   .form-select[readonly],
   .form-textarea[readonly] {
-    background-color: #f3f4f6;
+    background-color: rgb(var(--c-surface-2));
     cursor: not-allowed;
   }
   
@@ -65,7 +64,7 @@
     align-items: center;
     justify-content: center;
     padding: 0.75rem 1.5rem;
-    background-color: #db2777;
+    background-color: rgb(var(--c-primary));
     color: white;
     font-weight: 500;
     border-radius: 0.5rem;
@@ -75,12 +74,12 @@
   }
   
   .btn-primary:hover {
-    background-color: #be185d;
+    background-color: rgb(var(--c-primary));
   }
   
   .btn-primary:focus {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(219, 39, 119, 0.4);
+    box-shadow: 0 0 0 3px rgb(var(--berry-600) / 0.24);
   }
   
   .btn-primary:disabled {
@@ -93,22 +92,22 @@
     align-items: center;
     justify-content: center;
     padding: 0.75rem 1.5rem;
-    background-color: #f3f4f6;
-    color: #4b5563;
+    background-color: rgb(var(--c-surface-2));
+    color: rgb(var(--c-ink));
     font-weight: 500;
     border-radius: 0.5rem;
-    border: 1px solid #e5e7eb;
+    border: 1px solid rgb(var(--c-line));
     transition: all 0.2s ease;
     cursor: pointer;
   }
   
   .btn-secondary:hover {
-    background-color: #e5e7eb;
+    background-color: rgb(var(--c-surface-2));
   }
   
   .btn-secondary:focus {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(107, 114, 128, 0.2);
+    box-shadow: 0 0 0 3px rgb(36 26 33 / 0.12);
   }
   
   .btn-secondary:disabled {
@@ -121,7 +120,7 @@
     align-items: center;
     justify-content: center;
     padding: 0.75rem 1.5rem;
-    background-color: #3b82f6;
+    background-color: rgb(var(--c-info));
     color: white;
     font-weight: 500;
     border-radius: 0.5rem;
@@ -131,12 +130,12 @@
   }
   
   .btn-add:hover {
-    background-color: #2563eb;
+    background-color: rgb(var(--c-info));
   }
   
   .btn-add:focus {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.4);
+    box-shadow: 0 0 0 3px rgb(var(--c-info) / 0.24);
   }
   
   .btn-add:disabled {
@@ -149,7 +148,7 @@
     align-items: center;
     justify-content: center;
     padding: 0.75rem 1.5rem;
-    background-color: #ef4444;
+    background-color: rgb(var(--c-danger));
     color: white;
     font-weight: 500;
     border-radius: 0.5rem;
@@ -159,12 +158,12 @@
   }
   
   .btn-danger:hover {
-    background-color: #dc2626;
+    background-color: rgb(var(--c-danger));
   }
   
   .btn-danger:focus {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.4);
+    box-shadow: 0 0 0 3px rgb(var(--c-danger) / 0.24);
   }
   
   .btn-danger:disabled {
@@ -180,11 +179,11 @@
     overflow: hidden;
     margin-top: 1rem;
     margin-bottom: 1rem;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    box-shadow: 0 1px 3px 0 rgb(36 26 33 / 0.06), 0 1px 2px 0 rgb(36 26 33 / 0.036);
   }
   
   .tabla-servicios thead {
-    background-color: #f9fafb;
+    background-color: rgb(var(--c-surface));
   }
   
   .tabla-servicios th {
@@ -193,54 +192,54 @@
     font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
-    color: #6b7280;
+    color: rgb(var(--c-ink-soft));
     letter-spacing: 0.05em;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid rgb(var(--c-line));
   }
   
   .tabla-servicios td {
     padding: 0.75rem 1rem;
     font-size: 0.875rem;
-    color: #374151;
-    border-bottom: 1px solid #e5e7eb;
+    color: rgb(var(--c-info));
+    border-bottom: 1px solid rgb(var(--c-line));
   }
   
   .tabla-servicios tbody tr:hover {
-    background-color: #f9fafb;
+    background-color: rgb(var(--c-surface));
   }
   
   .tabla-servicios tfoot {
-    background-color: #f3f4f6;
+    background-color: rgb(var(--c-surface-2));
     font-weight: 600;
   }
   
   .tabla-servicios tfoot td {
-    border-top: 2px solid #e5e7eb;
+    border-top: 2px solid rgb(var(--c-line));
   }
   
   .resumen-venta {
-    background-color: #f9fafb;
+    background-color: rgb(var(--c-surface));
     border-radius: 0.5rem;
     padding: 1rem;
     margin-top: 1.5rem;
-    border: 1px solid #e5e7eb;
+    border: 1px solid rgb(var(--c-line));
   }
   
   .resumen-venta h3 {
     margin-top: 0;
     margin-bottom: 0.75rem;
-    color: #374151;
+    color: rgb(var(--c-info));
   }
   
   .resumen-venta p {
     margin: 0.5rem 0;
     font-size: 0.875rem;
-    color: #4b5563;
+    color: rgb(var(--c-ink));
   }
   
   .resumen-venta p strong {
     font-weight: 600;
-    color: #1f2937;
+    color: rgb(var(--c-info));
   }
   
   .checkbox-container {
@@ -254,13 +253,13 @@
     height: 1rem;
     margin-right: 0.5rem;
     border-radius: 0.25rem;
-    border: 1px solid #d1d5db;
+    border: 1px solid rgb(var(--c-line));
     cursor: pointer;
   }
   
   .checkbox-container label {
     font-size: 0.875rem;
-    color: #4b5563;
+    color: rgb(var(--c-ink));
     cursor: pointer;
   }
   
@@ -285,7 +284,7 @@
   .spinner {
     border: 3px solid rgba(0, 0, 0, 0.1);
     border-radius: 50%;
-    border-top: 3px solid #db2777;
+    border-top: 3px solid rgb(var(--c-primary));
     width: 1rem;
     height: 1rem;
     animation: spin 1s linear infinite;

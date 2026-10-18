@@ -128,7 +128,6 @@ const ArticlesGrid = () => {
   className="card-image"
 />
 
-
                     <div className="card-overlay">
                       <motion.div className="overlay-content" initial={{ opacity: 0 }} whileHover={{ opacity: 1 }}>
                         <FaHeart className="heart-icon" />

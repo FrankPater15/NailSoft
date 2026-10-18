@@ -1,9 +1,9 @@
 /* Estilos para la tabla de tipos de servicios */
 .tabla-container {
     padding: 20px;
-    background-color: #f9fafb;
+    background-color: rgb(var(--c-surface));
     border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 10px rgb(36 26 33 / 0.03);
     transition: all 0.3s ease;
   }
   
@@ -17,19 +17,19 @@
   }
   
   .tiposerv-tabla-moderna th {
-    /* background-color: #f3f4f6; */
-    /* color: #374151; */
+    /* background-color: rgb(var(--c-surface-2)); */
+    /* color: rgb(var(--c-info)); */
     font-weight: 600;
     text-align: left;
     padding: 12px 16px;
     font-size: 0.9rem;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid rgb(var(--c-line));
   }
   
   .tiposerv-tabla-moderna td {
     padding: 12px 16px;
-    border-bottom: 1px solid #e5e7eb;
-    /* color: #4b5563; */
+    border-bottom: 1px solid rgb(var(--c-line));
+    /* color: rgb(var(--c-ink)); */
     font-size: 0.9rem;
   }
   
@@ -41,12 +41,12 @@
     background-color: #5b5b5b;
   } */
   /* .tiposerv-tabla-moderna tr:hover {
-    background-color: #f9fafb;
+    background-color: rgb(var(--c-surface));
   } */
   
   /* Botones de acción */
   .btn-add {
-    background-color: #db2777;
+    background-color: rgb(var(--c-primary));
     color: white;
     border: none;
     border-radius: 6px;
@@ -60,7 +60,7 @@
   }
   
   .btn-add:hover {
-    background-color: #be185d;
+    background-color: rgb(var(--c-primary));
   }
   
   .btn-edit-1,
@@ -77,17 +77,17 @@
   }
   
   .btn-edit-1 {
-    background-color: #8bb1ee;
+    background-color: rgb(var(--c-info));
     color: white;
   }
   
   .btn-delete-1 {
-    background-color: #f35f81;
+    background-color: rgb(var(--c-primary));
     color: white;
   }
 
   .btn-toggle-1 {
-    background-color: #f9d39a;
+    background-color: rgb(var(--c-warning));
     color: white;
   }
 
@@ -117,7 +117,7 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: rgba(255, 255, 255, 0.3);
+  background: rgb(var(--c-surface) / 0.3);
   z-index: -1;
   transition: none;
   transform: skewX(-30deg);
@@ -134,12 +134,12 @@
 
 /* Puedes personalizar el color de fondo sin perder la animación */
 .btn-edit {
-  background-color: #000000; /* Puedes cambiar este color */
+  background-color: rgb(var(--neutral-900)); /* Puedes cambiar este color */
   color: white;
 }
 
 .btn-edit:hover {
-  background-color: #070b13; /* Y también este color */
+  background-color: rgb(var(--c-info)); /* Y también este color */
 }
 
 
@@ -147,12 +147,12 @@
 
   
   .btn-delete {
-    background-color: #ef4444;
+    background-color: rgb(var(--c-danger));
     color: white;
   }
   
   .btn-delete:hover {
-    background-color: #dc2626;
+    background-color: rgb(var(--c-danger));
   }
   
   .btn-toggle {
@@ -161,11 +161,11 @@
   }
   
   .btn-toggle.active {
-    background-color: #10b981;
+    background-color: rgb(var(--c-success));
   }
   
   .btn-toggle.active:hover {
-    background-color: #059669;
+    background-color: rgb(var(--c-success));
   }
   
   .btn-toggle.inactive {
@@ -187,13 +187,13 @@
   }
   
   /* .estado-badge.activo {
-    background-color: #d1fae5;
-    color: #065f46;
+    background-color: rgb(var(--c-success));
+    color: rgb(var(--c-success));
   }
   
   .estado-badge.inactivo {
-    background-color: #fee2e2;
-    color: #991b1b;
+    background-color: rgb(var(--c-danger));
+    color: rgb(var(--c-danger));
   } */
   
   /* Badge para tipo promocional */
@@ -207,13 +207,13 @@
   }
   
   .tipo-badge.promocional {
-    /* background-color: #e9be16; */
-    /* color: #92400e; */
+    /* background-color: rgb(var(--c-warning)); */
+    /* color: rgb(var(--c-primary-ink)); */
   }
   
   .tipo-badge.normal {
-    /* background-color: #e0e7ff; */
-    /* color: #4338ca; */
+    /* background-color: rgb(var(--c-info)); */
+    /* color: rgb(var(--c-info)); */
   }
   
   /* Buscador */
@@ -226,7 +226,7 @@
   .search-input {
     width: 100%;
     padding: 8px 16px 8px 40px;
-    border: 1px solid #e5e7eb;
+    border: 1px solid rgb(var(--c-line));
     border-radius: 6px;
     font-size: 0.9rem;
     transition: all 0.2s;
@@ -234,8 +234,8 @@
   
   .search-input:focus {
     outline: none;
-    border-color: #db2777;
-    box-shadow: 0 0 0 2px rgba(219, 39, 119, 0.1);
+    border-color: rgb(var(--c-primary));
+    box-shadow: 0 0 0 2px rgb(var(--berry-600) / 0.06);
   }
   
   .search-icon {
@@ -243,7 +243,7 @@
     left: 12px;
     top: 50%;
     transform: translateY(-50%);
-    color: #9ca3af;
+    color: rgb(var(--c-ink-faint));
   }
   
   /* Paginación */
@@ -257,7 +257,7 @@
   .pagination-btn {
     width: 36px;
     height: 36px;
-    border: 1px solid #e5e7eb;
+    border: 1px solid rgb(var(--c-line));
     background-color: white;
     border-radius: 6px;
     display: flex;
@@ -268,7 +268,7 @@
   }
   
   .pagination-btn:hover:not(.disabled) {
-    background-color: #f3f4f6;
+    background-color: rgb(var(--c-surface-2));
   }
   
   .pagination-btn.disabled {
@@ -284,7 +284,7 @@
   .pagination-number {
     width: 36px;
     height: 36px;
-    border: 1px solid #e5e7eb;
+    border: 1px solid rgb(var(--c-line));
     background-color: white;
     border-radius: 6px;
     display: flex;
@@ -296,13 +296,13 @@
   }
   
   .pagination-number:hover {
-    background-color: #f3f4f6;
+    background-color: rgb(var(--c-surface-2));
   }
   
   .pagination-number.active {
-    background-color: #db2777;
+    background-color: rgb(var(--c-primary));
     color: white;
-    border-color: #db2777;
+    border-color: rgb(var(--c-primary));
   }
   
   /* Modal */
@@ -312,7 +312,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgb(var(--neutral-900) / 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -338,13 +338,13 @@
     display: block;
     margin-bottom: 8px;
     font-weight: 500;
-    color: #374151;
+    color: rgb(var(--c-info));
   }
   
   .form-input {
     width: 100%;
     padding: 8px 12px;
-    border: 1px solid #e5e7eb;
+    border: 1px solid rgb(var(--c-line));
     border-radius: 6px;
     font-size: 0.9rem;
     transition: all 0.2s;
@@ -352,8 +352,8 @@
   
   .form-input:focus {
     outline: none;
-    border-color: #db2777;
-    box-shadow: 0 0 0 2px rgba(219, 39, 119, 0.1);
+    border-color: rgb(var(--c-primary));
+    box-shadow: 0 0 0 2px rgb(var(--berry-600) / 0.06);
   }
   
   .form-checkbox {
@@ -362,7 +362,7 @@
   
   /* Botones del formulario */
   .btn-primary {
-    background-color: #d24787;
+    background-color: rgb(var(--c-primary));
     color: white;
     border: none;
     border-radius: 6px;
@@ -374,7 +374,7 @@
   }
   
   .btn-primary:hover {
-    background-color: #be185d;
+    background-color: rgb(var(--c-primary));
   }
   
   .btn-secondary {

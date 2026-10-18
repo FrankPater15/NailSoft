@@ -109,11 +109,6 @@ export default function FormularioTipoServicios({ tipoServicioSeleccionado, onTi
 
     const method = tipoServicioSeleccionado ? "PUT" : "POST"
 
-    // // 👉 Log para verificar datos antes de enviar
-    // console.log("Datos enviados:", formData)
-    // console.log("Usando método:", method)
-    // console.log("URL:", url)
-
     const response = await fetch(url, {
   method,
   headers: {
@@ -122,9 +117,6 @@ export default function FormularioTipoServicios({ tipoServicioSeleccionado, onTi
   },
   body: JSON.stringify(formData),
 });
-
-// Log para ver si al menos hay respuesta
-// console.log("HTTP Status:", response.status);
 
 // Evita intentar parsear JSON si la respuesta no tiene contenido
 if (response.status === 204) {
@@ -138,14 +130,11 @@ if (response.status === 204) {
 }
 
 const data = await response.json();
-// console.log("Respuesta completa:", data);
-
 
     // Validación extra por si el backend no devuelve lo esperado
     if (!data.tiposerviciots) {
       console.warn("Advertencia: 'tiposerviciots' no está en la respuesta", data)
     }
-
 
     if (!response.ok) {
       Swal.fire({
@@ -180,7 +169,6 @@ const data = await response.json();
     setLoading(false)
   }
 }
-
 
   return (
     <div className="p-6 max-w-[100%] mx-auto bg-white rounded-lg shadow-md dark:bg-zinc-800">

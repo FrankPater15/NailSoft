@@ -125,7 +125,6 @@ const Layout = ({ children }) => {
   <Footer />
 </div>
 
-
       )}
 
       {/* Botones de redes sociales solo para la vista del cliente */}
@@ -507,5 +506,3 @@ function App() {
 }
 
 export default App
-
-

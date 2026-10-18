@@ -140,8 +140,6 @@ const FormularioServicio = ({
         }
       );
 
-      // Si llega aquí, el nombre está disponible
-      // console.log("Nombre disponible");
     } catch (error) {
       if (error.response && error.response.status === 400) {
         Swal.fire({
@@ -447,7 +445,6 @@ const FormularioServicio = ({
               </option>
             ))}
           </select>
-
 
           <span>Tipo de Servicio</span>{" "}
             <span className="text-pink-500 ml-1">*</span>

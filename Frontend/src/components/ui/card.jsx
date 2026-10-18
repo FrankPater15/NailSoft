@@ -45,4 +45,3 @@ export const CardFooter = ({ className, children, ...props }) => {
     </div>
   )
 }
-

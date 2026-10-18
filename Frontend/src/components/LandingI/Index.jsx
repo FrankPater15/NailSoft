@@ -355,7 +355,6 @@ const MembershipCard = memo(({ title, price, features, isPopular, onClick }) => 
   </motion.div>
 ))
 
-
 const Index = () => {
   const navigate = useNavigate()
   const [currentSlide, setCurrentSlide] = useState(0)
@@ -967,4 +966,3 @@ const Index = () => {
 }
 
 export default Index
-

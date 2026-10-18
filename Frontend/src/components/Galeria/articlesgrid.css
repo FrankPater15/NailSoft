@@ -1,7 +1,7 @@
 .services-container {
   min-height: 100vh;
   padding: 4rem 2rem;
-  background: linear-gradient(135deg, #fff5f7 0%, #fdf2f8 100%);
+  background: linear-gradient(135deg, rgb(var(--c-surface)) 0%, rgb(var(--c-surface)) 100%);
   overflow-x: hidden;
 }
 
@@ -10,17 +10,17 @@
   text-align: center;
   margin-bottom: 4rem;
   padding: 2rem;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgb(var(--c-surface) / 0.8);
   backdrop-filter: blur(10px);
   border-radius: 20px;
-  box-shadow: 0 8px 32px rgba(219, 39, 119, 0.1);
+  box-shadow: 0 8px 32px rgb(var(--berry-600) / 0.06);
 }
 
 .services-title {
   font-size: 3rem;
   font-weight: 700;
   margin-bottom: 1rem;
-  background: linear-gradient(135deg, #ff69b4, #da70d6);
+  background: linear-gradient(rgb(var(--berry-200)), rgb(var(--berry-200)));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   line-height: 1.2;
@@ -28,7 +28,7 @@
 
 .services-subtitle {
   font-size: 1.25rem;
-  color: #718096;
+  color: rgb(var(--c-ink-soft));
   margin-bottom: 2rem;
 }
 
@@ -45,10 +45,10 @@
 
 /* Card Styles */
 .service-card {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgb(var(--c-surface) / 0.9);
   border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 8px 32px rgba(219, 39, 119, 0.1);
+  box-shadow: 0 8px 32px rgb(var(--berry-600) / 0.06);
   transition: all 0.3s ease;
   cursor: pointer;
   position: relative;
@@ -79,7 +79,7 @@
 .card-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgb(var(--neutral-900) / 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -99,7 +99,7 @@
 .heart-icon {
   font-size: 2rem;
   margin-bottom: 0.5rem;
-  color: #ff69b4;
+  color: rgb(var(--berry-200));
 }
 
 .card-content-art {
@@ -116,11 +116,11 @@
 .card-title {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #000000;
+  color: rgb(var(--c-ink));
 }
 
 .price-tag {
-  background: linear-gradient(135deg, #6e6369, #da70d6);
+  background: linear-gradient(135deg, #6e6369, rgb(var(--c-primary)));
   color: white;
   padding: 0.5rem 1.5rem;
   border-radius: 999px;
@@ -128,7 +128,7 @@
 }
 
 .card-description {
-  color: #373d46;
+  color: rgb(var(--c-ink));
   font-size: 0.875rem;
   line-height: 1.5;
   margin-bottom: 1rem;
@@ -139,7 +139,7 @@
   justify-content: space-between;
   align-items: center;
   padding-top: 1rem;
-  border-top: 1px solid rgba(219, 39, 119, 0.1);
+  border-top: 1px solid rgb(var(--c-primary) / 0.1);
 }
 
 .service-meta {
@@ -151,12 +151,12 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #000000;
+  color: rgb(var(--c-ink));
   font-size: 0.875rem;
 }
 
 .meta-icon {
-  color: #ff69b4;
+  color: rgb(var(--berry-200));
 }
 
 .rating {
@@ -165,7 +165,7 @@
 }
 
 .star-icon {
-  color: #ff0090;
+  color: rgb(var(--c-primary-ink));
 }
 
 /* Buttons */
@@ -184,9 +184,9 @@
 
 .schedule-button.primary {
   display: flex;
-  background: linear-gradient(135deg, #ff69b4, #da70d6);
+  background: linear-gradient(rgb(var(--berry-200)), rgb(var(--berry-200)));
   color: black;
-  box-shadow: 0 10px 15px rgba(219, 39, 119, 0.3);
+  box-shadow: 0 10px 15px rgb(var(--berry-600) / 0.18);
   width: 35vh;
   height: 7vh;
   margin: auto;
@@ -200,8 +200,8 @@
 
 .schedule-button.secondary {
   background: white;
-  color: #ff69b4;
-  box-shadow: 0 4px 15px rgba(219, 39, 119, 0.2);
+  color: rgb(var(--berry-200));
+  box-shadow: 0 4px 15px rgb(var(--berry-600) / 0.12);
   width: 40vh;
   margin: auto;
 }
@@ -214,7 +214,7 @@
 .cta-section {
   margin-top: 4rem;
   padding: 4rem 2rem;
-  background: linear-gradient(135deg, #ff69b4, #da70d6);
+  background: linear-gradient(rgb(var(--berry-200)), rgb(var(--berry-200)));
   border-radius: 20px;
   color: white;
   text-align: center;
@@ -239,7 +239,7 @@
   left: 0 !important;
   width: 100vw !important;
   height: 100vh !important;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgb(var(--neutral-900) / 0.7);
   backdrop-filter: blur(8px);
   display: flex !important;
   align-items: center !important;
@@ -256,7 +256,7 @@
   height: 500px;
   overflow: hidden;
   position: relative;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 25px 50px -12px rgb(36 26 33 / 0.15);
   margin-left: 270px !important; /* Añadido margen izquierdo para posicionar */
   transform: none !important;
 }
@@ -274,14 +274,14 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgb(36 26 33 / 0.06);
   transition: all 0.3s ease;
   z-index: 10;
-  color: #4a5568;
+  color: rgb(var(--c-ink));
 }
 
 .modal-close:hover {
-  background: #ff69b4;
+  background: rgb(var(--berry-200));
   color: white;
   transform: rotate(90deg);
 }
@@ -312,7 +312,7 @@
 .image-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5));
+  background: linear-gradient(to bottom, rgb(var(--neutral-900) / 0.2), rgb(var(--neutral-900) / 0.5));
   display: flex;
   align-items: flex-start;
   justify-content: flex-end;
@@ -320,13 +320,13 @@
 }
 
 .service-rating {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgb(var(--c-surface) / 0.9);
   padding: 0.75rem 1.5rem;
   border-radius: 999px;
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgb(36 26 33 / 0.06);
 }
 
 .stars {
@@ -338,7 +338,7 @@
   padding: 2rem;
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: rgba(219, 39, 119, 0.3) transparent;
+  scrollbar-color: rgb(var(--c-primary) / 0.3) transparent;
 }
 
 .modal-details::-webkit-scrollbar {
@@ -350,14 +350,14 @@
 }
 
 .modal-details::-webkit-scrollbar-thumb {
-  background-color: rgba(219, 39, 119, 0.3);
+  background-color: rgb(var(--c-primary) / 0.3);
   border-radius: 3px;
 }
 
 .modal-title {
   font-size: 2rem;
   font-weight: 700;
-  color: #2d3748;
+  color: rgb(var(--c-info));
   margin-bottom: 1rem;
   line-height: 1.2;
 }
@@ -373,24 +373,24 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
-  background: #f7fafc;
+  background: rgb(var(--c-surface));
   border-radius: 999px;
   font-size: 0.875rem;
-  color: #4a5568;
+  color: rgb(var(--c-ink));
   transition: all 0.3s ease;
 }
 
 .meta-tag:hover {
-  background: #edf2f7;
+  background: rgb(var(--c-info));
   transform: translateY(-2px);
 }
 
 .meta-icon {
-  color: #ff69b4;
+  color: rgb(var(--berry-200));
 }
 
 .modal-price {
-  background: linear-gradient(135deg, #48323d, #da70d6);
+  background: linear-gradient(rgb(var(--c-primary-hover)), rgb(var(--c-primary-hover)));
   padding: 1.2rem;
   border-radius: 16px;
   color: white;
@@ -399,7 +399,7 @@
 
 .modal-original-price {
   text-decoration: line-through;
-  color: #ff2b2b;
+  color: rgb(var(--c-danger));
   font-size: 1.1rem;
   margin-right: 1rem;
 }
@@ -430,12 +430,12 @@
 .modal-features h3 {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #20252e;
+  color: rgb(var(--c-ink));
   margin-bottom: 0.8rem;
 }
 
 .modal-description p {
-  color: #31353a;
+  color: rgb(var(--c-ink));
   line-height: 1.6;
   font-size: 0.9rem;
 }
@@ -449,7 +449,7 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  color: #4a5568;
+  color: rgb(var(--c-ink));
   transition: all 0.3s ease;
   font-size: 0.9rem;
 }
@@ -459,7 +459,7 @@
 }
 
 .feature-icon {
-  color: #48bb78;
+  color: rgb(var(--c-success));
 }
 
 .modal-actions {
@@ -484,14 +484,14 @@
 }
 
 .modal-button.schedule {
-  background: linear-gradient(135deg, #ff69b4, #da70d6);
+  background: linear-gradient(rgb(var(--berry-200)), rgb(var(--berry-200)));
   color: white;
-  box-shadow: 0 4px 15px rgba(219, 39, 119, 0.3);
+  box-shadow: 0 4px 15px rgb(var(--berry-600) / 0.18);
 }
 
 .modal-button.schedule:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(219, 39, 119, 0.4);
+  box-shadow: 0 6px 20px rgb(var(--berry-600) / 0.24);
 }
 
 .button-icon {
@@ -546,7 +546,7 @@
 
   .original-price {
     text-decoration: line-through;
-    color: #ff2b2b;
+    color: rgb(var(--c-danger));
     font-size: 1.2rem;
     margin-right: 4vh;
   }
@@ -595,7 +595,7 @@
 .skeleton-image {
   width: 100%;
   padding-top: 75%;
-  background: #e2e8f0;
+  background: rgb(var(--c-info));
   border-radius: 20px 20px 0 0;
 }
 
@@ -605,14 +605,14 @@
 
 .skeleton-title {
   height: 24px;
-  background: #e2e8f0;
+  background: rgb(var(--c-info));
   border-radius: 4px;
   margin-bottom: 1rem;
 }
 
 .skeleton-text {
   height: 60px;
-  background: #e2e8f0;
+  background: rgb(var(--c-info));
   border-radius: 4px;
 }
 
@@ -636,7 +636,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(45deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
+  background: linear-gradient(45deg, transparent 0%, rgb(var(--c-surface) / 0.1) 50%, transparent 100%);
   transform: translateX(-100%);
   transition: transform 0.6s ease;
 }
@@ -648,7 +648,7 @@
 /* Añadir estilos para mostrar el precio original tachado y el descuento */
 .original-price {
   text-decoration: line-through;
-  color: #000000;
+  color: rgb(var(--c-ink));
   font-size: 0.85em;
   margin-right: 5px;
 }
@@ -657,14 +657,14 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  background-color: #e11d48;
+  background-color: rgb(var(--c-primary));
   color: white;
   padding: 4px 8px;
   border-radius: 4px;
   font-weight: bold;
   font-size: 0.8rem;
   z-index: 10;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 4px rgb(36 26 33 / 0.12);
 }
 
 .discounted-price {
@@ -674,8 +674,8 @@
 
 .promo-badge {
   display: inline-block;
-  background-color: #5bd752;
-  color: #000000;
+  background-color: rgb(var(--c-success));
+  color: rgb(var(--c-ink));
   font-size: 0.7rem;
   font-weight: 600;
   padding: 0.15rem 0.5rem;
@@ -686,7 +686,7 @@
 
 /* Estilos para el modal */
 .modal-discount-badge {
-  background-color: #e11d48;
+  background-color: rgb(var(--c-primary));
   color: white;
   padding: 6px 12px;
   border-radius: 20px;
@@ -695,7 +695,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 3px 8px rgb(36 26 33 / 0.18);
   margin-left: 10px;
 }
 
@@ -706,7 +706,7 @@
 }
 
 .discount-percentage {
-  background-color: #e11d48;
+  background-color: rgb(var(--c-primary));
   color: white;
   padding: 2px 8px;
   border-radius: 12px;

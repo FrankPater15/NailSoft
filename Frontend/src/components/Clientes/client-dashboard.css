@@ -1,21 +1,21 @@
 /* Variables de color basadas en el landing page */
 :root {
-  --primary: #ff69b4;
-  --primary-dark: #e5007a;
-  --secondary: #da70d6;
-  --secondary-dark: #c050c0;
-  --accent: #ff9bd7;
-  --light-bg: #fef8fa; /* Color de fondo más claro */
-  --dark-text: #333;
+  --clientdash-primary: rgb(var(--berry-200));
+  --primary-dark: rgb(var(--c-primary));
+  --clientdash-secondary: rgb(var(--c-primary));
+  --secondary-dark: rgb(var(--c-primary));
+  --clientdash-accent: rgb(var(--berry-100));
+  --light-bg: rgb(var(--c-surface)); /* Color de fondo más claro */
+  --dark-text: rgb(var(--c-ink));
   --light-text: #fff;
-  --gray-text: #666;
-  --light-gray: #f8f8f8;
-  --border-color: #eaeaea;
+  --gray-text: rgb(var(--c-ink-soft));
+  --light-gray: rgb(var(--c-surface));
+  --border-color: rgb(var(--c-line));
   --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.08);
   --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
-  --gradient-primary: linear-gradient(45deg, var(--primary), var(--secondary));
-  --gradient-hover: linear-gradient(45deg, var(--secondary), var(--primary));
+  --gradient-primary: linear-gradient(45deg, var(--clientdash-primary), var(--clientdash-secondary));
+  --gradient-hover: linear-gradient(45deg, var(--clientdash-secondary), var(--clientdash-primary));
   --transition-normal: all 0.3s ease;
   --border-radius-sm: 0.375rem;
   --border-radius-md: 0.5rem;
@@ -26,7 +26,7 @@
 .dashboard-container {
   background-color: var(--light-bg);
   min-height: 100vh;
-  font-family: "Poppins", sans-serif;
+  font-family: inherit;
 }
 
 /* Header del dashboard */
@@ -48,7 +48,7 @@
 .dashboard-bubble {
   position: absolute;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgb(var(--c-surface) / 0.1);
   backdrop-filter: blur(1px);
   z-index: 0;
   animation: float 8s ease-in-out infinite;
@@ -97,7 +97,7 @@
 .welcome-text {
   color: var(--light-text);
   font-weight: 700;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-shadow: 0 2px 4px rgb(36 26 33 / 0.06);
 }
 
 /* Aumentar el tamaño del texto de la información del usuario */
@@ -122,15 +122,15 @@
 }
 
 .stat-card-purchases {
-  border-top: 4px solid #3498db;
+  border-top: 4px solid rgb(var(--c-info));
 }
 
 .stat-card-appointments {
-  border-top: 4px solid #2ecc71;
+  border-top: 4px solid rgb(var(--c-success));
 }
 
 .stat-card-next {
-  border-top: 4px solid #f1c40f;
+  border-top: 4px solid rgb(var(--c-warning));
 }
 
 .stat-icon {
@@ -140,20 +140,20 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.8);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  background: rgb(var(--c-surface) / 0.8);
+  box-shadow: 0 4px 6px rgb(36 26 33 / 0.03);
 }
 
 .stat-purchases-icon {
-  color: #3498db;
+  color: rgb(var(--c-info));
 }
 
 .stat-appointments-icon {
-  color: #2ecc71;
+  color: rgb(var(--c-success));
 }
 
 .stat-next-icon {
-  color: #f1c40f;
+  color: rgb(var(--c-warning));
 }
 
 .stat-value {
@@ -184,7 +184,7 @@
 }
 
 .tab-button:hover {
-  color: var(--primary);
+  color: var(--clientdash-primary);
 }
 
 .tab-button.active {
@@ -221,7 +221,7 @@
 
 /* Personalización del calendario de react-big-calendar */
 .rbc-calendar {
-  font-family: "Poppins", sans-serif;
+  font-family: inherit;
 }
 
 .rbc-header {
@@ -241,22 +241,22 @@
 }
 
 .rbc-day-bg:hover {
-  background-color: #f9f0f5;
+  background-color: rgb(var(--c-primary-soft));
 }
 
 .rbc-today {
-  background-color: #fff0f7 !important;
+  background-color: rgb(var(--c-surface)) !important;
 }
 
 .rbc-event {
   border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgb(36 26 33 / 0.06);
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .rbc-event:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 8px rgb(36 26 33 / 0.09);
 }
 
 .rbc-toolbar button {
@@ -266,14 +266,14 @@
 }
 
 .rbc-toolbar button:hover {
-  background-color: #f9f0f5;
-  color: var(--primary);
+  background-color: rgb(var(--c-primary-soft));
+  color: var(--clientdash-primary);
 }
 
 .rbc-toolbar button.rbc-active {
-  background-color: var(--primary) !important;
+  background-color: var(--clientdash-primary) !important;
   color: white !important;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgb(36 26 33 / 0.06);
 }
 
 /* Estilos para la tabla de ventas */
@@ -284,12 +284,12 @@
 }
 
 .sales-table th {
-  background-color: #f9f0f5;
+  background-color: rgb(var(--c-primary-soft));
   color: var(--dark-text);
   font-weight: 600;
   text-align: left;
   padding: 1rem;
-  border-bottom: 2px solid var(--primary);
+  border-bottom: 2px solid var(--clientdash-primary);
 }
 
 .sales-table td {
@@ -299,7 +299,7 @@
 }
 
 .sales-table tr:hover td {
-  background-color: #fafafa;
+  background-color: rgb(var(--c-surface));
 }
 
 .sales-table tr:last-child td {
@@ -318,28 +318,28 @@
 }
 
 .status-badge-completed {
-  background-color: #d1f7dd;
-  color: #0d6832;
+  background-color: rgb(var(--c-success));
+  color: rgb(var(--c-success));
 }
 
 .status-badge-pending {
-  background-color: #fff3cd;
-  color: #856404;
+  background-color: rgb(var(--c-warning));
+  color: rgb(var(--c-warning));
 }
 
 .status-badge-confirmed {
-  background-color: #cce5ff;
-  color: #004085;
+  background-color: rgb(var(--c-info));
+  color: rgb(var(--c-info));
 }
 
 .status-badge-in-progress {
-  background-color: #d4edda;
-  color: #155724;
+  background-color: rgb(var(--c-success));
+  color: rgb(var(--c-success));
 }
 
 .status-badge-cancelled {
-  background-color: #f8d7da;
-  color: #721c24;
+  background-color: rgb(var(--c-primary-soft));
+  color: rgb(var(--berry-800));
 }
 
 /* Badges para servicios recomendados */
@@ -354,24 +354,24 @@
 }
 
 .badge-new {
-  background-color: #cce5ff;
-  color: #004085;
+  background-color: rgb(var(--c-info));
+  color: rgb(var(--c-info));
 }
 
 .badge-popular {
-  background-color: #d4edda;
-  color: #155724;
+  background-color: rgb(var(--c-success));
+  color: rgb(var(--c-success));
 }
 
 .badge-discount {
-  background-color: #f8d7da;
-  color: #721c24;
+  background-color: rgb(var(--c-primary-soft));
+  color: rgb(var(--berry-800));
 }
 
 /* Mensaje de advertencia */
 .warning-message {
-  background-color: #fff8e6;
-  border-left: 4px solid #f1c40f;
+  background-color: rgb(var(--c-warning));
+  border-left: 4px solid rgb(var(--c-warning));
   padding: 1rem;
   margin-bottom: 1.5rem;
   border-radius: 0 var(--border-radius-sm) var(--border-radius-sm) 0;
@@ -393,7 +393,7 @@
 }
 
 .action-button:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgb(var(--c-surface) / 0.2);
   transform: translateY(-2px);
 }
 
@@ -402,7 +402,7 @@
 }
 
 .action-button-debug {
-  color: #e74c3c;
+  color: rgb(var(--c-danger));
 }
 
 .action-button-refresh {
@@ -410,11 +410,11 @@
 }
 
 .action-button-test {
-  color: #2ecc71;
+  color: rgb(var(--c-success));
 }
 
 .action-button-eye {
-  color: #9b59b6;
+  color: rgb(var(--plum-500));
 }
 
 /* Estado de carga */
@@ -427,7 +427,7 @@
 }
 
 .loading-spinner {
-  color: var(--primary);
+  color: var(--clientdash-primary);
   font-size: 3rem;
 }
 
@@ -486,8 +486,8 @@
 }
 
 .dropdown-item:hover {
-  background-color: #f9f0f5;
-  color: var(--primary);
+  background-color: rgb(var(--c-primary-soft));
+  color: var(--clientdash-primary);
 }
 
 /* Botones */
@@ -510,8 +510,8 @@
 
 .btn-outline {
   background: transparent;
-  color: var(--primary);
-  border: 1px solid var(--primary);
+  color: var(--clientdash-primary);
+  border: 1px solid var(--clientdash-primary);
   padding: 0.5rem 1rem;
   border-radius: var(--border-radius-md);
   font-weight: 600;
@@ -520,7 +520,7 @@
 }
 
 .btn-outline:hover {
-  background-color: rgba(255, 105, 180, 0.1);
+  background-color: rgb(var(--berry-200) / 0.1);
   transform: translateY(-2px);
 }
 
@@ -585,7 +585,7 @@
 
 /* Estilos para SweetAlert2 */
 .swal2-popup {
-  font-family: "Poppins", sans-serif !important;
+  font-family: inherit;
   border-radius: var(--border-radius-md) !important;
 }
 
@@ -596,12 +596,12 @@
 .swal2-confirm {
   background: var(--gradient-primary) !important;
   border-radius: var(--border-radius-sm) !important;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 4px 10px rgb(36 26 33 / 0.06) !important;
   transition: var(--transition-normal) !important;
 }
 
 .swal2-confirm:hover {
   transform: translateY(-2px) !important;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 6px 15px rgb(36 26 33 / 0.09) !important;
 }
 

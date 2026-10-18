@@ -16,4 +16,3 @@ const LoadingOverlay = ({ isLoading, message = "Cargando...", children }) => {
 }
 
 export default LoadingOverlay
-

@@ -1,7 +1,7 @@
 /* Estilos para el formulario de citas */
 .time-slot {
   padding: 8px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid rgb(var(--c-info));
   border-radius: 8px;
   text-align: center;
   cursor: pointer;
@@ -10,22 +10,22 @@
 }
 
 .time-slot:hover {
-  background-color: #fff0f7;
-  border-color: #ff69b4;
+  background-color: rgb(var(--c-surface));
+  border-color: rgb(var(--berry-200));
   transform: translateY(-2px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 4px rgb(36 26 33 / 0.03);
 }
 
 .time-slot.selected {
-  background-color: #ff69b4;
+  background-color: rgb(var(--berry-200));
   color: white;
-  border-color: #ff69b4;
-  box-shadow: 0 4px 6px rgba(255, 105, 180, 0.3);
+  border-color: rgb(var(--berry-200));
+  box-shadow: 0 4px 6px rgb(var(--berry-600) / 0.18);
 }
 
 .time-slot.unavailable {
-  background-color: #f3f4f6;
-  color: #9ca3af;
+  background-color: rgb(var(--c-surface-2));
+  color: rgb(var(--c-ink-faint));
   cursor: not-allowed;
   text-decoration: line-through;
   transform: none;
@@ -33,7 +33,7 @@
 }
 
 .employee-card {
-  border: 1px solid #e2e8f0;
+  border: 1px solid rgb(var(--c-info));
   border-radius: 12px;
   padding: 16px;
   cursor: pointer;
@@ -41,15 +41,15 @@
 }
 
 .employee-card:hover {
-  border-color: #ff69b4;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  border-color: rgb(var(--berry-200));
+  box-shadow: 0 4px 8px rgb(36 26 33 / 0.03);
   transform: translateY(-2px);
 }
 
 .employee-card.selected {
-  border-color: #ff69b4;
-  background-color: #fff0f7;
-  box-shadow: 0 4px 8px rgba(255, 105, 180, 0.2);
+  border-color: rgb(var(--berry-200));
+  background-color: rgb(var(--c-surface));
+  box-shadow: 0 4px 8px rgb(var(--berry-600) / 0.12);
 }
 
 .step-indicator {
@@ -67,7 +67,7 @@
   left: 40px;
   right: 40px;
   height: 3px;
-  background-color: #fff0f7;
+  background-color: rgb(var(--c-surface));
   z-index: 0;
   border-radius: 3px;
 }
@@ -85,49 +85,49 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: #fff0f7;
+  background-color: rgb(var(--c-surface));
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 8px;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgb(36 26 33 / 0.06);
 }
 
 .step.active .step-circle {
-  background-color: #ff69b4;
+  background-color: rgb(var(--berry-200));
   color: white;
-  box-shadow: 0 4px 8px rgba(255, 105, 180, 0.3);
+  box-shadow: 0 4px 8px rgb(var(--berry-600) / 0.18);
   transform: scale(1.1);
 }
 
 .step.completed .step-circle {
-  background-color: #da70d6;
+  background-color: rgb(var(--c-primary));
   color: white;
-  box-shadow: 0 4px 8px rgba(218, 112, 214, 0.3);
+  box-shadow: 0 4px 8px rgb(var(--berry-600) / 0.18);
 }
 
 .step-text {
   font-size: 14px;
-  color: #6b7280;
+  color: rgb(var(--c-ink-soft));
   font-weight: 500;
   transition: all 0.3s ease;
 }
 
 .step.active .step-text {
-  color: #ff69b4;
+  color: rgb(var(--berry-200));
   font-weight: 600;
 }
 
 .step.completed .step-text {
-  color: #da70d6;
+  color: rgb(var(--c-primary-ink));
   font-weight: 600;
 }
 
 .step-line {
   flex-grow: 1;
   height: 3px;
-  background-color: #fff0f7;
+  background-color: rgb(var(--c-surface));
   margin-top: -28px;
   z-index: 0;
   transition: all 0.3s ease;
@@ -135,7 +135,7 @@
 }
 
 .step.active ~ .step-line {
-  background: linear-gradient(90deg, #ff69b4 0%, #fff0f7 100%);
+  background: linear-gradient(90deg, rgb(var(--berry-200)) 0%, rgb(var(--c-surface)) 100%);
 }
 
 /* Estilos adicionales para mejorar la apariencia del formulario */
@@ -146,33 +146,7 @@
 }
 
 .bg-white {
-  box-shadow: 0 4px 12px -2px rgba(255, 105, 180, 0.08);
-}
-
-select,
-input {
-  min-height: 42px;
-  transition: all 0.2s ease;
-}
-
-select:focus,
-input:focus {
-  border-color: #ff69b4;
-  box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.2);
-  outline: none;
-}
-
-/* Animaciones y transiciones */
-button {
-  transition: all 0.2s ease;
-}
-
-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-}
-
-button:active:not(:disabled) {
-  transform: translateY(0);
+  box-shadow: 0 4px 12px -2px rgb(var(--berry-600) / 0.048);
 }
 
 /* Estilos para el botón de cerrar */
@@ -188,21 +162,21 @@ button[aria-label="Cerrar"]:hover {
 
 /* Estilos para la confirmación */
 .bg-pink-50 {
-  background-color: #fff0f7;
+  background-color: rgb(var(--c-surface));
   border-radius: 8px;
 }
 
 /* Estilos para los mensajes de error y éxito */
 .bg-red-100 {
   border-radius: 8px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px -1px rgb(36 26 33 / 0.06);
 }
 
 /* Estilos para el modal completo */
 .max-w-5xl.mx-auto.relative {
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 10px 25px -5px rgba(255, 105, 180, 0.15), 0 8px 10px -6px rgba(255, 105, 180, 0.1);
+  box-shadow: 0 10px 25px -5px rgb(var(--berry-600) / 0.09), 0 8px 10px -6px rgb(var(--berry-600) / 0.06);
 }
 
 /* Nuevos estilos para la selección de horarios */
@@ -213,16 +187,16 @@ button[aria-label="Cerrar"]:hover {
 
 [class*="grid-cols"] > div:hover {
   transform: translateY(-2px);
-  box-shadow: 0 2px 4px rgba(255, 105, 180, 0.1);
+  box-shadow: 0 2px 4px rgb(var(--berry-600) / 0.06);
 }
 
 [class*="grid-cols"] > div.bg-pink-500 {
   transform: translateY(-2px);
-  box-shadow: 0 2px 8px rgba(255, 105, 180, 0.5);
+  box-shadow: 0 2px 8px rgb(var(--berry-600) / 0.3);
 }
 
 /* Estilo para mostrar información de fecha y empleado */
 .font-bold {
-  color: #ff69b4;
+  color: rgb(var(--berry-200));
 }
 

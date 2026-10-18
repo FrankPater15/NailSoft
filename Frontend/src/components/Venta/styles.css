@@ -7,14 +7,14 @@
   
   .tabs-header {
     display: flex;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid rgb(var(--c-line));
     margin-bottom: 1rem;
   }
   
   .tab-button {
     padding: 0.75rem 1.5rem;
     font-weight: 500;
-    color: #6b7280;
+    color: rgb(var(--c-ink-soft));
     border: none;
     background: none;
     cursor: pointer;
@@ -23,12 +23,12 @@
   }
   
   .tab-button:hover {
-    color: #4b5563;
+    color: rgb(var(--c-ink));
   }
   
   .tab-button.active {
-    color: #db2777;
-    border-bottom: 2px solid #db2777;
+    color: rgb(var(--c-primary-ink));
+    border-bottom: 2px solid rgb(var(--c-primary));
   }
   
   .tab-content {
@@ -47,16 +47,16 @@
     width: 1.5rem;
     height: 1.5rem;
     border-radius: 0.25rem;
-    background-color: #f3f4f6;
-    color: #4b5563;
-    border: 1px solid #e5e7eb;
+    background-color: rgb(var(--c-surface-2));
+    color: rgb(var(--c-ink));
+    border: 1px solid rgb(var(--c-line));
     transition: all 0.2s ease;
     cursor: pointer;
   }
   
   .btn-icon-sm:hover {
-    background-color: #e5e7eb;
-    color: #1f2937;
+    background-color: rgb(var(--c-surface-2));
+    color: rgb(var(--c-info));
   }
   
   /* Estilos para los badges de tipo de venta */
@@ -69,18 +69,18 @@
   }
   
   .tipo-badge.productos {
-    background-color: #dbeafe;
-    color: #2563eb;
+    background-color: rgb(var(--c-info));
+    color: rgb(var(--c-info));
   }
   
   .tipo-badge.servicios {
-    background-color: #fce7f3;
-    color: #db2777;
+    background-color: rgb(var(--c-primary-soft));
+    color: rgb(var(--c-primary-ink));
   }
   
   .tipo-badge.mixta {
-    background-color: #f3e8ff;
-    color: #9333ea;
+    background-color: rgb(var(--plum-50));
+    color: rgb(var(--plum-500));
   }
   
   /* Botón de éxito */
@@ -89,7 +89,7 @@
     align-items: center;
     justify-content: center;
     padding: 0.75rem 1.5rem;
-    background-color: #10b981;
+    background-color: rgb(var(--c-success));
     color: white;
     font-weight: 500;
     border-radius: 0.5rem;
@@ -99,12 +99,12 @@
   }
   
   .btn-success:hover {
-    background-color: #059669;
+    background-color: rgb(var(--c-success));
   }
   
   .btn-success:focus {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.4);
+    box-shadow: 0 0 0 3px rgb(var(--c-success) / 0.24);
   }
   
   .btn-success:disabled {

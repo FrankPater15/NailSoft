@@ -1,68 +1,36 @@
-/* Variables CSS para consistencia */
+/* Estructura del panel: menú lateral fijo, barra superior fija y contenido */
 :root {
-  --sidebar-width-expanded: 280px;
-  --sidebar-width-collapsed: 70px;
-  --navbar-height: 64px;
-  --transition-duration: 0.3s;
-  --transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
+  --sidebar-width-expanded: 16.5rem;
+  --sidebar-width-collapsed: 4.5rem;
+  --navbar-height: 4rem;
 }
 
-/* Layout principal */
 .main-layout {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  position: relative;
 }
 
-/* Contenido principal - MISMO PATRÓN QUE EL NAVBAR */
 .main-content {
   flex: 1;
   display: flex;
   flex-direction: column;
-  transition: all var(--transition-duration) var(--transition-easing);
-  will-change: margin-left, width;
-  position: relative;
-  /* background-color: #fafafa; */
+  min-height: 100vh;
+  transition:
+    margin-left 0.25s ease,
+    width 0.25s ease;
 }
 
-/* Estados del main-content según el sidebar - IGUAL QUE EL NAVBAR */
-.main-content.sidebar-collapsed {
-  margin-left: var(--sidebar-width-collapsed);
-  width: calc(100% - var(--sidebar-width-collapsed));
-}
-
-.main-content.sidebar-expanded {
-  margin-left: var(--sidebar-width-expanded);
-  width: calc(100% - var(--sidebar-width-expanded));
-}
-
-/* Responsive para móviles - IGUAL QUE EL NAVBAR */
-@media (max-width: 768px) {
-  .main-content.sidebar-collapsed,
-  .main-content.sidebar-expanded {
-    margin-left: 0 !important;
-    width: 100% !important;
-  }
-}
-
-/* Wrapper del contenido */
 .content-wrapper {
   flex: 1;
-  padding: 1.5rem;
   width: 100%;
-  box-sizing: border-box;
-  overflow-y: auto;
+  max-width: 96rem;
+  margin: 0 auto;
+  padding: 2rem;
 }
 
-/* Optimizaciones de rendimiento */
-.main-layout,
-.main-content {
-  backface-visibility: hidden;
-  perspective: 1000px;
-}
-
-/* Asegurar que el footer esté al final */
-.admin-footer {
-  margin-top: auto;
+@media (max-width: 768px) {
+  .content-wrapper {
+    padding: 1.25rem 1rem;
+  }
 }

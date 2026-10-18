@@ -151,8 +151,6 @@ export default function FormularioUsuario({ onClose, onUsuarioActualizado, usuar
     setLoading(true)
     setError("")
 
-    
-
     // Validar campos obligatorios
     if (
       !formData.nombre ||
@@ -271,29 +269,10 @@ export default function FormularioUsuario({ onClose, onUsuarioActualizado, usuar
         userData.confirmPassword = formData.confirmPassword
       }
 
-      // // Agregar datos específicos para empleado según el modelo exacto
-      // if (isEmpleado) {
-      //   userData.nombreempleado = formData.nombre.trim()
-      //   userData.apellidoempleado = formData.apellido.trim()
-      //   userData.correoempleado = formData.email.trim()
-      //   userData.telefonoempleado = formData.celular.trim()
-      //   userData.estadoempleado = formData.estado === "Activo"
-
       //   // Asegurarse de que todos los campos requeridos para Empleado estén presentes
       //   userData.especialidad = "General" // Valor por defecto
       //   userData.salario = 0 // Valor por defecto
       // }
-
-      // // Agregar datos específicos para cliente según el modelo exacto
-      // if (isCliente) {
-      //   userData.nombrecliente = formData.nombre.trim()
-      //   userData.apellidocliente = formData.apellido.trim()
-      //   userData.correocliente = formData.email.trim()
-      //   userData.celularcliente = formData.celular.trim()
-      //   userData.estadocliente = formData.estado === "Activo"
-      // }
-
-      // console.log("Datos a enviar:", userData)
 
       // Usar axios para la solicitud
       const url = usuarioEditando
@@ -588,4 +567,3 @@ finally {
     </div>
   )
 }
-

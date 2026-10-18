@@ -24,4 +24,3 @@ export const Button = ({ className, variant = "default", size = "default", child
     </button>
   )
 }
-

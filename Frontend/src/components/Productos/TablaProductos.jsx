@@ -86,7 +86,6 @@ const TablaProductos = () => {
   }
 
   const manejarProductoActualizado = () => {
-    // console.log("Actualizando lista de productos después de crear/editar")
     obtenerProductos()
     cerrarFormulario()
   }

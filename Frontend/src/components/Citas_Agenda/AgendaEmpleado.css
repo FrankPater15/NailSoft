@@ -2,25 +2,25 @@
 
 /* Variables CSS para consistencia */
 :root {
-  --primary-color: #8b5cf6;
-  --primary-hover: #7c3aed;
-  --secondary-color: #ec4899;
-  --secondary-hover: #be185d;
-  --success-color: #10b981;
-  --warning-color: #f59e0b;
-  --danger-color: #ef4444;
-  --info-color: #3b82f6;
-  --gray-50: #f9fafb;
-  --gray-100: #f3f4f6;
-  --gray-200: #e5e7eb;
-  --gray-300: #d1d5db;
-  --gray-400: #9ca3af;
-  --gray-500: #6b7280;
-  --gray-600: #4b5563;
-  --gray-700: #374151;
-  --gray-800: #1f2937;
-  --gray-900: #111827;
-  --white: #ffffff;
+  --primary-color: rgb(var(--plum-500));
+  --primary-hover: rgb(var(--plum-500));
+  --secondary-color: rgb(var(--c-primary));
+  --secondary-hover: rgb(var(--c-primary));
+  --success-color: rgb(var(--c-success));
+  --warning-color: rgb(var(--c-warning));
+  --danger-color: rgb(var(--c-danger));
+  --info-color: rgb(var(--c-info));
+  --gray-50: rgb(var(--c-surface));
+  --gray-100: rgb(var(--c-surface-2));
+  --gray-200: rgb(var(--neutral-100));
+  --gray-300: rgb(var(--neutral-200));
+  --gray-400: rgb(var(--neutral-400));
+  --gray-500: rgb(var(--neutral-500));
+  --gray-600: rgb(var(--neutral-600));
+  --gray-700: rgb(var(--c-info));
+  --gray-800: rgb(var(--c-info));
+  --gray-900: rgb(var(--c-info));
+  --white: rgb(var(--c-surface));
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
@@ -44,14 +44,14 @@
 .agenda-container {
   min-height: 100vh;
   padding: 2rem;
-  background: linear-gradient(135deg, #f3e8ff 0%, #fdf2f8 50%, #ede9fe 100%);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: linear-gradient(135deg, rgb(var(--plum-50)) 0%, rgb(var(--c-surface)) 50%, rgb(var(--plum-50)) 100%);
+  font-family: inherit;
 }
 
 .agenda-content {
   background-color: white;
   border-radius: 1.5rem;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 20px 25px -5px rgb(36 26 33 / 0.06), 0 10px 10px -5px rgb(36 26 33 / 0.024);
   padding: 2.5rem;
   max-width: 1600px;
   margin: 0 auto;
@@ -75,7 +75,7 @@
   font-size: 2rem;
   color: var(--primary-color);
   margin-right: 1rem;
-  filter: drop-shadow(0 2px 4px rgba(139, 92, 246, 0.3));
+  filter: drop-shadow(0 2px 4px rgb(var(--plum-500) / 0.3));
 }
 
 .agenda-title {
@@ -95,7 +95,7 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, #f3e8ff, #fdf2f8);
+  background: linear-gradient(135deg, rgb(var(--plum-50)), rgb(var(--c-surface)));
   border: 2px solid var(--primary-color);
   border-radius: 1rem;
   margin-bottom: 1.5rem;
@@ -125,10 +125,10 @@
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1.5rem;
   padding: 2rem;
-  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-  border: 2px solid #e2e8f0;
+  background: linear-gradient(135deg, rgb(var(--c-surface)), rgb(var(--c-info)));
+  border: 2px solid rgb(var(--c-info));
   border-radius: 1.25rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px -1px rgb(36 26 33 / 0.06);
 }
 
 .agenda-filter-group {
@@ -148,21 +148,21 @@
 .agenda-select,
 .agenda-search-input {
   padding: 0.875rem 1.25rem;
-  border: 2px solid #e5e7eb;
+  border: 2px solid rgb(var(--c-line));
   border-radius: 0.75rem;
   background-color: white;
   color: var(--gray-700);
   font-size: 0.95rem;
   font-weight: 500;
   transition: all 0.3s ease;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px 0 rgb(36 26 33 / 0.06);
 }
 
 .agenda-select:focus,
 .agenda-search-input:focus {
   outline: none;
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+  box-shadow: 0 0 0 3px rgb(var(--plum-600) / 0.06);
   transform: translateY(-1px);
 }
 
@@ -217,7 +217,7 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border: none;
   cursor: pointer;
-  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px -1px rgb(36 26 33 / 0.06);
   position: relative;
   overflow: hidden;
   white-space: nowrap;
@@ -235,7 +235,7 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  background: linear-gradient(90deg, transparent, rgb(var(--c-surface) / 0.2), transparent);
   transition: left 0.5s;
 }
 
@@ -254,21 +254,21 @@
 }
 
 .agenda-btn-primary:hover:not(:disabled) {
-  background: linear-gradient(135deg, var(--primary-hover), #6d28d9);
+  background: linear-gradient(135deg, var(--primary-hover), rgb(var(--plum-500)));
   transform: translateY(-2px);
-  box-shadow: 0 8px 15px -3px rgba(139, 92, 246, 0.4);
+  box-shadow: 0 8px 15px -3px rgb(var(--plum-600) / 0.24);
 }
 
 .agenda-btn-secondary {
-  background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+  background: linear-gradient(135deg, rgb(var(--c-surface)), rgb(var(--c-info)));
   color: var(--gray-600);
-  border: 1px solid #e2e8f0;
+  border: 1px solid rgb(var(--c-info));
 }
 
 .agenda-btn-secondary:hover:not(:disabled) {
-  background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
+  background: linear-gradient(135deg, rgb(var(--c-info)), rgb(var(--c-info)));
   transform: translateY(-2px);
-  box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 15px -3px rgb(36 26 33 / 0.06);
 }
 
 .agenda-btn-success {
@@ -277,9 +277,9 @@
 }
 
 .agenda-btn-success:hover:not(:disabled) {
-  background: linear-gradient(135deg, var(--secondary-hover), #9d174d);
+  background: linear-gradient(135deg, var(--secondary-hover), rgb(var(--c-primary)));
   transform: translateY(-2px);
-  box-shadow: 0 8px 15px -3px rgba(236, 72, 153, 0.4);
+  box-shadow: 0 8px 15px -3px rgb(var(--berry-600) / 0.24);
 }
 
 /* Leyenda de estados */
@@ -288,8 +288,8 @@
   flex-wrap: wrap;
   gap: 2rem;
   padding: 1.5rem 2rem;
-  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-  border: 2px solid #e2e8f0;
+  background: linear-gradient(135deg, rgb(var(--c-surface)), rgb(var(--c-info)));
+  border: 2px solid rgb(var(--c-info));
   border-radius: 1rem;
   margin-bottom: 1.5rem;
   justify-content: center;
@@ -307,23 +307,23 @@
   width: 1rem;
   height: 1rem;
   border-radius: 50%;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 4px rgb(36 26 33 / 0.12);
 }
 
 .agenda-legend-dot.pending {
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  background: linear-gradient(135deg, rgb(var(--c-info)), rgb(var(--c-info)));
 }
 
 .agenda-legend-dot.confirmed {
-  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  background: linear-gradient(rgb(var(--plum-500)), rgb(var(--plum-500)));
 }
 
 .agenda-legend-dot.in-progress {
-  background: linear-gradient(135deg, #f59e0b, #d97706);
+  background: linear-gradient(135deg, rgb(var(--c-warning)), rgb(var(--c-warning)));
 }
 
 .agenda-legend-dot.completed {
-  background: linear-gradient(135deg, #10b981, #059669);
+  background: linear-gradient(135deg, rgb(var(--c-success)), rgb(var(--c-success)));
 }
 
 /* Caja de información */
@@ -332,17 +332,17 @@
   align-items: center;
   gap: 0.75rem;
   padding: 1rem 1.5rem;
-  background: linear-gradient(135deg, #dbeafe, #e0f2fe);
-  border: 2px solid #3b82f6;
+  background: linear-gradient(135deg, rgb(var(--c-info)), rgb(var(--c-info)));
+  border: 2px solid rgb(var(--c-info));
   border-radius: 0.75rem;
   margin-bottom: 2rem;
-  color: #1e40af;
+  color: rgb(var(--c-info));
   font-weight: 600;
 }
 
 .agenda-info-icon {
   font-size: 1.25rem;
-  color: #3b82f6;
+  color: rgb(var(--c-info));
 }
 
 /* Indicador de carga */
@@ -357,7 +357,7 @@
 .agenda-loading-spinner {
   color: var(--primary-color);
   margin-bottom: 2rem;
-  filter: drop-shadow(0 2px 4px rgba(139, 92, 246, 0.3));
+  filter: drop-shadow(0 2px 4px rgb(var(--plum-500) / 0.3));
 }
 
 .agenda-loading-text {
@@ -371,8 +371,8 @@
   background-color: white;
   border-radius: 1.25rem;
   overflow: hidden;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  border: 2px solid #e5e7eb;
+  box-shadow: 0 10px 15px -3px rgb(36 26 33 / 0.06);
+  border: 2px solid rgb(var(--c-line));
 }
 
 .agenda-calendar {
@@ -385,8 +385,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem;
-  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-  border-bottom: 2px solid #e2e8f0;
+  background: linear-gradient(135deg, rgb(var(--c-surface)), rgb(var(--c-info)));
+  border-bottom: 2px solid rgb(var(--c-info));
   flex-wrap: wrap;
   gap: 1.5rem;
 }
@@ -409,7 +409,7 @@
   font-size: 1.5rem;
   min-width: 250px;
   text-align: center;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  text-shadow: 0 1px 2px rgb(36 26 33 / 0.06);
 }
 
 .agenda-toolbar-views {
@@ -428,15 +428,15 @@
   transition: all 0.3s ease;
   background-color: white;
   color: var(--gray-600);
-  border: 2px solid #e2e8f0;
+  border: 2px solid rgb(var(--c-info));
   cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgb(36 26 33 / 0.06);
 }
 
 .agenda-toolbar-btn:hover {
-  background-color: #f8fafc;
+  background-color: rgb(var(--c-surface));
   transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 8px rgb(36 26 33 / 0.09);
 }
 
 .agenda-toolbar-btn-active {
@@ -446,7 +446,7 @@
 }
 
 .agenda-toolbar-btn-today {
-  background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+  background: linear-gradient(135deg, rgb(var(--c-surface)), rgb(var(--c-info)));
   color: var(--gray-700);
   font-weight: 700;
 }
@@ -480,25 +480,25 @@
 
 .agenda-date-cell:hover {
   border-color: var(--primary-color);
-  background: linear-gradient(135deg, #faf5ff, #f3e8ff);
+  background: linear-gradient(135deg, rgb(var(--c-surface)), rgb(var(--plum-50)));
   transform: scale(1.02);
-  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+  box-shadow: 0 4px 12px rgb(var(--plum-600) / 0.12);
 }
 
 .agenda-date-cell.has-appointments {
-  background: linear-gradient(135deg, #fef3f2, #fdf2f8);
-  border-color: #e5e7eb;
+  background: linear-gradient(135deg, rgb(var(--c-surface)), rgb(var(--c-surface)));
+  border-color: rgb(var(--c-line));
 }
 
 .agenda-date-cell.has-appointments:hover {
-  background: linear-gradient(135deg, #fdf2f8, #f3e8ff);
+  background: linear-gradient(135deg, rgb(var(--c-surface)), rgb(var(--plum-50)));
   border-color: var(--primary-color);
 }
 
 .agenda-date-cell.is-today {
-  background: linear-gradient(135deg, #dbeafe, #e0f2fe) !important;
-  /* REMOVIDO: border-color: #3b82f6 !important; */
-  /* REMOVIDO: box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2); */
+  background: linear-gradient(135deg, rgb(var(--c-info)), rgb(var(--c-info))) !important;
+  /* REMOVIDO: border-color: rgb(var(--c-info)) !important; */
+  /* REMOVIDO: box-shadow: 0 0 0 2px rgb(var(--c-info) / 0.2); */
 }
 
 .agenda-date-cell.is-past {
@@ -532,7 +532,7 @@
   justify-content: center;
   font-size: 0.8rem;
   font-weight: 700;
-  box-shadow: 0 3px 8px rgba(139, 92, 246, 0.5);
+  box-shadow: 0 3px 8px rgb(var(--plum-600) / 0.3);
   border: 3px solid white;
 }
 
@@ -553,24 +553,24 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 1px 3px rgb(36 26 33 / 0.18);
   border: 1px solid white;
 }
 
 .agenda-status-dot.pending {
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  background: linear-gradient(135deg, rgb(var(--c-info)), rgb(var(--c-info)));
 }
 
 .agenda-status-dot.confirmed {
-  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  background: linear-gradient(rgb(var(--plum-500)), rgb(var(--plum-500)));
 }
 
 .agenda-status-dot.in-progress {
-  background: linear-gradient(135deg, #f59e0b, #d97706);
+  background: linear-gradient(135deg, rgb(var(--c-warning)), rgb(var(--c-warning)));
 }
 
 .agenda-status-dot.completed {
-  background: linear-gradient(135deg, #10b981, #059669);
+  background: linear-gradient(135deg, rgb(var(--c-success)), rgb(var(--c-success)));
 }
 
 /* Marcador de "HOY" */
@@ -579,14 +579,14 @@
   bottom: 0.25rem;
   left: 50%;
   transform: translateX(-50%);
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  background: linear-gradient(135deg, rgb(var(--c-info)), rgb(var(--c-info)));
   color: white;
   padding: 0.125rem 0.5rem;
   border-radius: 0.375rem;
   font-size: 0.625rem;
   font-weight: 700;
   letter-spacing: 0.05em;
-  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 2px 4px rgb(var(--c-info) / 0.18);
   z-index: 5;
 }
 
@@ -600,8 +600,8 @@
   padding: 1rem 0.75rem;
   font-weight: 700;
   color: var(--gray-800);
-  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-  border-bottom: 2px solid #e2e8f0;
+  background: linear-gradient(135deg, rgb(var(--c-surface)), rgb(var(--c-info)));
+  border-bottom: 2px solid rgb(var(--c-info));
   text-transform: uppercase;
   letter-spacing: 0.05em;
   font-size: 0.875rem;
@@ -617,12 +617,12 @@
 }
 
 .rbc-month-row + .rbc-month-row {
-  border-color: #e5e7eb;
+  border-color: rgb(var(--c-line));
   border-width: 2px;
 }
 
 .rbc-day-bg + .rbc-day-bg {
-  border-color: #e5e7eb;
+  border-color: rgb(var(--c-line));
   border-width: 2px;
 }
 
@@ -643,18 +643,18 @@
   text-decoration: none;
   padding: 6px 10px;
   border-radius: 6px;
-  background-color: rgba(255, 255, 255, 0.95);
+  background-color: rgb(var(--c-surface) / 0.95);
   z-index: 5;
   min-width: 32px;
   text-align: center;
   line-height: 1;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 4px rgb(36 26 33 / 0.09);
   border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .rbc-date-cell > a:hover {
-  background-color: rgba(139, 92, 246, 0.1);
+  background-color: rgb(var(--plum-500) / 0.1);
   color: var(--primary-color);
   transform: scale(1.05);
 }
@@ -665,15 +665,15 @@
 }
 
 .rbc-date-cell.rbc-now > a {
-  color: #3b82f6;
+  color: rgb(var(--c-info));
   font-weight: 800;
-  background-color: rgba(59, 130, 246, 0.15);
-  /* REMOVIDO: border: 2px solid rgba(59, 130, 246, 0.5); */
+  background-color: rgb(var(--c-info) / 0.15);
+  /* REMOVIDO: border: 2px solid rgb(var(--c-info) / 0.5); */
 }
 
 /* Modal mejorado */
 .modal-overlay {
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: rgb(var(--neutral-900) / 0.75);
   position: fixed;
   top: 0;
   left: 0;
@@ -694,7 +694,7 @@
   width: 95%;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 25px 50px -12px rgb(36 26 33 / 0.15);
   z-index: 1001;
   position: relative;
   border: 2px solid rgba(255, 255, 255, 0.2);

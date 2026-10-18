@@ -1,10 +1,10 @@
 /* Gradientes optimizados con CSS en lugar de inline styles */
 .hero-gradient {
-  background: linear-gradient(45deg, #ff69b4, #da70d6);
+  background: linear-gradient(rgb(var(--berry-200)), rgb(var(--berry-200)));
 }
 
 .cta-gradient {
-  background: linear-gradient(to right, #ff69b4, #da70d6);
+  background: linear-gradient(rgb(var(--berry-200)), rgb(var(--berry-200)));
 }
 
 /* Animación optimizada para las burbujas */
@@ -56,7 +56,7 @@
 /* Estilos para las tarjetas de servicios */
 .service-card:hover {
   transform: translateY(-10px);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 20px 25px -5px rgb(36 26 33 / 0.06), 0 10px 10px -5px rgb(36 26 33 / 0.024);
 }
 
 /* Estilos para las tarjetas de testimonios */
@@ -98,7 +98,7 @@
 }
 
 .faq-item:hover {
-  background-color: rgba(255, 105, 180, 0.05);
+  background-color: rgb(var(--berry-200) / 0.05);
 }
 
 /* Estilos para los iconos de redes sociales */
@@ -113,7 +113,7 @@
 /* Optimizaciones para dispositivos de alta densidad de píxeles */
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
   .hero-gradient {
-    background-image: linear-gradient(45deg, #ff69b4, #da70d6);
+    background-image: linear-gradient(rgb(var(--berry-200)), rgb(var(--berry-200)));
   }
 }
 

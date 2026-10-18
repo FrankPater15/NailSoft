@@ -1,4 +1,3 @@
-
 "use client"
 import { motion } from "framer-motion"
 import { Link } from "react-router-dom"
@@ -11,17 +10,8 @@ const Footer = () => {
   const { shouldShowSidebar, isClient } = useLayoutType()
   const { isCollapsed } = useSidebar()
 
-  // Footer administrativo para usuarios con sidebar
-  if (shouldShowSidebar) {
-    return (
-      <div className={`admin-footer dark:bg-primary ${isCollapsed ? "sidebar-collapsed" : "sidebar-expanded"}`}>
-        <p>
-          Desarrollado con <FaHeart className="inline-block text-pink-500 animate-pulse dark:text-white" /> por
-          NailsSoft
-        </p>
-      </div>
-    )
-  }
+  // El panel administrativo no lleva pie de página
+  if (shouldShowSidebar) return null
 
   // Footer completo para clientes y usuarios sin permisos administrativos
   return (
@@ -181,4 +171,3 @@ const Footer = () => {
 }
 
 export default Footer
-

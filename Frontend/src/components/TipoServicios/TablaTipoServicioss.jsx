@@ -17,7 +17,6 @@ import Swal from "sweetalert2";
 import FormularioTipoServicios from "./FormularioTipoServ";
 import "../../styles/tablas.css";
 
-
 Modal.setAppElement("#root");
 
 export default function TablaTipoServicioss() {

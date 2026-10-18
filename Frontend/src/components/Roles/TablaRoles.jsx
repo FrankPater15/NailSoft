@@ -39,54 +39,6 @@ export default function TablaRoles() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // const obtenerRoles = async () => {
-  //   setIsLoading(true);
-  //   setError(null);
-  //   try {
-  //     const token = localStorage.getItem("token");
-  //     const rolesResponse = await fetch(
-  //       `${import.meta.env.VITE_BACKEND_URL}/api/roles`,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //     );
-  //     if (!rolesResponse.ok)
-  //       throw new Error(`HTTP error! status: ${rolesResponse.status}`);
-  //     const rolesData = await rolesResponse.json();
-  //     setRoles(rolesData.roles || []);
-
-  //     const permisosResponse = await fetch(
-  //       `${import.meta.env.VITE_BACKEND_URL}/api/permisos`,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //     );
-  //     if (!permisosResponse.ok)
-  //       throw new Error(`HTTP error! status: ${permisosResponse.status}`);
-  //     const permisosData = await permisosResponse.json();
-  //     const permisoMap = {};
-  //     permisosData.permisos.forEach((permiso) => {
-  //       permisoMap[permiso._id] = permiso.nombrePermiso;
-  //     });
-  //     setPermisoMap(permisoMap);
-  //   } catch (error) {
-  //     console.error("Error al obtener los datos:", error);
-  //     setError("No se pudieron cargar los datos. Por favor, intenta de nuevo.");
-  //     Swal.fire({
-  //       title: "Error",
-  //       text: "No tienes permiso para estar aquí. Tu token no es válido.",
-  //       icon: "error",
-  //       confirmButtonColor: "#db2777",
-  //     });
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
 const obtenerRoles = async () => {
   setIsLoading(true);
   setError(null);
@@ -118,8 +70,6 @@ const obtenerRoles = async () => {
     setIsLoading(false);
   }
 };
-
-
 
   useEffect(() => {
     obtenerRoles();
@@ -462,8 +412,6 @@ const obtenerRoles = async () => {
           
         </div>
 
-
-
           <div className="universal-search-container w-full md:w-2/3">
           <FontAwesomeIcon icon={faSearch} className="universal-search-icon" />
           <input
@@ -476,9 +424,6 @@ const obtenerRoles = async () => {
         </div>
       </div>
         
-
-        
-
       <div className="overflow-x-auto rounded-lg shadow  mx-auto">
         <table
           className="universal-tabla-moderna w-full"

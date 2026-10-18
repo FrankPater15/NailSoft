@@ -1,267 +1,158 @@
-.dash {
-    
-    position: sticky;
-    top: 0;
-    z-index: 30;
-    height: 64px;
-    display: flex;
-    align-items: center;
-    border-bottom: 1px solid rgba(219, 39, 119, 0.1);
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
-  }
-  
-  .dashboard-navbar.scrolled {
-    box-shadow: 0 4px 20px rgba(219, 39, 119, 0.1);
-  }
-  
-  .dashboard-navbar-container {
-    width: 100vh;
-    padding: 0 1.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    
-  }
-  
-  .dashboard-navbar-left {
-    display: flex;
-    align-items: center;
-  }
-  
-  .page-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    /* color: #333; */
-  }
-  
-  .dashboard-navbar-right {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-  
-  .search-container {
-    position: relative;
-    display: none;
-  }
-  
-  @media (min-width: 768px) {
-    .search-container {
-      display: block;
-    }
-  }
-  
-  .search-icon {
-    position: absolute;
-    left: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 16px;
-    height: 16px;
-    color: #6b7280;
-  }
-  
-  .search-input {
-    width: 260px;
-    height: 36px;
-    padding-left: 36px;
-    border-radius: 9999px;
-    border: none;
-    background-color: rgba(219, 39, 119, 0.05);
-    transition: all 0.3s ease;
-  }
-  
-  .search-input:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(219, 39, 119, 0.2);
-  }
-  
-  .notification-container {
-    position: relative;
-  }
-  
-  .notification-button {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 9999px;
-    border: 1px solid rgba(219, 39, 119, 0.2);
-    background: transparent;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-  
-  .notification-button:hover {
-    background-color: rgba(219, 39, 119, 0.05);
-  }
-  
-  .notification-icon {
-    width: 16px;
-    height: 16px;
-    color: #6b7280;
-  }
-  
-  .notification-badge {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background-color: #db2777;
-    color: white;
-    font-size: 10px;
-    font-weight: 500;
-  }
-  
-  .user-container {
-    position: relative;
-  }
-  
-  .user-button {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.25rem;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-  
-  .user-button:hover {
-    opacity: 0.8;
-  }
-  
-  .user-avatar {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background-color: rgba(219, 39, 119, 0.2);
-    color: #db2777;
-    font-size: 12px;
-    font-weight: 600;
-  }
-  
-  .dropdown-icon {
-    width: 16px;
-    height: 16px;
-    color: #6b7280;
-    opacity: 0.5;
-  }
-  
-  .user-menu {
-    position: absolute;
-    right: 0;
-    top: calc(100% + 0.5rem);
-    width: 200px;
-    border-radius: 8px;
-    background-color: white;
-    border: 1px solid rgba(219, 39, 119, 0.1);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    z-index: 50;
-  }
-  
-  .user-menu-item {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    width: 100%;
-    padding: 0.75rem 1rem;
-    border: none;
-    background: transparent;
-    color: #4b5563;
-    font-size: 0.875rem;
-    text-align: left;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-  
-  .user-menu-item:hover {
-    background-color: rgba(219, 39, 119, 0.05);
-  }
-  
-  .user-menu-item.danger {
-    color: #ef4444;
-  }
-  
-  .user-menu-item.danger:hover {
-    background-color: rgba(239, 68, 68, 0.05);
-  }
-  
-  .menu-item-icon {
-    width: 16px;
-    height: 16px;
-  }
-  
-  .user-menu-divider {
-    height: 1px;
-    background-color: rgba(219, 39, 119, 0.1);
-    margin: 0.25rem 0;
-  }
-  
-  /* Responsive adjustments */
-  @media (max-width: 768px) {
-    .dashboard-navbar {
-      margin-left: 0 !important;
-      width: 100% !important;
-    }
-  
-    .page-title {
-      font-size: 1.25rem;
-    }
-  }
-  
-  /* Animaciones */
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  .user-menu {
-    animation: fadeIn 0.2s ease-out;
-  }
-  
-  /* Estilos para el navbar del dashboard */
+/* Barra superior del panel: ubicación actual, fecha, tema y usuario */
 .dashboard-navbar {
-  transition: all 0.3s ease;
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  height: var(--navbar-height, 4rem);
+  padding: 0 1.5rem 0 2rem;
+  background: rgb(var(--c-bg) / 0.85);
+  backdrop-filter: saturate(1.4) blur(10px);
+  border-bottom: 1px solid rgb(var(--c-line));
+  transition: left 0.25s ease;
 }
-
-/* Cuando el sidebar está colapsado */
-.dashboard-navbar.sidebar-collapsed {
-  left: 70px;
-  width: calc(100% - 70px);
-}
-
-/* Cuando el sidebar está expandido */
 .dashboard-navbar.sidebar-expanded {
-  left: 280px;
-  width: calc(100% - 280px);
+  left: var(--sidebar-width-expanded);
+}
+.dashboard-navbar.sidebar-collapsed {
+  left: var(--sidebar-width-collapsed);
 }
 
-/* Responsive para móviles */
+.navbar-ubicacion {
+  display: flex;
+  align-items: baseline;
+  gap: 0.625rem;
+  min-width: 0;
+}
+.navbar-seccion {
+  font-size: 0.875rem;
+  color: rgb(var(--c-ink-faint));
+}
+.navbar-seccion::after {
+  content: "/";
+  margin-left: 0.625rem;
+  color: rgb(var(--c-line-strong));
+}
+.navbar-titulo {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.navbar-acciones {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.navbar-fecha {
+  margin-right: 0.5rem;
+  font-size: 0.875rem;
+  color: rgb(var(--c-ink-soft));
+}
+.navbar-fecha::first-letter {
+  text-transform: uppercase;
+}
+
+.navbar-usuario {
+  position: relative;
+}
+.navbar-usuario-boton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 2.5rem;
+  padding: 0 0.5rem 0 0.25rem;
+  border-radius: 999px;
+  border: 1px solid rgb(var(--c-line));
+  background: rgb(var(--c-surface));
+  color: rgb(var(--c-ink-soft));
+  cursor: pointer;
+}
+.navbar-usuario-boton:hover {
+  border-color: rgb(var(--c-line-strong));
+}
+.navbar-avatar {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  background: rgb(var(--c-surface-2));
+}
+.navbar-usuario-nombre {
+  max-width: 10rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgb(var(--c-ink));
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.navbar-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.5rem);
+  width: 15rem;
+  padding: 0.375rem;
+  background: rgb(var(--c-surface));
+  border: 1px solid rgb(var(--c-line));
+  border-radius: calc(var(--radius) + 0.25rem);
+  box-shadow: var(--sombra-3);
+}
+.navbar-menu-cabecera {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0.625rem 0.625rem;
+}
+.navbar-menu-nombre {
+  font-weight: 600;
+}
+.navbar-menu-rol {
+  font-size: 0.8125rem;
+  color: rgb(var(--c-ink-faint));
+}
+.navbar-menu button {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  width: 100%;
+  padding: 0.5rem 0.625rem;
+  border-radius: calc(var(--radius) - 2px);
+  font-size: 0.875rem;
+  color: rgb(var(--c-ink));
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+.navbar-menu button:hover {
+  background: rgb(var(--c-surface-2));
+}
+.navbar-menu hr {
+  margin: 0.375rem 0;
+  border: 0;
+  border-top: 1px solid rgb(var(--c-line));
+}
+.navbar-menu .navbar-menu-salir {
+  color: rgb(var(--c-danger));
+}
+
 @media (max-width: 768px) {
-  .dashboard-navbar.sidebar-collapsed,
-  .dashboard-navbar.sidebar-expanded {
+  .dashboard-navbar,
+  .dashboard-navbar.sidebar-expanded,
+  .dashboard-navbar.sidebar-collapsed {
     left: 0;
-    width: 100%;
+    padding-left: 4rem;
+    padding-right: 1rem;
+  }
+  .navbar-fecha,
+  .navbar-usuario-nombre,
+  .navbar-seccion {
+    display: none;
   }
 }

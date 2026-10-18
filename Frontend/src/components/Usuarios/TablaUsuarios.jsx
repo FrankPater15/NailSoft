@@ -76,9 +76,6 @@ const TablaUsuarios = () => {
       });
       setRolMap(rolMapObj);
 
-      // console.log("Roles cargados:", rolesArray);
-      // console.log("Mapa de roles:", rolMapObj);
-
       // Luego obtener los usuarios
       const usuariosResponse = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/api/usuarios`,

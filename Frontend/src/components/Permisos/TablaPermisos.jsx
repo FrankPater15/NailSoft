@@ -67,7 +67,6 @@ export default function TablaPermisos() {
     { value: "vistasSidebar", label: "Vistas del Sidebar" },
   ];
     
-
   const obtenerPermisos = async () => {
     try {
       setCargando(true);
@@ -351,9 +350,6 @@ export default function TablaPermisos() {
       );
     });
 
-
-
-    
   // Paginación
   const indiceUltimoPermiso = paginaActual * permisosPorPagina;
   const indicePrimerPermiso = indiceUltimoPermiso - permisosPorPagina;
@@ -377,7 +373,6 @@ export default function TablaPermisos() {
   const paginaSiguiente = () => {
     if (paginaActual < paginasTotales) setPaginaActual(paginaActual + 1);
   };
-
 
   const renderNumerosPaginacion = () => {
   const visiblePages = 5;
@@ -413,7 +408,6 @@ export default function TablaPermisos() {
     )
   );
 };
-
 
   // Traducir nivel a español
   const traducirNivel = (nivel) => {
@@ -684,7 +678,6 @@ export default function TablaPermisos() {
           <div className="pagination-pages">
   {renderNumerosPaginacion()}
 </div>
-
 
           <button
             onClick={paginaSiguiente}

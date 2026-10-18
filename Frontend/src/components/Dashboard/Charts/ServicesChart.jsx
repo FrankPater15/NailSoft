@@ -135,8 +135,6 @@ const ServicesChart = () => {
     setTimeRange(range)
   }
 
-  
-
   if (isLoading) {
     return (
       <div className="h-[300px] flex items-center justify-center">
@@ -222,7 +220,6 @@ const ServicesChart = () => {
                 const x = cx + radius * Math.cos(-midAngle * RADIAN)
                 const y = cy + radius * Math.sin(-midAngle * RADIAN)
                 
-
                 return (
                   <text
                     x={x}
@@ -270,4 +267,3 @@ const ServicesChart = () => {
 }
 
 export default ServicesChart
-

@@ -408,12 +408,7 @@ const ClientDashboard = () => {
       setLastFetchTime(new Date(storedLastFetch))
     }
 
-    
-
   }, [])
-
-
-
 
 useEffect(() => {
   if (!user) return;
@@ -433,8 +428,6 @@ useEffect(() => {
   });
 }, [user]);
 
-
-
   // Guardar datos en localStorage cuando cambien
   useEffect(() => {
     if (userData) {
@@ -453,10 +446,6 @@ useEffect(() => {
       localStorage.setItem(STORAGE_KEYS.LAST_FETCH, lastFetchTime.toISOString())
     }
   }, [userData, citas, ventas, lastFetchTime])
-
-
-
-
 
   // Función para cancelar una cita
   const handleCancelAppointment = async (citaId, motivoCancelacion) => {
@@ -727,12 +716,6 @@ console.log("Usuario recibido en fetchData:", user);
     setIsLoading(false);
   }
 };
-
- 
- 
- 
-
-  
 
   const eventStyleGetter = (event) => {
     return {

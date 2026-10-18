@@ -39,8 +39,6 @@ export const obtenerServiciosConDescuento = async () => {
       tiposMap[tipo._id] = tipo
     })
 
-    // console.log("Tipos de servicio disponibles:", tiposServicio)
-
     // Filtrar servicios activos
     const serviciosActivos = servicios.filter((servicio) => servicio.estado === true)
 
@@ -93,8 +91,6 @@ export const obtenerServiciosConDescuento = async () => {
       }
     })
 
-    // console.log("Servicios procesados con descuentos:", serviciosConDescuento)
-
     // Verificar que todos los servicios tengan nombres válidos
     const serviciosValidados = serviciosConDescuento.map((servicio) => {
       if (!servicio.nombreServicio || servicio.nombreServicio === "Servicio") {
@@ -107,19 +103,8 @@ export const obtenerServiciosConDescuento = async () => {
       return servicio
     })
 
-    // console.log("Servicios validados con nombres:", serviciosValidados)
-
     // Verificar que cada servicio tenga la información completa
     serviciosValidados.forEach((servicio, index) => {
-      // console.log(`Servicio #${index + 1}:`, {
-      //   id: servicio._id,
-      //   nombre: servicio.nombreServicio,
-      //   precio: servicio.precio,
-      //   tieneDescuento: servicio.tieneDescuento,
-      //   precioOriginal: servicio.precioOriginal,
-      //   precioConDescuento: servicio.precioConDescuento,
-      //   porcentajeDescuento: servicio.porcentajeDescuento,
-      // })
     })
 
     return serviciosValidados
@@ -230,7 +215,6 @@ export const calcularPrecioConDescuento = (precio, tipoServicio) => {
 // Función para validar y corregir IDs de servicios
 export const validarIdServicio = async (servicioId) => {
   try {
-    // console.log(`Validando ID de servicio: ${servicioId}`)
 
     // Obtener el token de autenticación del localStorage
     const token = localStorage.getItem("token")
@@ -266,7 +250,6 @@ export const validarIdServicio = async (servicioId) => {
       if (serviciosResponse.ok) {
         const data = await serviciosResponse.json()
         const servicios = data.servicios || []
-        // console.log(`Buscando entre ${servicios.length} servicios disponibles...`)
 
         // Buscar un servicio con ID similar (últimos 5 caracteres)
         if (servicioId && servicioId.length >= 5) {
@@ -297,10 +280,7 @@ export const validarIdServicio = async (servicioId) => {
           }
         }
 
-        // Mostrar los primeros 5 servicios para depuración
-        // console.log("Primeros 5 servicios disponibles:")
         servicios.slice(0, 5).forEach((s) => {
-          // console.log(`- ID: ${s._id}, Nombre: ${s.nombreServicio}, Precio: ${s.precio}`)
         })
       }
 

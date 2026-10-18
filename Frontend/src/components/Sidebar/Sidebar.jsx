@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, createContext, useContext, useCallback, useMemo } from "react"
 import { Link } from "react-router-dom"
-import { FaSignOutAlt, FaBars, FaChevronLeft, FaChevronRight } from "react-icons/fa"
+import { LogOut, Menu, PanelLeftClose, PanelLeftOpen } from "lucide-react"
 import { useAuth } from "../../context/AuthContext"
 import { useLayoutType } from "../../hooks/useLayoutType"
 import SidebarMenu from "./SidebarMenu"
@@ -155,8 +155,8 @@ const Sidebar = () => {
 
       {/* Toggle móvil */}
       {isMobile && (
-        <button className="mobile-toggle" onClick={toggleOpen} aria-label="Toggle sidebar">
-          <FaBars />
+        <button className="mobile-toggle" onClick={toggleOpen} aria-label="Abrir menú">
+          <Menu size={20} />
         </button>
       )}
 
@@ -165,9 +165,9 @@ const Sidebar = () => {
         <button
           className={`sidebar-toggle ${isCollapsed ? "collapsed" : "expanded"}`}
           onClick={toggleCollapse}
-          aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+          aria-label={isCollapsed ? "Expandir menú" : "Contraer menú"}
         >
-          {isCollapsed ? <FaChevronRight size={12} /> : <FaChevronLeft size={12} />}
+          {isCollapsed ? <PanelLeftOpen size={16} /> : <PanelLeftClose size={16} />}
         </button>
       )}
 
@@ -178,39 +178,28 @@ const Sidebar = () => {
         data-testid="sidebar"
       >
         <div className="sidebar-content">
-          {/* Header */}
-          <div className="sidebar-header">
-            <Link
-              to="/dashboard"
-              className="logo-container"
-              onClick={closeMobileSidebar} // 🔥 Cerrar en móvil al hacer clic en el logo
-            >
-              <div className="logo-wrapper">
-                <img
-                  src={`${import.meta.env.VITE_BACKEND_URL}/uploads/logo1Navbar.webp`}
-                  alt="NailsSoft Logo"
-                  className="logo-image"
-                  loading="lazy"
-                />
-              </div>
-              <div className={`logo-text ${isCollapsed ? "hidden" : "visible"}`}>NailsSoft</div>
-            </Link>
-          </div>
+          <Link to="/dashboard" className="sidebar-marca" onClick={closeMobileSidebar} aria-label="NailSoft, ir al inicio">
+            <span className="sidebar-marca-una forma-una" aria-hidden="true" />
+            {!isCollapsed && (
+              <span className="sidebar-marca-texto">
+                <span className="sidebar-marca-nombre font-marca">NailSoft</span>
+                <span className="sidebar-marca-spa">S&amp;B Spa y Belleza</span>
+              </span>
+            )}
+          </Link>
 
-          {/* Menu */}
           <div className="menu-container">
             <SidebarMenu collapsed={isCollapsed} />
           </div>
 
-          {/* Logout */}
           <button
             onClick={handleLogout}
-            className={`logout-button ${isCollapsed ? "collapsed" : "expanded"}`}
-            title={isCollapsed ? "Cerrar Sesión" : ""}
+            className="sidebar-salir"
+            title={isCollapsed ? "Cerrar sesión" : undefined}
             aria-label="Cerrar sesión"
           >
-            <FaSignOutAlt className="logout-icon" />
-            <span className={`logout-text ${isCollapsed ? "hidden" : "visible"}`}>Cerrar Sesión</span>
+            <LogOut size={18} strokeWidth={1.75} aria-hidden="true" />
+            {!isCollapsed && <span>Cerrar sesión</span>}
           </button>
         </div>
       </aside>

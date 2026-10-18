@@ -28,4 +28,3 @@ const Spinner = ({ size = "md", color = "blue" }) => {
   
   export default Spinner
   
-  

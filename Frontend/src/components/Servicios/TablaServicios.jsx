@@ -395,7 +395,6 @@ const TablaServicios = () => {
     );
   })
 
-
     .sort((a, b) => {
       const field = state.sortField;
       const direction = state.sortDirection === "asc" ? 1 : -1;
@@ -462,7 +461,6 @@ const TablaServicios = () => {
     );
   if (state.error)
     return <div className="alert alert-error">{state.error}</div>;
-// console.log(serviciosActuales)
   return (
     <div className="content">
       <h2 className="text-3xl font-semibold mb-6 text-foreground px-4 pt-4">
@@ -539,8 +537,6 @@ const TablaServicios = () => {
           <tbody className="dark:bg-zinc-900/80 text-foreground">
             {serviciosActuales.length > 0 ? (
               serviciosActuales.map((servicio) => {
-                // console.log("tipoServicio:", servicio.tipoServicio);
-                // Calcular precio con descuento si el tipo de servicio tiene descuento
                 const tieneDescuento = servicio.tipoServicio?.descuento > 0;
                 const precioOriginal = Number.parseFloat(servicio.precio);
                 const precioConDescuento = tieneDescuento

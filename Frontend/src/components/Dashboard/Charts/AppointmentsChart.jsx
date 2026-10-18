@@ -294,4 +294,3 @@ const AppointmentsChart = () => {
 }
 
 export default AppointmentsChart
-

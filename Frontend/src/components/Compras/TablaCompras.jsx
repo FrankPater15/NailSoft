@@ -19,7 +19,6 @@ import { saveAs } from "file-saver"
 // import "../Compras/tablaCompras.css"
 import "../../styles/tablas.css" 
 
-
 // Configura el contenedor del modal
 Modal.setAppElement("#root")
 

@@ -1,17 +1,65 @@
 /** @type {import('tailwindcss').Config} */
+
+// Escala de color a partir de variables CSS "R G B" definidas en src/tailwind.css
+const escala = (nombre) =>
+  Object.fromEntries(
+    [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950].map((tono) => [
+      tono,
+      `rgb(var(--${nombre}-${tono}) / <alpha-value>)`,
+    ]),
+  )
+
+const rol = (nombre) => `rgb(var(--c-${nombre}) / <alpha-value>)`
+
 export default {
-  content: ["./index.html","./src/**/*.{html,js,jsx,ts,tsx}", "*.{js,ts,jsx,tsx,mdx}"],
+  content: ["./index.html", "./src/**/*.{html,js,jsx,ts,tsx}"],
   darkMode: ["class"],
   theme: {
     container: {
       center: true,
-      padding: "2rem",
+      padding: "1.5rem",
       screens: {
         "2xl": "1400px",
       },
     },
     extend: {
+      fontFamily: {
+        sans: ["Onest", "ui-sans-serif", "system-ui", "-apple-system", "Segoe UI", "sans-serif"],
+        marca: ["Bodoni Moda", "Didot", "Georgia", "serif"],
+      },
       colors: {
+        // Paleta propia; las escalas de Tailwind que usaba el proyecto apuntan a ella
+        berry: escala("berry"),
+        plum: escala("plum"),
+        nude: escala("nude"),
+        neutral: escala("neutral"),
+        pink: escala("berry"),
+        rose: escala("berry"),
+        fuchsia: escala("berry"),
+        purple: escala("plum"),
+        violet: escala("plum"),
+        indigo: escala("plum"),
+        gray: escala("neutral"),
+        slate: escala("neutral"),
+        zinc: escala("neutral"),
+
+        // Roles semánticos que cambian con el tema
+        superficie: rol("surface"),
+        "superficie-2": rol("surface-2"),
+        linea: rol("line"),
+        tinta: {
+          DEFAULT: rol("ink"),
+          suave: rol("ink-soft"),
+          tenue: rol("ink-faint"),
+        },
+        laca: {
+          DEFAULT: rol("primary"),
+          hover: rol("primary-hover"),
+          suave: rol("primary-soft"),
+          tinta: rol("primary-ink"),
+        },
+
+        // Variables de shadcn/ui
         background: "hsl(var(--background) / <alpha-value>)",
         foreground: "hsl(var(--foreground) / <alpha-value>)",
         primary: {
@@ -42,16 +90,6 @@ export default {
           DEFAULT: "hsl(var(--card) / <alpha-value>)",
           foreground: "hsl(var(--card-foreground) / <alpha-value>)",
         },
-        sidebar: {
-          DEFAULT: "hsl(var(--sidebar, var(--background)) / <alpha-value>)",
-          foreground: "hsl(var(--sidebar-foreground, var(--foreground)) / <alpha-value>)",
-          border: "hsl(var(--sidebar-border, var(--border)) / <alpha-value>)",
-          primary: "hsl(var(--sidebar-primary, var(--primary)) / <alpha-value>)",
-          "primary-foreground": "hsl(var(--sidebar-primary-foreground, var(--primary-foreground)) / <alpha-value>)",
-          accent: "hsl(var(--sidebar-accent, var(--accent)) / <alpha-value>)",
-          "accent-foreground": "hsl(var(--sidebar-accent-foreground, var(--accent-foreground)) / <alpha-value>)",
-          ring: "hsl(var(--sidebar-ring, var(--ring)) / <alpha-value>)",
-        },
         success: {
           DEFAULT: "hsl(var(--success) / <alpha-value>)",
           foreground: "hsl(var(--success-foreground) / <alpha-value>)",
@@ -61,9 +99,18 @@ export default {
         ring: "hsl(var(--ring) / <alpha-value>)",
       },
       borderRadius: {
+        xl: "calc(var(--radius) + 0.25rem)",
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      boxShadow: {
+        sm: "var(--sombra-1)",
+        DEFAULT: "var(--sombra-1)",
+        md: "var(--sombra-2)",
+        lg: "var(--sombra-2)",
+        xl: "var(--sombra-3)",
+        "2xl": "var(--sombra-3)",
       },
       keyframes: {
         "accordion-down": {
@@ -74,26 +121,10 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: 0 },
         },
-        "pulse-gentle": {
-          "0%, 100%": { opacity: 1 },
-          "50%": { opacity: 0.8 },
-        },
-        float: {
-          "0%, 100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(-5px)" },
-        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "pulse-gentle": "pulse-gentle 3s ease-in-out infinite",
-        float: "float 5s ease-in-out infinite",
-      },
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-        "gradient-shine":
-          "linear-gradient(45deg, transparent 25%, rgba(255, 255, 255, 0.1) 25%, rgba(255, 255, 255, 0.1) 50%, transparent 50%, transparent 75%, rgba(255, 255, 255, 0.1) 75%, rgba(255, 255, 255, 0.1))",
       },
     },
   },

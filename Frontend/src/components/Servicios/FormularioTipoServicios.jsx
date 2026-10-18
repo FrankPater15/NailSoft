@@ -112,7 +112,6 @@ if (
   });
 }
 
-
   try {
     const token = localStorage.getItem("token");
     const url = tipoServicioSeleccionado
@@ -159,7 +158,6 @@ if (
     setLoading(false);
   }
 };
-
 
   return (
     <div className="p-6">
@@ -272,4 +270,3 @@ if (
     </div>
   )
 }
-

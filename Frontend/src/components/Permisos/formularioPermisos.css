@@ -1,7 +1,6 @@
 /* Estilos modernos para formularios */
 .formulario-moderno-perm {
-    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
-      "Helvetica Neue", sans-serif;
+    font-family: inherit;
       height: 80vh;
   }
   
@@ -13,7 +12,7 @@
     display: block;
     font-size: 0.875rem;
     font-weight: 500;
-    color: #374151;
+    color: rgb(var(--c-info));
     margin-bottom: 0.5rem;
   }
   
@@ -22,10 +21,10 @@
   .form-textarea {
     width: 100%;
     padding: 0.75rem;
-    border: 1px solid #e5e7eb;
+    border: 1px solid rgb(var(--c-line));
     border-radius: 0.5rem;
-    background-color: #f9fafb;
-    color: #1f2937;
+    background-color: rgb(var(--c-surface));
+    color: rgb(var(--c-info));
     font-size: 0.875rem;
     transition: all 0.2s ease;
   }
@@ -34,14 +33,14 @@
   .form-select:focus,
   .form-textarea:focus {
     outline: none;
-    border-color: #db2777;
-    box-shadow: 0 0 0 3px rgba(219, 39, 119, 0.1);
-    background-color: #fff;
+    border-color: rgb(var(--c-primary));
+    box-shadow: 0 0 0 3px rgb(var(--berry-600) / 0.06);
+    background-color: rgb(var(--c-surface));
   }
   
   .form-input::placeholder,
   .form-textarea::placeholder {
-    color: #9ca3af;
+    color: rgb(var(--c-ink-faint));
   }
   
   .form-textarea {
@@ -54,7 +53,7 @@
     align-items: center;
     justify-content: center;
     padding: 0.75rem 1.5rem;
-    background-color: #db2777;
+    background-color: rgb(var(--c-primary));
     color: white;
     font-weight: 500;
     border-radius: 0.5rem;
@@ -64,12 +63,12 @@
   }
   
   .btn-primary:hover {
-    background-color: #be185d;
+    background-color: rgb(var(--c-primary));
   }
   
   .btn-primary:focus {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(219, 39, 119, 0.4);
+    box-shadow: 0 0 0 3px rgb(var(--berry-600) / 0.24);
   }
   
   .btn-primary:disabled {
@@ -82,22 +81,22 @@
     align-items: center;
     justify-content: center;
     padding: 0.75rem 1.5rem;
-    background-color: #f3f4f6;
-    color: #4b5563;
+    background-color: rgb(var(--c-surface-2));
+    color: rgb(var(--c-ink));
     font-weight: 500;
     border-radius: 0.5rem;
-    border: 1px solid #e5e7eb;
+    border: 1px solid rgb(var(--c-line));
     transition: all 0.2s ease;
     cursor: pointer;
   }
   
   .btn-secondary:hover {
-    background-color: #e5e7eb;
+    background-color: rgb(var(--c-surface-2));
   }
   
   .btn-secondary:focus {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(107, 114, 128, 0.2);
+    box-shadow: 0 0 0 3px rgb(36 26 33 / 0.12);
   }
   
   .btn-secondary:disabled {

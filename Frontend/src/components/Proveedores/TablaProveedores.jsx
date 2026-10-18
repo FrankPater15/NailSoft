@@ -53,17 +53,11 @@ const TablaProveedores = () => {
         return
       }
 
-      // console.log("🔍 Obteniendo proveedores...")
       const respuesta = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/proveedores`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
-
-      // console.log("📡 Respuesta completa:", respuesta)
-      // console.log("📊 Datos recibidos:", respuesta.data)
-      // console.log("📊 Tipo de datos:", typeof respuesta.data)
-      // console.log("📊 Es array:", Array.isArray(respuesta.data))
 
       // Manejar la estructura de respuesta del backend
       let proveedoresArray = []
@@ -83,9 +77,6 @@ const TablaProveedores = () => {
           proveedoresArray = []
         }
       }
-
-      // console.log("✅ Proveedores procesados:", proveedoresArray)
-      // console.log("📊 Cantidad de proveedores:", proveedoresArray.length)
 
       setProveedores(proveedoresArray)
     } catch (error) {
@@ -226,13 +217,6 @@ const TablaProveedores = () => {
           throw new Error("Proveedor no encontrado")
         }
 
-        // console.log("🔄 Cambiando estado del proveedor:", {
-        //   id,
-        //   estadoActual,
-        //   nuevoEstado,
-        //   proveedor: proveedorEncontrado,
-        // })
-
         // Intentar primero con endpoint específico para cambiar estado
         let response
         try {
@@ -248,15 +232,12 @@ const TablaProveedores = () => {
             },
           )
         } catch (patchError) {
-          // console.log("⚠️ Endpoint PATCH no disponible, intentando con PUT:", patchError.response?.status)
 
           // Opción 2: Endpoint PUT con objeto completo
           const proveedorActualizado = {
             ...proveedorEncontrado,
             estado: nuevoEstado,
           }
-
-          // console.log("📤 Enviando datos completos:", proveedorActualizado)
 
           response = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/proveedores/${id}`, proveedorActualizado, {
             headers: {
@@ -265,8 +246,6 @@ const TablaProveedores = () => {
             },
           })
         }
-
-        // console.log("✅ Respuesta del servidor:", response.data)
 
         // Actualizar el estado local de forma segura
         setProveedores((prevProveedores) =>

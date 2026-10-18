@@ -1,12 +1,12 @@
 /* Footer para Admin */
 .admin-footer {
-    /* background: rgba(255, 255, 255, 0.9); */
+    /* background: rgb(var(--c-surface) / 0.9); */
     backdrop-filter: blur(10px);
-    border-top: 1px solid rgba(219, 39, 119, 0.1);
+    border-top: 1px solid rgb(var(--c-primary) / 0.1);
     padding: 1rem;
     text-align: center;
     font-size: 0.875rem;
-    color: #718096;
+    color: rgb(var(--c-ink-soft));
     position: fixed;
     bottom: 0;
     right: 0;
@@ -17,7 +17,7 @@
   /* Footer Principal */
   .main-footer {
     position: relative;
-    background: linear-gradient(135deg, #ff69b4, #da70d6);
+    background: linear-gradient(rgb(var(--berry-200)), rgb(var(--berry-200)));
     color: white;
     overflow: hidden;
     padding: 4rem 2rem 2rem;
@@ -33,7 +33,7 @@
     position: absolute;
     width: 150px;
     height: 150px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgb(var(--c-surface) / 0.1);
     border-radius: 50%;
     animation: float 8s ease-in-out infinite;
   }
@@ -91,14 +91,14 @@
     justify-content: center;
     width: 40px;
     height: 40px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgb(var(--c-surface) / 0.1);
     border-radius: 50%;
     transition: all 0.3s ease;
   }
   
   .social-link:hover {
     background: white;
-    color: #ff69b4;
+    color: rgb(var(--berry-200));
   }
   
   .footer-title {
@@ -122,7 +122,7 @@
   
   .footer-links a:hover {
     opacity: 1;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    text-shadow: 0 0 10px rgb(36 26 33 / 0.3);
   }
   
   .contact-info {
@@ -174,7 +174,7 @@
   
   .footer-legal a:hover {
     opacity: 1;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    text-shadow: 0 0 10px rgb(36 26 33 / 0.3);
   }
   
   @keyframes float {

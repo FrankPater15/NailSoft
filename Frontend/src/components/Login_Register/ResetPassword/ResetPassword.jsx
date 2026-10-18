@@ -164,7 +164,6 @@ const handleSubmit = async (e) => {
               Crea una nueva contraseña segura para tu cuenta.
             </p>
 
-
             <form onSubmit={handleSubmit} className="reset-form">
               <div className="input-group-reset">
                 <input

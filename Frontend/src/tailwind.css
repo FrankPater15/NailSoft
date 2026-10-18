@@ -2,179 +2,491 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * Sistema de diseño de NailSoft — "esmalte"
+ *
+ * Porcelana (fondo frío con un toque malva), tinta berenjena, laca frambuesa como color
+ * principal y nude para rellenos suaves. Onest para la interfaz; Bodoni Moda solo en los
+ * momentos de marca. La forma de uña almendrada (.forma-una) es el único elemento decorativo.
+ *
+ * Escalas en canales RGB ("R G B") para usar con opacidad: rgb(var(--berry-600) / 0.2).
+ * Las escalas pink/rose/fuchsia, purple/violet y gray/slate/zinc de Tailwind apuntan a
+ * berry, plum y neutral (tailwind.config.js), así todo el frontend usa esta paleta.
+ */
 @layer base {
   :root {
-    
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
+    /* Laca frambuesa */
+    --berry-50: 251 242 245;
+    --berry-100: 246 225 232;
+    --berry-200: 237 194 209;
+    --berry-300: 222 147 174;
+    --berry-400: 203 95 134;
+    --berry-500: 178 52 102;
+    --berry-600: 155 27 74;
+    --berry-700: 127 22 61;
+    --berry-800: 101 19 50;
+    --berry-900: 77 16 39;
+    --berry-950: 46 9 23;
 
+    /* Ciruela: acento secundario */
+    --plum-50: 247 243 249;
+    --plum-100: 237 228 242;
+    --plum-200: 218 200 228;
+    --plum-300: 189 160 205;
+    --plum-400: 152 116 172;
+    --plum-500: 116 80 138;
+    --plum-600: 94 61 114;
+    --plum-700: 76 48 93;
+    --plum-800: 60 38 73;
+    --plum-900: 45 29 55;
+    --plum-950: 29 18 36;
+
+    /* Nude */
+    --nude-50: 252 247 244;
+    --nude-100: 246 234 228;
+    --nude-200: 239 216 206;
+    --nude-300: 233 207 196;
+    --nude-400: 220 182 165;
+    --nude-500: 207 165 146;
+    --nude-600: 176 128 108;
+    --nude-700: 140 98 82;
+    --nude-800: 104 72 60;
+    --nude-900: 72 50 42;
+    --nude-950: 44 30 25;
+
+    /* Porcelana → berenjena */
+    --neutral-50: 247 245 246;
+    --neutral-100: 239 236 238;
+    --neutral-200: 226 222 225;
+    --neutral-300: 203 197 202;
+    --neutral-400: 163 156 162;
+    --neutral-500: 125 117 124;
+    --neutral-600: 95 87 94;
+    --neutral-700: 70 63 69;
+    --neutral-800: 46 40 45;
+    --neutral-900: 31 26 30;
+    --neutral-950: 21 17 20;
+
+    /* Roles semánticos (cambian con el tema) */
+    --c-bg: var(--neutral-50);
+    --c-surface: 255 255 255;
+    --c-surface-2: var(--neutral-100);
+    --c-line: var(--neutral-200);
+    --c-line-strong: var(--neutral-300);
+    --c-ink: 36 26 33;
+    --c-ink-soft: var(--neutral-600);
+    --c-ink-faint: var(--neutral-500);
+    --c-primary: var(--berry-600);
+    --c-primary-hover: var(--berry-700);
+    --c-primary-soft: var(--berry-50);
+    --c-primary-ink: var(--berry-700);
+    --c-on-primary: 255 255 255;
+    --c-nude: var(--nude-300);
+    --c-success: 63 125 92;
+    --c-warning: 199 125 23;
+    --c-danger: 192 54 44;
+    --c-info: 59 92 140;
+
+    /* Estados de cita como colores de esmalte */
+    --st-pendiente: var(--nude-500);
+    --st-confirmada: var(--berry-600);
+    --st-progreso: 199 125 23;
+    --st-completada: 63 125 92;
+    --st-cancelada: var(--neutral-400);
+
+    --radius: 0.625rem;
+    --sombra-1: 0 1px 2px rgb(36 26 33 / 0.06), 0 1px 1px rgb(36 26 33 / 0.04);
+    --sombra-2: 0 8px 24px -12px rgb(36 26 33 / 0.18), 0 2px 6px rgb(36 26 33 / 0.05);
+    --sombra-3: 0 24px 48px -20px rgb(36 26 33 / 0.28);
+
+    /* Variables de shadcn/ui en HSL (las usan bg-primary, border, ring, etc.) */
+    --background: 330 11% 96%;
+    --foreground: 317 16% 12%;
     --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-
+    --card-foreground: 317 16% 12%;
     --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
+    --popover-foreground: 317 16% 12%;
+    --primary: 338 70% 36%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 18 46% 84%;
+    --secondary-foreground: 317 16% 12%;
+    --muted: 320 8% 93%;
+    --muted-foreground: 308 4% 40%;
+    --accent: 338 60% 96%;
+    --accent-foreground: 338 70% 30%;
+    --destructive: 4 63% 46%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 148 33% 37%;
+    --success-foreground: 0 0% 100%;
+    --border: 315 8% 88%;
+    --input: 315 8% 84%;
+    --ring: 338 70% 36%;
 
-    --primary: 330 81% 90%;
-    --primary-foreground: 0 0% 98%;
-
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-
-    --accent: 330 81% 97%;
-    --accent-foreground: 330 81% 60%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 330 81% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 330 81% 60%;
-
-    --radius: 0.5rem;
-
-   
-
-  }
-  .border-gradient {
-    border: 2px solid transparent;
-    background-clip: padding-box, border-box;
-    background-origin: padding-box, border-box;
-    background-image: 
-      linear-gradient(to right, hsl(var(--background)), hsl(var(--background))), 
-      linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+    color-scheme: light;
   }
 
   .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
+    --c-bg: var(--neutral-950);
+    --c-surface: var(--neutral-900);
+    --c-surface-2: var(--neutral-800);
+    --c-line: 58 51 57;
+    --c-line-strong: var(--neutral-700);
+    --c-ink: 243 238 241;
+    --c-ink-soft: var(--neutral-400);
+    --c-ink-faint: var(--neutral-500);
+    --c-primary: 224 85 138;
+    --c-primary-hover: 233 120 163;
+    --c-primary-soft: 77 16 39;
+    --c-primary-ink: 240 160 190;
+    --c-on-primary: 31 10 20;
+    --c-success: 110 181 142;
+    --c-warning: 230 165 70;
+    --c-danger: 236 110 98;
+    --c-info: 130 165 215;
+    --st-confirmada: 224 85 138;
 
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
+    --sombra-1: 0 1px 2px rgb(0 0 0 / 0.4);
+    --sombra-2: 0 8px 24px -12px rgb(0 0 0 / 0.6);
+    --sombra-3: 0 24px 48px -20px rgb(0 0 0 / 0.7);
 
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
+    --background: 317 13% 7%;
+    --foreground: 324 18% 94%;
+    --card: 315 9% 11%;
+    --card-foreground: 324 18% 94%;
+    --popover: 315 9% 11%;
+    --popover-foreground: 324 18% 94%;
+    --primary: 337 69% 61%;
+    --primary-foreground: 330 50% 8%;
+    --secondary: 315 7% 17%;
+    --secondary-foreground: 324 18% 94%;
+    --muted: 310 7% 17%;
+    --muted-foreground: 309 4% 62%;
+    --accent: 338 66% 18%;
+    --accent-foreground: 337 75% 80%;
+    --destructive: 4 78% 66%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 147 33% 57%;
+    --success-foreground: 150 40% 8%;
+    --border: 308 6% 21%;
+    --input: 308 6% 25%;
+    --ring: 337 69% 61%;
 
-    --primary: 330 81% 60%;
-    --primary-foreground: 0 0% 98%;
-
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-
-    --accent: 330 81% 20%;
-    --accent-foreground: 0 0% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 330 81% 60%;
-    
-  }
-  
-  .card-gradient-33 {
-    background:linear-gradient(135deg, #ceb6c4 0%, #b45d92 10%, #ceb6c4 100%,#d461a8 50%);
-    color: white;
-    
-  }
-
-  /* .card-gradient-33 {
-    background: linear-gradient(135deg, #ff008c 0%, #e26ab4 50%, #ceb6c4 100%);
-    color: white;
-  } */
-  .card-gradient-4 {
-    background: linear-gradient(135deg, #151315 0%, #22273898 50%, #3c3c3c 100%);
-    color: white;
-  }
-  .card-gradient-5 {
-    background: linear-gradient(135deg, #151315 80%, #22273898 100%, #3c3c3c 100%);
-    color: white;
-  }
-  
-  .glass {
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    color-scheme: dark;
   }
 
-  .hover-lift {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-
-  .darkglass {
-    background: rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-  }
-
-  .text-gradient-primary {
-    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    color: transparent;
-  }
-
-  .text-gradient-secondary {
-  background: linear-gradient(135deg, #ef0090 0%, #ffffff 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: transparent;
-}
-
-.text-gradient-3 {
-  background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: transparent;
-}
-
-.border-gradient {
-  border: 10px solid transparent;
-  background-clip: padding-box, border-box;
-  background-origin: padding-box, border-box;
-  background-image: 
-    linear-gradient(to right, hsl(var(--background)), hsl(var(--background))), 
-    linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
-}
-
-.border-dashed-custom {
-  background-image: 
-    linear-gradient(90deg, hsl(var(--border)) 50%, transparent 50%),
-    linear-gradient(90deg, hsl(var(--border)) 50%, transparent 50%),
-    linear-gradient(0deg, hsl(var(--border)) 50%, transparent 50%),
-    linear-gradient(0deg, hsl(var(--border)) 50%, transparent 50%);
-  background-position: top, bottom, left, right;
-  background-size: 15px 1px, 15px 1px, 1px 15px, 1px 15px;
-  background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
-}
-
-}
-
-@layer base {
   * {
     @apply border-border;
   }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
   body {
-    @apply bg-background text-foreground;
+    margin: 0;
+    font-family: "Onest", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    background-color: rgb(var(--c-bg));
+    color: rgb(var(--c-ink));
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "cv11", "ss01";
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    color: rgb(var(--c-ink));
+    letter-spacing: -0.015em;
+    line-height: 1.2;
+  }
+
+  ::selection {
+    background: rgb(var(--berry-200));
+    color: rgb(var(--berry-900));
+  }
+
+  :focus-visible {
+    outline: 2px solid rgb(var(--c-primary));
+    outline-offset: 2px;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(var(--c-line-strong)) transparent;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
 
-/* Animaciones para los elementos decorativos */
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0);
+/*
+ * Kit de componentes: reemplaza las clases de Bootstrap que usaban las pantallas
+ * (btn, form-*, row/col, card, badge, text-muted) con el diseño propio.
+ */
+@layer components {
+  .font-marca {
+    font-family: "Bodoni Moda", "Didot", Georgia, serif;
+    font-optical-sizing: auto;
+    letter-spacing: -0.01em;
   }
-  50% {
-    transform: translateY(-10px);
+
+  /* Forma de uña almendrada: el elemento distintivo del sistema */
+  .forma-una {
+    border-radius: 50% 50% 46% 46% / 62% 62% 38% 38%;
+  }
+
+  /* Indicador de estado con forma de uña */
+  .esmalte {
+    display: inline-block;
+    width: 0.6rem;
+    height: 0.8rem;
+    border-radius: 50% 50% 46% 46% / 62% 62% 38% 38%;
+    background: currentColor;
+    box-shadow: inset -1.5px -2px 0 rgb(0 0 0 / 0.12), inset 1.5px 1.5px 0 rgb(255 255 255 / 0.35);
+    flex-shrink: 0;
+  }
+
+  /* Botón cuadrado solo con ícono (tema, cerrar, acciones de fila) */
+  .boton-icono {
+    display: inline-grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: var(--radius);
+    color: rgb(var(--c-ink-soft));
+    background: transparent;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease;
+  }
+  .boton-icono:hover {
+    background: rgb(var(--c-surface-2));
+    color: rgb(var(--c-ink));
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.5rem;
+    padding: 0 1rem;
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    text-decoration: none;
+    transition:
+      background-color 0.15s ease,
+      border-color 0.15s ease,
+      color 0.15s ease,
+      box-shadow 0.15s ease;
+  }
+  .btn:disabled,
+  .btn.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  .btn-sm {
+    min-height: 2rem;
+    padding: 0 0.75rem;
+    font-size: 0.8125rem;
+  }
+  .btn-lg {
+    min-height: 3rem;
+    padding: 0 1.5rem;
+    font-size: 1rem;
+  }
+  .btn-primary {
+    background: rgb(var(--c-primary));
+    color: rgb(var(--c-on-primary));
+  }
+  .btn-primary:hover {
+    background: rgb(var(--c-primary-hover));
+  }
+  .btn-secondary,
+  .btn-light,
+  .btn-outline-secondary {
+    background: rgb(var(--c-surface));
+    color: rgb(var(--c-ink));
+    border-color: rgb(var(--c-line-strong));
+  }
+  .btn-secondary:hover,
+  .btn-light:hover,
+  .btn-outline-secondary:hover {
+    background: rgb(var(--c-surface-2));
+  }
+  .btn-outline-primary {
+    background: transparent;
+    color: rgb(var(--c-primary-ink));
+    border-color: rgb(var(--c-primary) / 0.45);
+  }
+  .btn-outline-primary:hover {
+    background: rgb(var(--c-primary-soft));
+  }
+  .btn-success {
+    background: rgb(var(--c-success));
+    color: #fff;
+  }
+  .btn-danger,
+  .btn-outline-danger:hover {
+    background: rgb(var(--c-danger));
+    color: #fff;
+  }
+  .btn-outline-danger {
+    color: rgb(var(--c-danger));
+    border-color: rgb(var(--c-danger) / 0.45);
+  }
+  .btn-warning {
+    background: rgb(var(--c-warning));
+    color: #fff;
+  }
+  .btn-info {
+    background: rgb(var(--c-info));
+    color: #fff;
+  }
+  .btn-success:hover,
+  .btn-danger:hover,
+  .btn-warning:hover,
+  .btn-info:hover {
+    filter: brightness(0.92);
+  }
+  .btn-link {
+    background: none;
+    color: rgb(var(--c-primary-ink));
+    padding: 0;
+    min-height: auto;
+  }
+  .btn-link:hover {
+    text-decoration: underline;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  .form-label {
+    display: block;
+    margin-bottom: 0.375rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: rgb(var(--c-ink-soft));
+  }
+  .form-control,
+  .form-select {
+    display: block;
+    width: 100%;
+    min-height: 2.5rem;
+    padding: 0.5rem 0.75rem;
+    font: inherit;
+    font-size: 0.9375rem;
+    color: rgb(var(--c-ink));
+    background-color: rgb(var(--c-surface));
+    border: 1px solid rgb(var(--c-line-strong));
+    border-radius: var(--radius);
+    transition:
+      border-color 0.15s ease,
+      box-shadow 0.15s ease;
+  }
+  .form-select {
+    appearance: none;
+    padding-right: 2.25rem;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%237d757c' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.6' d='m4 6 4 4 4-4'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1rem;
+  }
+  .form-control:focus,
+  .form-select:focus {
+    outline: none;
+    border-color: rgb(var(--c-primary));
+    box-shadow: 0 0 0 3px rgb(var(--c-primary) / 0.15);
+  }
+  .form-control::placeholder {
+    color: rgb(var(--c-ink-faint));
+  }
+  .form-control.is-invalid {
+    border-color: rgb(var(--c-danger));
+  }
+  .invalid-feedback {
+    margin-top: 0.25rem;
+    font-size: 0.8125rem;
+    color: rgb(var(--c-danger));
+  }
+  .input-group {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .col,
+  [class*="col-md-"],
+  [class*="col-sm-"],
+  [class*="col-lg-"] {
+    flex: 1 1 14rem;
+    min-width: 0;
+  }
+
+  .card {
+    background: rgb(var(--c-surface));
+    border: 1px solid rgb(var(--c-line));
+    border-radius: calc(var(--radius) + 0.25rem);
+    box-shadow: var(--sombra-1);
+  }
+  .card-title {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.15rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1.5;
+    background: rgb(var(--c-surface-2));
+    color: rgb(var(--c-ink-soft));
+  }
+
+  .text-muted {
+    color: rgb(var(--c-ink-soft));
+  }
+
+  /* Tarjetas de color usadas en el dashboard (antes degradados rosa/negro) */
+  .card-gradient-33 {
+    background: rgb(var(--berry-600));
+    color: #fff;
+  }
+  .card-gradient-4,
+  .card-gradient-5 {
+    background: rgb(var(--c-surface));
+    color: rgb(var(--c-ink));
+    border: 1px solid rgb(var(--c-line));
+  }
+  .text-gradient-secondary {
+    color: rgb(var(--c-primary-ink));
   }
 }

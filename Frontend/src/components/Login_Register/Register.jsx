@@ -310,12 +310,6 @@ export default function Register() {
         correo:  user.email, // Asegúrate de usar el campo correcto del backend
       })
       
-      // localStorage.setItem("token", token)
-      // localStorage.setItem("userRole", role.toLowerCase())
-      // if (user?.id) {
-      //   localStorage.setItem("userId", user.id)
-      // }
-
       showSuccessAlert()
 
       if (role.toLowerCase() === "admin") {
@@ -325,13 +319,6 @@ export default function Register() {
       }
     } catch (error) {
       console.error("Registration error:", error)
-  //       console.log("Detalles del error de Axios:", {
-  //   message: error.message,
-  //   status: error?.response?.status,
-  //   data: error?.response?.data,
-  //   headers: error?.response?.headers,
-  // });
-
 
       let errorMessage = "Error al registrar. Por favor intente nuevamente."
 

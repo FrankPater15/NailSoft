@@ -52,4 +52,3 @@ export function ThemeProvider({ children }) {
 
   return <ThemeContext.Provider value={{ theme, setTheme, toggleTheme }}>{children}</ThemeContext.Provider>
 }
-

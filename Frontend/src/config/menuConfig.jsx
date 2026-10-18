@@ -1,169 +1,71 @@
 import {
-  FaTachometerAlt,
-  FaCalendarCheck,
-  FaClipboardList,
-  FaUserCog,
-  FaCalendarAlt,
-  FaCalendarWeek,
-  FaMoneyBillWave,
-  FaCube,
-  FaBoxes,
-  FaTruck,
-  FaTags,
-  FaUserShield,
-  FaUserLock,
-  FaUsers
-} from "react-icons/fa"
-import { MdOutlineMonetizationOn, MdOutlineSpa, MdOutlineVrpano } from "react-icons/md"
-import { BiSolidDiscount, BiAlbum } from "react-icons/bi"
+  LayoutGrid,
+  CalendarDays,
+  CalendarRange,
+  Timer,
+  Receipt,
+  Sparkles,
+  Shapes,
+  BadgePercent,
+  Store,
+  Users,
+  UserRound,
+  Package,
+  Tags,
+  Boxes,
+  PackageMinus,
+  ShoppingBag,
+  Truck,
+  UserCog,
+  ShieldCheck,
+  KeyRound,
+} from "lucide-react"
 
+// Menú lateral agrupado según el trabajo diario del spa.
+// Cada opción solo se muestra si el usuario tiene su permiso; un grupo sin opciones visibles no se muestra.
 export const menuConfig = [
-  {
-    label: "Dashboard",
-    path: "/dashboard",
-    icon: FaTachometerAlt,
-    permission: "visualizarDashboardMenu"
-  },
+  { label: "Inicio", path: "/dashboard", icon: LayoutGrid, permission: "visualizarDashboardMenu" },
 
-  // Gestión de Ventas
+  { label: "Citas", path: "/citas", icon: CalendarDays, group: "Agenda", permission: "verCitasMenu" },
   {
-    label: "Citas en Progreso",
+    label: "Agenda por empleado",
+    path: "/agenda-empleado",
+    icon: CalendarRange,
+    group: "Agenda",
+    permission: "verAgendaEmpleadosMenu",
+  },
+  {
+    label: "En atención",
     path: "/citas-en-progreso",
-    icon: FaCalendarCheck,
-    group: "Gestión de Ventas",
+    icon: Timer,
+    group: "Agenda",
     permission: "visualizarCitaEnProgresoMenu",
   },
-  {
-    label: "Ventas Unificadas",
-    path: "/ventas-unificadas",
-    icon: MdOutlineMonetizationOn,
-    group: "Gestión de Ventas",
-    permission:"verVentasUnificadasMenu"
-  },
 
-  // Gestión de Servicios
-  {
-    label: "Servicios",
-    path: "/servicios",
-    icon: MdOutlineSpa,
-    group: "Gestión de Servicios",
-    permission:"verServiciosMenu"
-  },
-  {
-    label: "Tipo de Descuentos",
-    path: "/tiposervicios",
-    icon: BiSolidDiscount,
-    group: "Gestión de Servicios",
-    permission:"verTipoDescuentoMenu"
-  },
-  {
-    label: "Tipo de Servicios",
-    path: "/tiposervicioss",
-    icon: BiAlbum,
-    group: "Gestión de Servicios",
-    permission:"verTipoServiciosMenu"
-  },
-  {
-    label: "Catálogo de Servicios",
-    path: "/articles",
-    icon: MdOutlineVrpano,
-    group: "Gestión de Servicios",
-    permission:"verCatalogoMenu"
-  },
-  {
-    label: "Clientes",
-    path: "/clientes",
-    icon: FaClipboardList,
-    group: "Gestión de Servicios",
-    permission:"verClientesMenu"
-  },
-  {
-    label: "Empleados",
-    path: "/empleados",
-    icon: FaUserCog,
-    group: "Gestión de Servicios",
-    permission:"verEmpleadosMenu"
-  },
-  {
-    label: "Citas",
-    path: "/citas",
-    icon: FaCalendarAlt,
-    group: "Gestión de Servicios",
-    permission:"verCitasMenu"
-  },
-  {
-    label: "Agenda de Empleados",
-    path: "/agenda-empleado",
-    icon: FaCalendarWeek,
-    group: "Gestión de Servicios",
-    permission:"verAgendaEmpleadosMenu"
-  },
+  { label: "Ventas", path: "/ventas-unificadas", icon: Receipt, group: "Ventas", permission: "verVentasUnificadasMenu" },
 
-  // Gestión de Compras
+  { label: "Servicios", path: "/servicios", icon: Sparkles, group: "Catálogo", permission: "verServiciosMenu" },
+  { label: "Categorías", path: "/tiposervicioss", icon: Shapes, group: "Catálogo", permission: "verTipoServiciosMenu" },
+  { label: "Descuentos", path: "/tiposervicios", icon: BadgePercent, group: "Catálogo", permission: "verTipoDescuentoMenu" },
+  { label: "Vista de clientes", path: "/articles", icon: Store, group: "Catálogo", permission: "verCatalogoMenu" },
+
+  { label: "Clientes", path: "/clientes", icon: Users, group: "Personas", permission: "verClientesMenu" },
+  { label: "Empleados", path: "/empleados", icon: UserRound, group: "Personas", permission: "verEmpleadosMenu" },
+
+  { label: "Productos", path: "/productos", icon: Package, group: "Inventario", permission: "verProductosMenu" },
   {
-    label: "Compras",
-    path: "/compras",
-    icon: FaMoneyBillWave,
-    group: "Gestión de Compras",
-    permission:"verComprasMenu"
-  },
-  {
-    label: "Productos",
-    path: "/productos",
-    icon: FaCube,
-    group: "Gestión de Compras",
-    permission:"verProductosMenu"
-  },
-  {
-    label: "Insumos",
-    path: "/insumos",
-    icon: FaBoxes,
-    group: "Gestión de Compras",
-    permission:"verInsumosMenu"
-  },
-  {
-    label: "Proveedores",
-    path: "/proveedores",
-    icon: FaTruck,
-    group: "Gestión de Compras",
-    permission:"verProveedoresMenu"
-  },
-  {
-    label: "Categoría Productos",
+    label: "Categorías de productos",
     path: "/categoriaProductos",
-    icon: FaTags,
-    group: "Gestión de Compras",
-    permission:"verCategoriaProductosMenu"
+    icon: Tags,
+    group: "Inventario",
+    permission: "verCategoriaProductosMenu",
   },
-  {
-    label: "Baja de Productos",
-    path: "/baja-producto",
-    icon: FaClipboardList,
-    group: "Gestión de Compras",
-    permission:"verBajaProductoMenu"
-  },
+  { label: "Insumos", path: "/insumos", icon: Boxes, group: "Inventario", permission: "verInsumosMenu" },
+  { label: "Bajas", path: "/baja-producto", icon: PackageMinus, group: "Inventario", permission: "verBajaProductoMenu" },
+  { label: "Compras", path: "/compras", icon: ShoppingBag, group: "Inventario", permission: "verComprasMenu" },
+  { label: "Proveedores", path: "/proveedores", icon: Truck, group: "Inventario", permission: "verProveedoresMenu" },
 
-  // Configuración
-  {
-    label: "Roles",
-    path: "/roles",
-    icon: FaUserShield,
-    group: "Configuración",
-    permission:"visualizarRolesMenu"
-  },
-  {
-    label: "Permisos",
-    path: "/permisos",
-    icon: FaUserLock,
-    group: "Configuración",
-    permission:"verPermisosMenu"
-  },
-  {
-    label: "Usuarios",
-    path: "/usuarios",
-    icon: FaUsers,
-    group: "Configuración",
-    permission:"verUsuariosMenu"
-    
-  }
+  { label: "Usuarios", path: "/usuarios", icon: UserCog, group: "Configuración", permission: "verUsuariosMenu" },
+  { label: "Roles", path: "/roles", icon: ShieldCheck, group: "Configuración", permission: "visualizarRolesMenu" },
+  { label: "Permisos", path: "/permisos", icon: KeyRound, group: "Configuración", permission: "verPermisosMenu" },
 ]

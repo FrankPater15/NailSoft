@@ -88,74 +88,6 @@ export default function Login() {
     };
   }, []);
 
-//   const handleLogin = async (e) => {
-//     e.preventDefault();
-//     setLoading(true);
-//     setError("");
-
-//     try {
-//       const response = await axios.post(
-//         `${import.meta.env.VITE_BACKEND_URL}/api/auth/login`,
-//         { email, password }
-//       );
-//       const { token, role, user } = response.data;
-//       const  permisos = user.permisos || []; // Asegúrate de que permisos sea un array
-
-//       if (!token || !role || !user) {
-//         throw new Error("Token, role, or user missing from response");
-//       }
-
-//       login({
-//         token,
-//         role,
-//         _id: user.id || user._id, // asegúrate de usar el campo correcto del backend
-//         nombre: user.name, // o user.nombre, si tu backend devuelve ese campo
-//         correo: user.email, // o user.correo, si tu backend devuelve ese campo
-//         permisos
-//       });
-// console.log("Permisos recibidos:", permisos);
-
-//       // localStorage.setItem("token", token);
-//       // localStorage.setItem("userRole", role.toLowerCase());
-//       // localStorage.setItem("userId", user.id);
-
-//       // Redirigir según el rol del usuario
-//       if (role.toLowerCase() === "admin") {
-//         navigate("/dashboard");
-//       } else {
-//         navigate("/");
-//       }
-//     } catch (error) {
-//       console.error("Error de login:", error);
-
-//       // Verificar si el error es por cuenta inactiva
-//       if (error.response?.data?.cuentaInactiva) {
-//         Swal.fire({
-//           icon: "error",
-//           title: "Cuenta inactiva",
-//           text: "Tu cuenta ha sido desactivada. Por favor, contacta al administrador para reactivarla.",
-//           confirmButtonText: "Entendido",
-//         });
-//       }
-//       // Verificar si el error es por rol desactivado
-//       else if (error.response?.data?.rolDesactivado) {
-//         Swal.fire({
-//           icon: "error",
-//           title: "Acceso denegado",
-//           text: "Tu rol ha sido desactivado. Contacta al administrador.",
-//           confirmButtonText: "Entendido",
-//         });
-//       } else {
-//         setError(
-//           error.response?.data?.message ||
-//             "Credenciales inválidas. Por favor, intente de nuevo."
-//         );
-//       }
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
 const handleLogin = async (e) => {
   e.preventDefault();
   setLoading(true);
@@ -166,9 +98,7 @@ const handleLogin = async (e) => {
       `${import.meta.env.VITE_BACKEND_URL}/api/auth/login`,
       { email, password }
     );
-//  console.log("Respuesta completa del backend:", response.data); // 👈 Verifica esto
     const { token, role, permisos,user } = response.data;
-    // const permisos = user.permisos || [];
 
     if (!token || !role || !user) {
       throw new Error("Token, role, or user missing from response");
@@ -183,10 +113,6 @@ const handleLogin = async (e) => {
       correo: user.email || user.correo,
       permisos: permisos || [], // Asegúrate de que permisos sea un array
     });
-
-    // console.log("Permisos recibidos:", permisos);
-
-   
 
     // Redirigir según el rol
     if (role.toLowerCase() !== "cliente") {
@@ -221,7 +147,6 @@ const handleLogin = async (e) => {
     setLoading(false);
   }
 };
-
 
   return (
     <div className="login-container" ref={loginContainerRef}>

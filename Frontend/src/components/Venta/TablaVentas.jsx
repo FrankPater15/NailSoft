@@ -50,7 +50,6 @@ const TablaVentas = () => {
           },
         }
       );
-      // console.log("Ventas obtenidas:", response.data.ventas?.length || 0);
       setVentas(response.data.ventas || []);
     } catch (error) {
       console.error("Error al obtener las ventas:", error);
@@ -373,8 +372,6 @@ const TablaVentas = () => {
 
       if (response.data && response.data.venta) {
         const ventaCompleta = response.data.venta;
-// console.log("Fecha cruda de cita:", ventaCompleta?.cita?.fechacita);
-        // Procesar servicios para asegurar que la información de descuento esté correcta
         if (ventaCompleta.servicios && ventaCompleta.servicios.length > 0) {
           try {
             // Intentar obtener servicios con descuentos
@@ -544,7 +541,6 @@ const TablaVentas = () => {
     )
   );
 };
-
 
   // Paginación
   const indiceUltimaVenta = paginaActual * ventasPorPagina;
@@ -799,9 +795,6 @@ const TablaVentas = () => {
                 {index + 1}
               </button>
             ))} */}
-
-           
-          
 
           <button
             onClick={paginaSiguiente}

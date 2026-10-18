@@ -67,11 +67,6 @@ const TablaCitas = () => {
 
   // Función mejorada para calcular precios con descuentos
   const calcularPreciosConDescuento = (cita) => {
-    // console.log("🔍 Calculando precios para cita:", cita._id, {
-    //   servicios: cita.servicios,
-    //   montototal: cita.montototal,
-    //   descuentoGeneral: cita.descuentoGeneral,
-    // })
 
     const servicios = cita.servicios || []
     let subtotal = 0
@@ -80,14 +75,6 @@ const TablaCitas = () => {
 
     // Calcular precios de servicios
     servicios.forEach((servicio, index) => {
-      // console.log(`Servicio ${index + 1}:`, {
-      //   nombre: servicio.nombreServicio || servicio.nombreservicio,
-      //   precio: servicio.precio,
-      //   descuento: servicio.descuento,
-      //   tieneDescuento: servicio.tieneDescuento,
-      //   precioConDescuento: servicio.precioConDescuento,
-      //   precioOriginal: servicio.precioOriginal,
-      // })
 
       const precioBase = Number.parseFloat(servicio.precio) || 0
       subtotal += precioBase
@@ -100,7 +87,6 @@ const TablaCitas = () => {
       if (servicio.precioConDescuento !== undefined && servicio.precioConDescuento !== null) {
         precioFinal = Number.parseFloat(servicio.precioConDescuento)
         descuentoServicio = precioBase - precioFinal
-        // console.log(`  -> Precio con descuento detectado: ${precioFinal}, descuento: ${descuentoServicio}`)
       }
       // Caso 2: Servicio con porcentaje de descuento
       else if (servicio.descuento && Number.parseFloat(servicio.descuento) > 0) {

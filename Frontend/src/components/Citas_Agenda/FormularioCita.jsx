@@ -449,7 +449,6 @@ export default function FormularioCita({ cita, fechaSeleccionada, servicioSelecc
   useEffect(() => {
     // Si tenemos fecha y empleado al cargar el componente, actualizar horarios disponibles
     if (formData.fechacita && formData.nombreempleado && isLoading === false) {
-      // console.log("Cargando horarios disponibles iniciales")
       actualizarHorariosDisponibles(new Date(formData.fechacita), formData.nombreempleado)
     }
   }, [isLoading, formData.fechacita, formData.nombreempleado, actualizarHorariosDisponibles]) // Solo se ejecuta cuando cambia isLoading (cuando termina de cargar)
@@ -625,7 +624,6 @@ export default function FormularioCita({ cita, fechaSeleccionada, servicioSelecc
 
       if (cita) {
         const response = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/citas/${cita._id}`, dataToSend, { headers })
-        // console.log("RESPUESTA DEL SERVIDOR (ACTUALIZACIÓN):", response.data)
         Swal.fire({
           title: "¡Éxito!",
           text: "Cita actualizada correctamente",
@@ -634,7 +632,6 @@ export default function FormularioCita({ cita, fechaSeleccionada, servicioSelecc
         })
       } else {
         const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/citas`, dataToSend, { headers })
-        // console.log("RESPUESTA DEL SERVIDOR (CREACIÓN):", response.data)
         Swal.fire({
           title: "¡Éxito!",
           text: "Cita creada correctamente",
