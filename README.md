@@ -1,22 +1,10 @@
 # NailSoft — Sistema de gestión para el Spa "S&B"
 
-[![Ver en Firebase](https://img.shields.io/badge/Ver%20App%20en-Firebase-orange?style=for-the-badge&logo=firebase)](https://nailsoft-7d03c.web.app/login)
-
 NailSoft es un sistema web y móvil para gestionar un spa de diseño de uñas: agendamiento de citas con varios servicios, registro de ventas, compras de insumos y reportes, con permisos dinámicos por rol.
 
-Proyecto formativo del **SENA** (Tecnólogo en Análisis y Desarrollo de Software), desarrollado entre febrero y junio de 2025.
+Nació como proyecto formativo del **SENA** (Tecnólogo en Análisis y Desarrollo de Software), desarrollado en equipo entre febrero y junio de 2025. Desde 2026 lo continúo como proyecto personal.
 
-![Logo NailSoft](https://gitbf.onrender.com/uploads/SPA%20Y%20BELLEZA%20MARCA%20DE%20AGUA%20DISTINTA.png)
-
-## Probar la aplicación
-
-Entra a la [aplicación web](https://nailsoft-7d03c.web.app/login) con la cuenta de prueba de administrador:
-
-| Usuario | Contraseña |
-|---------|------------|
-| test@gmail.com | Test123! |
-
-> El backend está en el plan gratuito de Render, que se suspende cuando nadie lo usa. La primera carga puede tardar unos 30 segundos; después responde normal.
+![Logo NailSoft](Backend/uploads/SPA%20Y%20BELLEZA%20MARCA%20DE%20AGUA%20DISTINTA.png)
 
 ## Equipo
 
@@ -55,13 +43,13 @@ Entra a la [aplicación web](https://nailsoft-7d03c.web.app/login) con la cuenta
 ### Requisitos
 
 - Node.js 18 o superior
-- Una base de datos MongoDB (local o Atlas)
+- MongoDB local (en Windows: `winget install MongoDB.Server`) o un clúster de Atlas
 
 ### 1. Clonar el repositorio
 
 ```bash
-git clone https://github.com/IHomoSapienI/ProyectoNailSoft.git
-cd ProyectoNailSoft
+git clone https://github.com/FrankPater15/NailSoft.git
+cd NailSoft
 ```
 
 ### 2. Backend
@@ -69,16 +57,20 @@ cd ProyectoNailSoft
 ```bash
 cd Backend
 npm install
-cp .env.example .env   # luego llena los valores del .env
-node index.js          # la API queda en http://localhost:3000
+cp .env.example .env   # llena JWT_SECRET y, si quieres recuperar contraseñas, los datos del correo
+npm run seed           # crea permisos, roles y el usuario administrador
+npm run dev            # la API queda en http://localhost:3000 y se recarga al guardar
 ```
+
+El seed crea el administrador `admin@nailsoft.local` con contraseña `Admin123!`. Puedes cambiarlos con las variables `SEED_ADMIN_EMAIL` y `SEED_ADMIN_PASSWORD` antes de correrlo.
 
 ### 3. Frontend
 
 ```bash
 cd Frontend
 npm install
-npm run dev
+cp .env.example .env   # VITE_BACKEND_URL apunta al backend (http://localhost:3000)
+npm run dev            # http://localhost:5173
 ```
 
 ### 4. Pruebas del backend
@@ -90,7 +82,7 @@ npm test
 
 ## Estado del proyecto
 
-Versión 1.0.0 — proyecto finalizado (SENA, 2025).
+Versión 1.0.0 entregada al SENA en 2025; en desarrollo como proyecto personal.
 
 ## Galería
 

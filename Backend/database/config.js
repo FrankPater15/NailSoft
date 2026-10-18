@@ -1,13 +1,13 @@
 const mongoose = require('mongoose')
 
-const dbConnection = () => {
+const dbConnection = async () => {
     try{
-        mongoose.connect(process.env.MONGODB_CNN)
+        await mongoose.connect(process.env.MONGODB_CNN)
         console.log('Datos en Linea')
     }
     catch(error){
-        console.log(error)
-        throw new('Error al conectarse a la base de datos')
+        console.error('Error al conectarse a la base de datos:', error.message)
+        process.exit(1)
     }
 }
 
