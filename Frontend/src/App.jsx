@@ -10,6 +10,8 @@ import MainLayout from "./components/Sidebar/MainLayout"
 import ClientDashboard from "./components/Clientes/client-dashboard"
 import Sidebar from "./components/Sidebar/Sidebar"
 import Navbar from "./components/NavBars/Navbar"
+import { FaWhatsapp } from "react-icons/fa"
+import { enlaceWhatsapp } from "./config/contacto"
 import Footer from "./components/Footer/Footer"
 import { useLayoutType } from "./hooks/useLayoutType"
 import Unauthorized from "./components/Unauthorized"
@@ -102,61 +104,35 @@ const PrivateRoute = ({ children, requiredPermissions = [], allowedRoles = [] })
   return children
 }
 
-// Layout dinámico basado en permisos
+// Layout dinámico basado en permisos: panel con menú lateral para el personal,
+// barra pública y pie de página para clientes y visitantes
 const Layout = ({ children }) => {
-  const { shouldShowSidebar, isClient } = useLayoutType()
+  const { shouldShowSidebar } = useLayoutType()
+
+  if (shouldShowSidebar) {
+    return (
+      <div className="admin-layout">
+        <Sidebar />
+        <MainLayout>{children}</MainLayout>
+      </div>
+    )
+  }
 
   return (
-    <div className="min-h-screen bg-gray-10">
-      {shouldShowSidebar ? (
-        // Layout administrativo: Sidebar + MainLayout (que incluye DashboardNavbar)
-        <div className="admin-layout">
-          <Sidebar />
-          <MainLayout>{children}</MainLayout>
-        </div>
-      ) : (
-        // Layout de cliente: Navbar + contenido + Footer
-<div className="client-layout flex flex-col min-h-screen overflow-x-hidden">
-  <Navbar />
-  <main className="flex-grow">
-    {children}
-  </main>
-  <Footer />
-</div>
-
-      )}
-
-      {/* Botones de redes sociales solo para la vista del cliente */}
-      {isClient && (
-        <>
-          <a
-            href="https://wa.me/3015789978?text=Quisiera realizar una reserva y poner magia en mis uñas"
-            className="fixed bottom-5 right-5 p-2 rounded-full shadow-lg transition duration-300 z-50"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img
-              data-ripple-light="true"
-              data-tooltip-target="tooltip"
-              src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
-              alt="WhatsApp"
-              className="w-12 h-12"
-            />
-          </a>
-          <a
-            href="https://www.instagram.com/belleza_spacol/"
-            className="fixed bottom-5 left-5 p-2 rounded-full shadow-lg transition duration-300 z-50"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img
-              src="Instagram_icon.webp"
-              alt="Instagram"
-              className="w-12 h-12"
-            />
-          </a>
-        </>
-      )}
+    <div className="client-layout flex min-h-screen flex-col overflow-x-hidden">
+      <Navbar />
+      <main className="flex-grow">{children}</main>
+      <Footer />
+      <a
+        href={enlaceWhatsapp()}
+        className="boton-whatsapp"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Escribir por WhatsApp"
+      >
+        <FaWhatsapp size={22} aria-hidden="true" />
+        <span>WhatsApp</span>
+      </a>
     </div>
   )
 }

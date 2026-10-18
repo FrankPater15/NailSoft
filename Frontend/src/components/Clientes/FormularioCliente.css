@@ -9,20 +9,7 @@
   overflow-x: hidden;
 }
 
-.form-group {
-  margin-bottom: 1.5rem;
-}
-
-.form-label {
-  display: block;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: rgb(var(--c-info));
-  margin-bottom: 0.5rem;
-}
-
 .form-input,
-.form-select,
 .form-textarea {
   width: 100%;
   padding: 0.75rem;
@@ -35,7 +22,6 @@
 }
 
 .form-input:focus,
-.form-select:focus,
 .form-textarea:focus {
   outline: none;
   border-color: rgb(var(--c-primary));
@@ -51,71 +37,6 @@
 .form-textarea {
   min-height: 100px;
   resize: vertical;
-}
-
-.form-select {
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='currentColor'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd' /%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 0.75rem center;
-  background-size: 1.5em 1.5em;
-  padding-right: 2.5rem;
-}
-
-.btn-primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.75rem 1.5rem;
-  background-color: rgb(var(--c-primary));
-  color: white;
-  font-weight: 500;
-  border-radius: 0.5rem;
-  border: none;
-  transition: all 0.2s ease;
-  cursor: pointer;
-}
-
-.btn-primary:hover {
-  background-color: rgb(var(--c-primary));
-}
-
-.btn-primary:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgb(var(--berry-600) / 0.24);
-}
-
-.btn-primary:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-.btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.75rem 1.5rem;
-  background-color: rgb(var(--c-surface-2));
-  color: rgb(var(--c-ink));
-  font-weight: 500;
-  border-radius: 0.5rem;
-  border: 1px solid rgb(var(--c-line));
-  transition: all 0.2s ease;
-  cursor: pointer;
-}
-
-.btn-secondary:hover {
-  background-color: rgb(var(--c-surface-2));
-}
-
-.btn-secondary:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgb(36 26 33 / 0.12);
-}
-
-.btn-secondary:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
 }
 
 /* Animaciones */

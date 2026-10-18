@@ -97,8 +97,6 @@
 /* Botón con efecto de línea animada */
 .btn-edit-1,
 .btn-delete-1,
-.btn-info,
-.btn-success,
 .btn-toggle-1 {
   position: relative;
   overflow: hidden;
@@ -108,8 +106,6 @@
 /* Efecto de línea animada que funciona con cualquier color de fondo */
 .btn-edit-1::before,
 .btn-delete-1::before,
-.btn-info::before,
-.btn-success::before,
 .btn-toggle-1::before {
   content: "";
   position: absolute;
@@ -125,8 +121,6 @@
 
 .btn-edit-1:hover::before,
 .btn-delete-1:hover::before,
-.btn-info:hover::before,
-.btn-success:hover::before,
 .btn-toggle-1:hover::before {
   left: 100%;
   transition: all 0.5s ease;
@@ -330,16 +324,6 @@
   }
   
   /* Formulario */
-  .form-group {
-    margin-bottom: 16px;
-  }
-  
-  .form-label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 500;
-    color: rgb(var(--c-info));
-  }
   
   .form-input {
     width: 100%;
@@ -361,37 +345,6 @@
   }
   
   /* Botones del formulario */
-  .btn-primary {
-    background-color: rgb(var(--c-primary));
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 8px 10px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  
-  .btn-primary:hover {
-    background-color: rgb(var(--c-primary));
-  }
-  
-  .btn-secondary {
-    background-color: #6b7280;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 8px 16px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  
-  .btn-secondary:hover {
-    background-color: #4b5563;
-  }
   
   /* Responsive */
   @media (max-width: 768px) {

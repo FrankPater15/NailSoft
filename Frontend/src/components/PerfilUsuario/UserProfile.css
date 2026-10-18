@@ -177,12 +177,6 @@
   gap: 1.25rem;
 }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
 .form-group label {
   display: flex;
   align-items: center;
@@ -197,7 +191,6 @@
 }
 
 .form-input,
-.form-select,
 .form-textarea {
   padding: 0.75rem;
   border: 1px solid rgb(var(--c-line));
@@ -207,7 +200,6 @@
 }
 
 .form-input:focus,
-.form-select:focus,
 .form-textarea:focus {
   outline: none;
   border-color: rgb(var(--c-primary));

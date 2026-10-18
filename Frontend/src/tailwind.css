@@ -243,7 +243,7 @@
 
   /* Forma de uña almendrada: el elemento distintivo del sistema */
   .forma-una {
-    border-radius: 50% 50% 46% 46% / 62% 62% 38% 38%;
+    border-radius: 50% 50% 40% 40% / 66% 66% 20% 20%;
   }
 
   /* Indicador de estado con forma de uña */
@@ -251,7 +251,7 @@
     display: inline-block;
     width: 0.6rem;
     height: 0.8rem;
-    border-radius: 50% 50% 46% 46% / 62% 62% 38% 38%;
+    border-radius: 50% 50% 40% 40% / 66% 66% 20% 20%;
     background: currentColor;
     box-shadow: inset -1.5px -2px 0 rgb(0 0 0 / 0.12), inset 1.5px 1.5px 0 rgb(255 255 255 / 0.35);
     flex-shrink: 0;

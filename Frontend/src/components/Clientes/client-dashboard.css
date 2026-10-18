@@ -343,15 +343,6 @@
 }
 
 /* Badges para servicios recomendados */
-.badge {
-  display: inline-block;
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
 
 .badge-new {
   background-color: rgb(var(--c-info));
@@ -491,22 +482,6 @@
 }
 
 /* Botones */
-.btn-primary {
-  background: var(--gradient-primary);
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: var(--border-radius-md);
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition-normal);
-  box-shadow: var(--shadow-sm);
-}
-
-.btn-primary:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
-}
 
 .btn-outline {
   background: transparent;
@@ -525,16 +500,6 @@
 }
 
 /* Tarjetas */
-.card {
-  background-color: white;
-  border-radius: var(--border-radius-md);
-  box-shadow: var(--shadow-sm);
-  transition: var(--transition-normal);
-}
-
-.card:hover {
-  box-shadow: var(--shadow-md);
-}
 
 /* Avatar */
 .avatar-circle {

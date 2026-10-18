@@ -89,6 +89,12 @@
 | DELETE | `/api/servicios/:id`               | `eliminarServicios`   | Eliminar un servicio                                                      |
 | PATCH  | `/api/servicios/:id/toggle-estado` | `actualizarServicios` | Cambiar el estado de un servicio (activar/desactivar)                     |
 
+### catalogo
+
+| Método | Ruta            | Acceso  | Descripción                                                                                        |
+| ------ | --------------- | ------- | -------------------------------------------------------------------------------------------------- |
+| GET    | `/api/catalogo` | Público | Carta pública de servicios: solo los activos, con su categoría y la promoción vigente (sin sesión) |
+
 ### insumos
 
 | Método | Ruta                                 | Acceso                               | Descripción                                       |

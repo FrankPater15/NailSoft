@@ -113,7 +113,7 @@
   left: -0.5rem;
   width: 0.4375rem;
   height: 0.75rem;
-  border-radius: 50% 50% 46% 46% / 62% 62% 38% 38%;
+  border-radius: 50% 50% 40% 40% / 66% 66% 20% 20%;
   background: rgb(var(--c-primary));
 }
 .menu-icon {

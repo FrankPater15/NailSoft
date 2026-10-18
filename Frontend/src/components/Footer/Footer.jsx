@@ -1,171 +1,43 @@
 "use client"
-import { motion } from "framer-motion"
+
 import { Link } from "react-router-dom"
-import { FaInstagram, FaFacebookF, FaTwitter, FaPhone, FaEnvelope, FaMapMarkerAlt, FaHeart } from "react-icons/fa"
-import { useSidebar } from "../Sidebar/Sidebar"
+import { FaInstagram, FaWhatsapp } from "react-icons/fa"
 import { useLayoutType } from "../../hooks/useLayoutType"
+import { CONTACTO, enlaceInstagram, enlaceWhatsapp } from "../../config/contacto"
 import "./footer.css"
 
 const Footer = () => {
-  const { shouldShowSidebar, isClient } = useLayoutType()
-  const { isCollapsed } = useSidebar()
+  const { shouldShowSidebar } = useLayoutType()
 
   // El panel administrativo no lleva pie de página
   if (shouldShowSidebar) return null
 
-  // Footer completo para clientes y usuarios sin permisos administrativos
   return (
-    <footer className="main-footer">
-      <div className="footer-background">
-        {[...Array(5)].map((_, i) => (
-          <div
-            key={i}
-            className="footer-bubble"
-            style={{
-              left: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 2}s`,
-            }}
-          />
-        ))}
-      </div>
-
-      <div className="footer-content">
-        <div className="footer-grid">
-          {/* Logo y Descripción */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="footer-section"
-          >
-            <img src={`${import.meta.env.VITE_BACKEND_URL}/uploads/Logo1_Fotter.webp`} alt="NailsSoft Logo" className="footer-logo" />
-            <h2 className="footer-brand">NailsSoft</h2>
-            <p className="footer-description">
-              Transformando la gestión de salones de belleza con tecnología innovadora y experiencias únicas.
-            </p>
-            <div className="social-links">
-              <motion.a
-                href="https://instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                className="social-link"
-              >
-                <FaInstagram />
-              </motion.a>
-              <motion.a
-                href="https://facebook.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                className="social-link"
-              >
-                <FaFacebookF />
-              </motion.a>
-              <motion.a
-                href="https://twitter.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                className="social-link"
-              >
-                <FaTwitter />
-              </motion.a>
-            </div>
-          </motion.div>
-
-          {/* Enlaces Rápidos */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="footer-section"
-          >
-            <h3 className="footer-title">Enlaces Rápidos</h3>
-            <ul className="footer-links">
-              <motion.li whileHover={{ x: 5 }}>
-                <Link to="/servicios">Nuestros Servicios</Link>
-              </motion.li>
-              <motion.li whileHover={{ x: 5 }}>
-                <Link to="/citas">Reservar Cita</Link>
-              </motion.li>
-              <motion.li whileHover={{ x: 5 }}>
-                <Link to="/productos">Productos</Link>
-              </motion.li>
-              <motion.li whileHover={{ x: 5 }}>
-                <Link to="/blog">Blog de Belleza</Link>
-              </motion.li>
-            </ul>
-          </motion.div>
-
-          {/* Servicios */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="footer-section"
-          >
-            <h3 className="footer-title">Nuestros Servicios</h3>
-            <ul className="footer-links">
-              <motion.li whileHover={{ x: 5 }}>
-                <Link to="/manicure">Manicure</Link>
-              </motion.li>
-              <motion.li whileHover={{ x: 5 }}>
-                <Link to="/pedicure">Pedicure</Link>
-              </motion.li>
-              <motion.li whileHover={{ x: 5 }}>
-                <Link to="/tratamientos">Tratamientos</Link>
-              </motion.li>
-              <motion.li whileHover={{ x: 5 }}>
-                <Link to="/especiales">Servicios Especiales</Link>
-              </motion.li>
-            </ul>
-          </motion.div>
-
-          {/* Contacto */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
-            className="footer-section"
-          >
-            <h3 className="footer-title">Contacto</h3>
-            <ul className="contact-info">
-              <motion.li whileHover={{ scale: 1.02 }}>
-                <FaPhone className="contact-icon" />
-                <span>(123) 456-7890</span>
-              </motion.li>
-              <motion.li whileHover={{ scale: 1.02 }}>
-                <FaEnvelope className="contact-icon" />
-                <span>contacto@nailssoft.com</span>
-              </motion.li>
-              <motion.li whileHover={{ scale: 1.02 }}>
-                <FaMapMarkerAlt className="contact-icon" />
-                <span>Calle 123, Medellín, Colombia</span>
-              </motion.li>
-            </ul>
-          </motion.div>
+    <footer className="pie">
+      <div className="pie-interior">
+        <div className="pie-marca">
+          <Link to="/" className="pie-logo font-marca">
+            NailSoft
+          </Link>
+          <p>{CONTACTO.nombre}. Manicure, pedicure y uñas esculpidas con cita.</p>
         </div>
 
-        {/* Copyright */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.8 }}
-          className="footer-bottom"
-        >
-          <div className="copyright">
-            <p>© {new Date().getFullYear()} NailsSoft. Todos los derechos reservados.</p>
-          </div>
-          <div className="footer-legal">
-            <Link to="/privacidad">Política de Privacidad</Link>
-            <Link to="/terminos">Términos de Servicio</Link>
-          </div>
-        </motion.div>
+        <nav className="pie-columna" aria-label="Enlaces">
+          <Link to="/#servicios">Servicios y precios</Link>
+          <Link to="/seleccionarservicios">Reservar cita</Link>
+          <Link to="/politicas">Políticas del spa</Link>
+        </nav>
+
+        <div className="pie-columna">
+          <a href={enlaceWhatsapp()} target="_blank" rel="noopener noreferrer">
+            <FaWhatsapp aria-hidden="true" /> WhatsApp
+          </a>
+          <a href={enlaceInstagram()} target="_blank" rel="noopener noreferrer">
+            <FaInstagram aria-hidden="true" /> @{CONTACTO.instagram}
+          </a>
+        </div>
       </div>
+      <p className="pie-legal">© {new Date().getFullYear()} {CONTACTO.nombre}</p>
     </footer>
   )
 }

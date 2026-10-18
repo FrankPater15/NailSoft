@@ -20,6 +20,32 @@ const serviciosGet = async (req, res = response) => {
   }
 };
 
+// Carta pública de servicios: solo los activos, con su categoría y la promoción vigente (sin sesión)
+const catalogoPublico = async (req, res = response) => {
+  try {
+    const servicios = await Servicio.find({ estado: true })
+      .select("nombreServicio descripcion precio tiempo imagenUrl tipoServicio tipoServicio2")
+      .populate("tipoServicio", "nombreTs descuento esPromocional activo")
+      .populate("tipoServicio2", "nombreTipoServicio activo")
+      .sort({ precio: 1 })
+      .lean();
+
+    res.json({
+      servicios: servicios.map(({ tipoServicio, tipoServicio2, ...servicio }) => {
+        const descuento = tipoServicio?.activo !== false ? tipoServicio?.descuento || 0 : 0;
+        return {
+          ...servicio,
+          categoria: tipoServicio2?.activo !== false ? tipoServicio2?.nombreTipoServicio || null : null,
+          promocion: descuento > 0 ? { nombre: tipoServicio.nombreTs, descuento } : null,
+          precioFinal: Math.round(servicio.precio * (1 - descuento / 100)),
+        };
+      }),
+    });
+  } catch (error) {
+    responderError(res, error, "Error al obtener el catálogo");
+  }
+};
+
 // Validar que el nombre del servicio no esté duplicado
 const validarNombreServicio = async (req, res) => {
   try {
@@ -312,6 +338,7 @@ const serviciosToggleEstado = async (req, res = response) => {
 
 module.exports = {
   serviciosGet,
+  catalogoPublico,
   serviciosPost,
   serviciosPut,
   serviciosDelete,

@@ -17,6 +17,7 @@ const RUTAS = [
   ["/api/tiposervicios", require("../routes/tiposervs")],
   ["/api/tiposervicioss", require("../routes/tiposervicioss")],
   ["/api/servicios", require("../routes/servicios")],
+  ["/api/catalogo", require("../routes/catalogo")],
   ["/api/insumos", require("../routes/insumos")],
   ["/api/empleados", require("../routes/empleados")],
   ["/api/clientes", require("../routes/clientes")],

@@ -40,9 +40,38 @@ const todasLasRutas = RUTAS.flatMap(([prefijo, router]) =>
       ]),
     ),
 );
-const RUTAS_PUBLICAS = ["login", "register", "request-password-reset", "verify-reset-token", "reset-password"].map(
-  (ruta) => `/api/auth/${ruta}`,
-);
+const RUTAS_PUBLICAS = [
+  ...["login", "register", "request-password-reset", "verify-reset-token", "reset-password"].map(
+    (ruta) => `/api/auth/${ruta}`,
+  ),
+  "/api/catalogo", // carta pública de servicios (solo lectura)
+];
+
+describe("catálogo público", () => {
+  it("muestra solo servicios activos y sin datos internos", async () => {
+    const Servicio = require("../modules/servicio");
+    const inactivo = await Servicio.findOneAndUpdate({}, { estado: false }, { new: true });
+    const res = await request(app).get("/api/catalogo");
+    await Servicio.updateOne({ _id: inactivo._id }, { estado: true });
+
+    expect(res.status).toBe(200);
+    expect(res.body.servicios.length).toBeGreaterThan(0);
+    expect(res.body.servicios.some((s) => String(s._id) === String(inactivo._id))).toBe(false);
+    expect(Object.keys(res.body.servicios[0]).sort()).toEqual(
+      [
+        "_id",
+        "categoria",
+        "descripcion",
+        "imagenUrl",
+        "nombreServicio",
+        "precio",
+        "precioFinal",
+        "promocion",
+        "tiempo",
+      ].sort(),
+    );
+  });
+});
 
 describe("sin iniciar sesión", () => {
   const protegidas = todasLasRutas.filter(([, ruta]) => !RUTAS_PUBLICAS.includes(ruta));
