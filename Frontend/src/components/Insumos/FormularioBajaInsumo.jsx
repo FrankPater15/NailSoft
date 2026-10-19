@@ -151,7 +151,7 @@ const FormularioBajaInsumo = ({ insumo, onClose, onSubmit }) => {
   const stockRestante = (insumo?.stock || 0) - Number(formData.cantidad || 0)
 
   return (
-    <div className="p-6 w-full mx-auto" style={{ maxWidth: "90%", minWidth: "600px" }}>
+    <div className="p-6 w-full mx-auto">
       <h2 className="text-2xl font-semibold mb-6 text-center text-pink-600">
         <FontAwesomeIcon icon={faExclamationTriangle} className="mr-2" />
         Dar de Baja Insumo

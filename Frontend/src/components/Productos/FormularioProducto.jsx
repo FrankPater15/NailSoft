@@ -329,7 +329,7 @@ const FormularioProducto = ({ producto, onClose, onProductoActualizado }) => {
   }
 
   return (
-    <div className="p-6 w-full mx-auto" style={{ maxWidth: "95%", minWidth: "900px" }}>
+    <div className="p-6 w-full mx-auto">
       <h2 className="text-2xl font-semibold mb-6 text-center text-pink-600">
         <FontAwesomeIcon icon={faBox} className="mr-2" />
         {producto ? "Editar Producto" : "Nuevo Producto"}

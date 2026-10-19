@@ -440,10 +440,12 @@ const FormularioServicio = ({
             ))}
           </select>
 
-          <span>Tipo de Servicio</span>{" "}
+          <label htmlFor="tipoServicio2" className="form-label flex items-center mt-4">
+            <span>Tipo de Servicio</span>{" "}
             <span className="text-pink-500 ml-1">*</span>
+          </label>
           <select
-          id="tipoServicio"
+            id="tipoServicio2"
             name="tipoServicio2"
             value={formData.tipoServicio2}
             onChange={manejarCambioTipoServicio2}

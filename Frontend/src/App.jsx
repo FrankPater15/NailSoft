@@ -24,7 +24,7 @@ const TablaUsuarios = lazy(() => import("./components/Usuarios/TablaUsuarios"))
 const UserProfile = lazy(() => import("./components/PerfilUsuario/UserProfile"))
 const TablaVentas = lazy(() => import("./components/Venta/TablaVentas"))
 const GestionVentaServicio = lazy(() => import("./components/VentaServicios/GestionVentaServicio"))
-const CitasEnProgreso = lazy(() => import("./components/Citas_Agenda/CitasEnProgreso"))
+const EnAtencion = lazy(() => import("./components/Citas_Agenda/EnAtencion"))
 const AgendaEmpleado = lazy(() => import("./components/Citas_Agenda/AgendaEmpleado"))
 const ArticlesGrid = lazy(() => import("./components/Galeria/ArticlesGrid"))
 const Reservar = lazy(() => import("./components/Reservar/Reservar"))
@@ -63,7 +63,8 @@ axios.interceptors.request.use(
 )
 
 // Componente para rutas protegidas basado en permisos
-const PrivateRoute = ({ children, requiredPermissions = [], allowedRoles = [] }) => {
+// Exige sesión y, si se indican, al menos uno de los permisos (nunca nombres de rol)
+const PrivateRoute = ({ children, requiredPermissions = [] }) => {
   const { user, loading } = useAuth()
   const { hasPermission } = usePermissions()
 
@@ -79,7 +80,6 @@ const PrivateRoute = ({ children, requiredPermissions = [], allowedRoles = [] })
   }
 
   const isAuthenticated = Boolean(user?.token)
-  const userRole = user?.rol || user?.role
 
   if (!isAuthenticated) {
     return <Navigate to="/login" />
@@ -90,13 +90,6 @@ const PrivateRoute = ({ children, requiredPermissions = [], allowedRoles = [] })
     const hasRequiredPermission = requiredPermissions.some((permission) => hasPermission(permission))
 
     if (!hasRequiredPermission) {
-      return <Navigate to="/unauthorized" />
-    }
-  }
-
-  // Verificar roles como fallback si se especifican
-  if (allowedRoles.length > 0 && userRole) {
-    if (!allowedRoles.includes(userRole.toLowerCase())) {
       return <Navigate to="/unauthorized" />
     }
   }
@@ -200,7 +193,7 @@ function App() {
             <Route
               path="/mi-cuenta"
               element={
-                <PrivateRoute allowedRoles={["cliente"]}>
+                <PrivateRoute requiredPermissions={["verCitasPropias", "verCitas"]}>
                   <Layout>
                     <ClientDashboard />
                   </Layout>
@@ -291,7 +284,7 @@ function App() {
               element={
                 <PrivateRoute requiredPermissions={["visualizarCitaEnProgresoMenu"]}>
                   <Layout>
-                    <CitasEnProgreso />
+                    <EnAtencion />
                   </Layout>
                 </PrivateRoute>
               }
@@ -322,7 +315,7 @@ function App() {
             <Route
               path="/politicas"
               element={
-                <PrivateRoute allowedRoles={["admin", "usuario", "cliente", "empleado"]}>
+                <PrivateRoute>
                   <Layout>
                     <Politicas />
                   </Layout>
@@ -402,7 +395,7 @@ function App() {
             <Route
               path="/seleccionarservicios"
               element={
-                <PrivateRoute allowedRoles={["admin", "cliente", "usuario"]}>
+                <PrivateRoute requiredPermissions={["crearCitasPropias", "crearCitas"]}>
                   <Layout>
                     <Reservar />
                   </Layout>
@@ -452,7 +445,7 @@ function App() {
             <Route
               path="/gestion-venta/:id"
               element={
-                <PrivateRoute allowedRoles={["admin", "empleado"]}>
+                <PrivateRoute requiredPermissions={["crearVentas", "actualizarVentas", "actualizarVentasPropias"]}>
                   <Layout>
                     <GestionVentaServicio />
                   </Layout>
@@ -462,7 +455,7 @@ function App() {
             <Route
               path="/gestion-venta/new/:citaId"
               element={
-                <PrivateRoute allowedRoles={["admin", "empleado"]}>
+                <PrivateRoute requiredPermissions={["crearVentas", "actualizarVentas", "actualizarVentasPropias"]}>
                   <Layout>
                     <GestionVentaServicio />
                   </Layout>

@@ -257,7 +257,7 @@ const FormularioProveedor = ({ proveedor, onProveedorActualizado, onClose }) => 
   }
 
   return (
-    <div className="p-6 w-full mx-auto" style={{ maxWidth: "90%", minWidth: "600px" }}>
+    <div className="p-6 w-full mx-auto">
       <h2 className="text-2xl font-semibold mb-6 text-center text-pink-600">
         {modoEdicion ? "Editar Proveedor" : "Nuevo Proveedor"}
       </h2>

@@ -251,7 +251,7 @@ const FormularioInsumo = ({ insumo, onClose, onSuccess }) => {
     formData.stock && formData.precio ? (Number(formData.stock) * Number(formData.precio)).toFixed(2) : "0.00"
 
   return (
-    <div className="p-6 w-full mx-auto" style={{ maxWidth: "90%", minWidth: "800px" }}>
+    <div className="p-6 w-full mx-auto">
       <h2 className="text-2xl font-semibold mb-6 text-center text-pink-600">
         {modoEdicion ? "Editar Insumo" : "Nuevo Insumo"}
       </h2>

@@ -484,7 +484,7 @@ const FormularioCompra = ({ compra, onClose, onSuccess }) => {
   }
 
   return (
-    <div className="p-6 w-full mx-auto" style={{ maxWidth: "95%", minWidth: "900px" }}>
+    <div className="p-6 w-full mx-auto">
       <h2 className="text-2xl font-semibold mb-6 text-center text-pink-600">
         <FontAwesomeIcon icon={faShoppingCart} className="mr-2" />
         {compra ? "Editar Compra" : "Nueva Compra"}

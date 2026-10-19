@@ -357,3 +357,36 @@
     padding: 1.25rem;
   }
 }
+
+/* Campos de los formularios dentro de los modales, con el mismo aspecto en todas las pantallas */
+.modal-content form {
+  display: grid;
+  gap: 0 1rem;
+}
+.modal-content :is(input:not([type="checkbox"], [type="radio"], [type="file"], [type="color"]), select, textarea) {
+  width: 100%;
+  min-height: 2.5rem;
+  padding: 0.5rem 0.75rem;
+  font: inherit;
+  font-size: 0.9375rem;
+  color: rgb(var(--c-ink));
+  background-color: rgb(var(--c-surface));
+  border: 1px solid rgb(var(--c-line-strong));
+  border-radius: var(--radius);
+  box-shadow: none;
+}
+.modal-content :is(input, select, textarea):focus {
+  outline: none;
+  border-color: rgb(var(--c-primary));
+  box-shadow: 0 0 0 3px rgb(var(--c-primary) / 0.15);
+}
+.modal-content :is(input, textarea)[readonly],
+.modal-content :is(input, select, textarea):disabled {
+  background-color: rgb(var(--c-surface-2));
+  color: rgb(var(--c-ink-soft));
+}
+.modal-content label {
+  color: rgb(var(--c-ink-soft));
+  font-size: 0.8125rem;
+  font-weight: 500;
+}

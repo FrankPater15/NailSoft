@@ -532,13 +532,6 @@
     margin: auto;
   }
 
-  .original-price {
-    text-decoration: line-through;
-    color: rgb(var(--c-danger));
-    font-size: 1.2rem;
-    margin-right: 4vh;
-  }
-
   /* MODAL MANTIENE POSICIÓN EN MÓVILES */
   .modal-content-art {
     width: 90vw;
@@ -634,12 +627,6 @@
 }
 
 /* Añadir estilos para mostrar el precio original tachado y el descuento */
-.original-price {
-  text-decoration: line-through;
-  color: rgb(var(--c-ink));
-  font-size: 0.85em;
-  margin-right: 5px;
-}
 
 .discount-badge {
   position: absolute;
@@ -653,11 +640,6 @@
   font-size: 0.8rem;
   z-index: 10;
   box-shadow: 0 2px 4px rgb(36 26 33 / 0.12);
-}
-
-.discounted-price {
-  color: #ffffff;
-  font-weight: bold;
 }
 
 .promo-badge {
@@ -685,12 +667,6 @@
   gap: 6px;
   box-shadow: 0 3px 8px rgb(36 26 33 / 0.18);
   margin-left: 10px;
-}
-
-.price-with-discount {
-  display: flex;
-  align-items: center;
-  gap: 10px;
 }
 
 .discount-percentage {

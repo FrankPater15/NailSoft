@@ -30,7 +30,6 @@ export default function FormularioUsuario({ onClose, onUsuarioActualizado, usuar
   const [originalRolId, setOriginalRolId] = useState("")
   const [fetchingCurrentUser, setFetchingCurrentUser] = useState(false)
   const [passwordMatchError, setPasswordMatchError] = useState("")
-  const allowedDomains = ["gmail.com", "hotmail.com", "outlook.com", "yahoo.com", "icloud.com"];
 
   useEffect(() => {
     if (usuarioEditando) {
@@ -85,17 +84,6 @@ export default function FormularioUsuario({ onClose, onUsuarioActualizado, usuar
       }))
     }
 
-    if (name === 'email') {
-    const domain = value.split('@')[1]?.toLowerCase();
-    if (domain && !allowedDomains.includes(domain)) {
-      setFormErrors((prev) => ({
-        ...prev,
-        email: 'Solo se permiten correos de gmail, hotmail, outlook, yahoo o icloud',
-      }));
-    } else {
-      setFormErrors((prev) => ({ ...prev, email: '' }));
-    }
-  }
     // Validación de coincidencia de contraseña en tiempo real
   if (name === "password" || name === "confirmPassword") {
     const newPassword = name === "password" ? value : formData.password

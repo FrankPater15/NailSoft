@@ -171,7 +171,7 @@ const FormularioCliente = ({ cliente, onClose, onClienteActualizado = () => {} }
   }
 
   return (
-   <div className="p-6 w-full mx-auto" style={{ maxWidth: "90%", minWidth: "800px" }}>
+   <div className="p-6 w-full mx-auto">
       <h2 className="text-2xl font-semibold mb-6 text-center text-pink-600">
         {cliente ? "Editar Cliente" : "Nuevo Cliente"}
       </h2>

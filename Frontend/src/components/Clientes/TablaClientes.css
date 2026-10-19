@@ -45,86 +45,13 @@
   } */
   
   /* Botones de acción */
-  .btn-add {
-    background-color: rgb(var(--c-primary));
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 8px 16px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    transition: all 0.2s;
-  }
-  
-  .btn-add:hover {
-    background-color: rgb(var(--c-primary));
-  }
-  
-  .btn-edit-1,
-  .btn-delete-1,
-  .btn-toggle-1 {
-    width: 32px;
-    height: 32px;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  
-  .btn-edit-1 {
-    background-color: rgb(var(--c-info));
-    color: white;
-  }
-  
-  .btn-delete-1 {
-    background-color: rgb(var(--c-primary));
-    color: white;
-  }
-
-  .btn-toggle-1 {
-    background-color: rgb(var(--c-warning));
-    color: white;
-  }
 
 
 
     
 /* Botón con efecto de línea animada */
-.btn-edit-1,
-.btn-delete-1,
-.btn-toggle-1 {
-  position: relative;
-  overflow: hidden;
-  z-index: 1;
-}
 
 /* Efecto de línea animada que funciona con cualquier color de fondo */
-.btn-edit-1::before,
-.btn-delete-1::before,
-.btn-toggle-1::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: rgb(var(--c-surface) / 0.3);
-  z-index: -1;
-  transition: none;
-  transform: skewX(-30deg);
-}
-
-.btn-edit-1:hover::before,
-.btn-delete-1:hover::before,
-.btn-toggle-1:hover::before {
-  left: 100%;
-  transition: all 0.5s ease;
-}
 
 /* Puedes personalizar el color de fondo sin perder la animación */
 .btn-edit {
@@ -241,56 +168,10 @@
   }
   
   /* Paginación */
-  .pagination-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-  }
-  
-  .pagination-btn {
-    width: 36px;
-    height: 36px;
-    border: 1px solid rgb(var(--c-line));
-    background-color: white;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  
-  .pagination-btn:hover:not(.disabled) {
-    background-color: rgb(var(--c-surface-2));
-  }
   
   .pagination-btn.disabled {
     opacity: 0.5;
     cursor: not-allowed;
-  }
-  
-  .pagination-pages {
-    display: flex;
-    margin: 0 8px;
-  }
-  
-  .pagination-number {
-    width: 36px;
-    height: 36px;
-    border: 1px solid rgb(var(--c-line));
-    background-color: white;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 4px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  
-  .pagination-number:hover {
-    background-color: rgb(var(--c-surface-2));
   }
   
   .pagination-number.active {
@@ -300,28 +181,6 @@
   }
   
   /* Modal */
-  .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgb(var(--neutral-900) / 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-  }
-  
-  .modal-content {
-    background-color: white;
-    border-radius: 8px;
-    max-width: 500px;
-    width: 100%;
-    max-height: 90vh;
-    overflow-y: auto;
-    position: relative;
-  }
   
   /* Formulario */
   
@@ -355,12 +214,6 @@
     .tabla-moderna th,
     .tabla-moderna td {
       padding: 8px;
-    }
-  
-    .pagination-btn,
-    .pagination-number {
-      width: 32px;
-      height: 32px;
     }
   }
   

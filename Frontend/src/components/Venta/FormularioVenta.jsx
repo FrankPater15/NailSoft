@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from "react"
 import "./formularioVentaServicio.css"
+import "./styles.css"
 
 const FormularioVenta = ({ venta, onGuardar, onCancelar }) => {
   const [clientes, setClientes] = useState([])
@@ -353,7 +354,6 @@ const FormularioVenta = ({ venta, onGuardar, onCancelar }) => {
   return (
     <div className="formulario-moderno">
       <form onSubmit={manejarSubmit} className="space-y-4">
-        <h2 className="text-xl font-semibold mb-4">{venta ? "Editar Venta" : "Agregar Venta"}</h2>
 
         {ventaId && (
           <div className="form-group">

@@ -287,7 +287,18 @@
     color: rgb(var(--c-ink));
   }
 
-  .btn {
+  /* Las variantes traen también la forma base: muchas pantallas usan solo "btn-primary" */
+  .btn,
+  .btn-primary,
+  .btn-secondary,
+  .btn-success,
+  .btn-danger,
+  .btn-warning,
+  .btn-info,
+  .btn-light,
+  .btn-outline-primary,
+  .btn-outline-secondary,
+  .btn-outline-danger {
     display: inline-flex;
     align-items: center;
     justify-content: center;

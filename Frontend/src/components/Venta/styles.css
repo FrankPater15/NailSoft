@@ -69,7 +69,7 @@
   }
   
   .tipo-badge.productos {
-    background-color: rgb(var(--c-info));
+    background-color: rgb(var(--c-info) / 0.12);
     color: rgb(var(--c-info));
   }
   

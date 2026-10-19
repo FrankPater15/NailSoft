@@ -47,8 +47,6 @@
   
   .formulario-moderno-serv {
     animation: fadeIn 0.3s ease-out;
-    background-color: red;
-    width: 120%;
   }
   
   /* Estilos para descuentos */
@@ -62,23 +60,6 @@
   border-radius: 9999px;
   margin-left: 0.5rem;
   vertical-align: middle;
-}
-
-.price-with-discount {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.original-price {
-  text-decoration: line-through;
-  color: rgb(var(--c-ink-faint));
-  font-size: 0.85em;
-}
-
-.discounted-price {
-  color: rgb(var(--c-primary-ink));
-  font-weight: 600;
 }
 
 .promotional-tag {
