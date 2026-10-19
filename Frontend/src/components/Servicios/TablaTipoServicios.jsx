@@ -8,7 +8,6 @@ import {
   faEdit,
   faTrash,
   faSearch,
-  faPowerOff,
   faToggleOn,
   faToggleOff,
   faPercent,

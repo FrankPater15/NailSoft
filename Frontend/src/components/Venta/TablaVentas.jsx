@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import FormularioVenta from "./FormularioVenta";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import Modal from "react-modal";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -13,7 +13,6 @@ import {
   faSearch,
   faCheck,
   faTag,
-  faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 // import "./tablaVentaServicio.css"
 import "../../styles/tablas.css";
@@ -33,7 +32,6 @@ const TablaVentas = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const location = useLocation();
-  const navigate = useNavigate();
   const API_URL = `${import.meta.env.VITE_BACKEND_URL}/api`;
 
   const fetchVentas = async () => {

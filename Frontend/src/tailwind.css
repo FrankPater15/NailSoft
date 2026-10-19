@@ -599,3 +599,21 @@
 .swal2-timer-progress-bar {
   background: rgb(var(--c-primary) / 0.5) !important;
 }
+
+/* Color de cada estado de cita como variable (lo usan agenda, En atención y detalle).
+   Fuera de @layer: las clases se arman en tiempo de ejecución y Tailwind las purgaría. */
+.estado-pendiente {
+  --color-estado: rgb(var(--st-pendiente));
+}
+.estado-confirmada {
+  --color-estado: rgb(var(--st-confirmada));
+}
+.estado-progreso {
+  --color-estado: rgb(var(--st-progreso));
+}
+.estado-completada {
+  --color-estado: rgb(var(--st-completada));
+}
+.estado-cancelada {
+  --color-estado: rgb(var(--st-cancelada));
+}

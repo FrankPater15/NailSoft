@@ -616,14 +616,14 @@ export default function FormularioCita({ cita, fechaSeleccionada, servicioSelecc
       const headers = { Authorization: `Bearer ${token}` }
 
       if (cita) {
-        const response = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/citas/${cita._id}`, dataToSend, { headers })
+        await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/citas/${cita._id}`, dataToSend, { headers })
         Swal.fire({
           title: "¡Éxito!",
           text: "Cita actualizada correctamente",
           icon: "success",
         })
       } else {
-        const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/citas`, dataToSend, { headers })
+        await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/citas`, dataToSend, { headers })
         Swal.fire({
           title: "¡Éxito!",
           text: "Cita creada correctamente",

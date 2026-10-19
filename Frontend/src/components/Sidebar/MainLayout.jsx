@@ -8,7 +8,7 @@ import Footer from "../Footer/Footer"
 import "./mainLayout.css"
 
 const MainLayout = ({ children }) => {
-  const { isCollapsed, isSidebarOpen } = useSidebar()
+  const { isCollapsed } = useSidebar()
   const { shouldShowSidebar } = useLayoutType()
   const [sidebarState, setSidebarState] = useState(isCollapsed)
   const [isMobile, setIsMobile] = useState(false)

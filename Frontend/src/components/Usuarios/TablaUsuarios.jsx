@@ -9,14 +9,12 @@ import {
   faEdit,
   faTrash,
   faSync,
-  faPowerOff,
   faSearch,
   faToggleOn,
   faToggleOff,
 } from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
 import axios from "axios";
-import { useSidebar } from "../Sidebar/Sidebar"; // Importamos el hook del sidebar
 // import "./tablaUsuarios.css";
 import "../../styles/tablas.css"
 
@@ -24,7 +22,6 @@ import "../../styles/tablas.css"
 Modal.setAppElement("#root");
 
 const TablaUsuarios = () => {
-  const { isCollapsed } = useSidebar(); // Usamos el hook del sidebar
   const [usuarios, setUsuarios] = useState([]);
   const [roles, setRoles] = useState([]);
   const [rolMap, setRolMap] = useState({});
@@ -216,7 +213,7 @@ const TablaUsuarios = () => {
         });
 
         const token = localStorage.getItem("token");
-        const response = await axios.patch(
+        await axios.patch(
           `${import.meta.env.VITE_BACKEND_URL}/api/usuarios/${id}/toggle-estado`,
           {},
           {

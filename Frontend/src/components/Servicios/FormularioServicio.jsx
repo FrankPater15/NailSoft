@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { useSidebar } from "../Sidebar/Sidebar";
 import { FaUpload, FaSpinner, FaPercent, FaTag } from "react-icons/fa";
 import "./formularioServ.css";
 import { calcularPrecioConDescuento } from "./obtenerServicios";
@@ -28,7 +27,6 @@ const FormularioServicio = ({
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [previewImage, setPreviewImage] = useState(null);
-  const { isCollapsed } = useSidebar();
 
   useEffect(() => {
     const obtenerTiposServicios = async () => {
@@ -128,7 +126,7 @@ const FormularioServicio = ({
 
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get(
+      await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/api/servicios/validar-nombre?nombre=${encodeURIComponent(
           nombre
         )}`,

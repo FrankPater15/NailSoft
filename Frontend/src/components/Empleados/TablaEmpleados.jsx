@@ -17,13 +17,11 @@ import {
   faToggleOff,
 } from "@fortawesome/free-solid-svg-icons"
 import Swal from "sweetalert2"
-import { useSidebar } from "../Sidebar/Sidebar"
 import "../../styles/tablas.css"
 
 Modal.setAppElement("#root")
 
 const TablaEmpleados = () => {
-  const { isCollapsed } = useSidebar()
   const [empleados, setEmpleados] = useState([])
   const [empleadoSeleccionado, setEmpleadoSeleccionado] = useState(null)
   const [formModalIsOpen, setFormModalIsOpen] = useState(false)

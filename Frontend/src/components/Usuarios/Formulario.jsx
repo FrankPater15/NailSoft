@@ -7,12 +7,8 @@ import { FaSpinner, FaUser, FaEnvelope, FaPhone, FaLock, FaUserTag, FaSuperpower
 
 import "./formularioUsuarios.css"
 
-// Importar el hook useSidebar
-import { useSidebar } from "../Sidebar/Sidebar"
 
 export default function FormularioUsuario({ onClose, onUsuarioActualizado, usuarioEditando, roles }) {
-  // Añadir el hook useSidebar al inicio del componente
-  const { isCollapsed } = useSidebar()
 
   const [formData, setFormData] = useState({
     nombre: "",

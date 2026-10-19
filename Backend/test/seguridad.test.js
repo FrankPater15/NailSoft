@@ -241,6 +241,14 @@ describe("cada quien ve solo lo suyo", () => {
     expect(res.body[0].telefonoempleado).toBeUndefined();
   });
 
+  it("un empleado reconoce su propio registro sin ver el vínculo de los demás", async () => {
+    const res = await get("/api/empleados", "empleado");
+    expect(res.status).toBe(200);
+    const propios = res.body.filter((e) => e.esPropio);
+    expect(propios.map((e) => String(e._id))).toEqual([String(ids.empleado1)]);
+    expect(res.body.every((e) => e.usuario === undefined)).toBe(true);
+  });
+
   it("un empleado solo ve las citas que tiene asignadas", async () => {
     const res = await get("/api/citas", "empleado");
     expect(res.status).toBe(200);

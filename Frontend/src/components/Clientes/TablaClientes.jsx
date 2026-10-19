@@ -9,19 +9,16 @@ import {
   faEdit,
   faTrash,
   faSearch,
-  faPowerOff,
   faPlus,
   faToggleOn,
   faToggleOff
 } from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
-import { useSidebar } from "../Sidebar/Sidebar";
 import "../../styles/tablas.css";
 
 Modal.setAppElement("#root");
 
 const TablaClientes = () => {
-  const { isCollapsed } = useSidebar();
   const [clientes, setClientes] = useState([]);
   const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -99,7 +96,7 @@ const TablaClientes = () => {
   if (result.isConfirmed) {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.patch(
+      await axios.patch(
         `${import.meta.env.VITE_BACKEND_URL}/api/clientes/${id}/toggle-estado`,
         {},
         {

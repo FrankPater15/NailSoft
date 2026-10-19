@@ -117,28 +117,28 @@
   font-size: 0.8125rem;
   font-weight: 500;
 }
-.estado-pendiente {
+.estado-cita.estado-pendiente {
   color: rgb(var(--nude-700));
 }
-.estado-pendiente .esmalte {
+.estado-cita.estado-pendiente .esmalte {
   color: rgb(var(--st-pendiente));
 }
-.estado-confirmada,
-.estado-confirmada .esmalte {
+.estado-cita.estado-confirmada,
+.estado-cita.estado-confirmada .esmalte {
   color: rgb(var(--st-confirmada));
 }
-.estado-progreso,
-.estado-progreso .esmalte {
+.estado-cita.estado-progreso,
+.estado-cita.estado-progreso .esmalte {
   color: rgb(var(--st-progreso));
 }
-.estado-completada,
-.estado-completada .esmalte {
+.estado-cita.estado-completada,
+.estado-cita.estado-completada .esmalte {
   color: rgb(var(--st-completada));
 }
-.estado-cancelada {
+.estado-cita.estado-cancelada {
   color: rgb(var(--c-ink-faint));
 }
-.estado-cancelada .esmalte {
+.estado-cita.estado-cancelada .esmalte {
   color: rgb(var(--st-cancelada));
 }
 

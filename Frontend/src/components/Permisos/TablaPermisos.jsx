@@ -9,12 +9,10 @@ import {
   faEdit,
   faTrash,
   faInfoCircle,
-  faPowerOff,
   faFileExcel,
   faDownload,
   faToggleOff,
   faToggleOn,
-  faFilter,
   faSearch,
   faSort,
   faSortUp,
@@ -171,7 +169,7 @@ export default function TablaPermisos() {
         });
 
         const token = localStorage.getItem("token");
-        const response = await axios.put(
+        await axios.put(
           `${import.meta.env.VITE_BACKEND_URL}/api/permisos/${id}`,
           { activo: nuevoEstado },
           {
@@ -226,7 +224,7 @@ export default function TablaPermisos() {
         });
 
         const token = localStorage.getItem("token");
-        const response = await axios.delete(
+        await axios.delete(
           `${import.meta.env.VITE_BACKEND_URL}/api/permisos/${id}`,
           {
             headers: {

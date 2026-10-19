@@ -92,17 +92,8 @@
   display: flex;
   gap: 0.5rem;
 }
-.estado-pendiente {
-  --color-estado: rgb(var(--st-pendiente));
-}
 .estado-pendiente .atencion-estado {
   color: rgb(var(--nude-700));
-}
-.estado-confirmada {
-  --color-estado: rgb(var(--st-confirmada));
-}
-.estado-progreso {
-  --color-estado: rgb(var(--st-progreso));
 }
 
 @media (max-width: 700px) {

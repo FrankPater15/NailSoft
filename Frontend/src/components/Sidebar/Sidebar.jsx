@@ -26,7 +26,7 @@ const Sidebar = () => {
   const [isTransitioning, setIsTransitioning] = useState(false)
   const sidebarRef = useRef(null)
   const timeoutRef = useRef(null)
-  const { user, logout } = useAuth()
+  const { logout } = useAuth()
   const { shouldShowSidebar } = useLayoutType()
 
   // Detectar si es móvil de forma optimizada

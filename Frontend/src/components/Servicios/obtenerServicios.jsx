@@ -232,7 +232,7 @@ export const validarIdServicio = async (servicioId) => {
     })
 
     if (response.ok) {
-      const data = await response.json()
+      await response.json()
       // console.log(
       //   `ID de servicio ${servicioId} validado correctamente. Nombre: ${data.servicio?.nombreServicio || "Desconocido"}`,
       // )

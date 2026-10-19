@@ -1,0 +1,583 @@
+/* Calendario de citas y agenda por empleado (react-big-calendar con el sistema "esmalte") */
+
+.agenda-botones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Filtros en una sola fila */
+.agenda-filtros {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.625rem;
+  margin-bottom: 1rem;
+}
+.agenda-filtros .form-select {
+  width: auto;
+  min-width: 11rem;
+}
+.agenda-busqueda {
+  position: relative;
+  flex: 1 1 18rem;
+  max-width: 26rem;
+  margin: 0;
+  color: rgb(var(--c-ink-faint));
+}
+.agenda-busqueda svg {
+  position: absolute;
+  top: 50%;
+  left: 0.75rem;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+.agenda-busqueda input {
+  width: 100%;
+  height: 2.5rem;
+  padding: 0 0.875rem 0 2.25rem;
+  font: inherit;
+  font-size: 0.9375rem;
+  color: rgb(var(--c-ink));
+  background: rgb(var(--c-surface));
+  border: 1px solid rgb(var(--c-line-strong));
+  border-radius: var(--radius);
+}
+.agenda-busqueda input:focus {
+  outline: none;
+  border-color: rgb(var(--c-primary));
+  box-shadow: 0 0 0 3px rgb(var(--c-primary) / 0.15);
+}
+.agenda-limpiar {
+  padding: 0.25rem 0.5rem;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgb(var(--c-primary-ink));
+  background: none;
+  border: 0;
+  border-radius: 0.375rem;
+  cursor: pointer;
+}
+.agenda-limpiar:hover {
+  text-decoration: underline;
+}
+.agenda-interruptor {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0.5rem 0 0;
+  font-size: 0.875rem;
+  color: rgb(var(--c-ink-soft));
+  cursor: pointer;
+}
+.agenda-interruptor input {
+  width: 1rem;
+  height: 1rem;
+  accent-color: rgb(var(--c-primary));
+}
+
+/* Contenedor del calendario */
+.agenda-calendario {
+  padding: 1rem 1.25rem 1.25rem;
+  background: rgb(var(--c-surface));
+  border: 1px solid rgb(var(--c-line));
+  border-radius: calc(var(--radius) + 0.375rem);
+  box-shadow: var(--sombra-1);
+  transition: opacity 0.2s ease;
+}
+.agenda-calendario[aria-busy="true"] {
+  opacity: 0.6;
+}
+.agenda-calendario .rbc-calendar {
+  height: 44rem;
+  font-family: inherit;
+  color: rgb(var(--c-ink));
+}
+.agenda-calendario.vista-day .rbc-calendar,
+.agenda-calendario.vista-week .rbc-calendar {
+  height: 46rem;
+}
+
+/* Barra propia */
+.cal-barra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+.cal-navegacion {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.cal-navegacion .btn {
+  margin-right: 0.25rem;
+}
+.cal-titulo {
+  margin: 0 0 0 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.cal-vistas {
+  display: inline-flex;
+  padding: 0.1875rem;
+  background: rgb(var(--c-surface-2));
+  border-radius: calc(var(--radius) + 0.125rem);
+}
+.cal-vistas button {
+  padding: 0.375rem 0.875rem;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgb(var(--c-ink-soft));
+  background: transparent;
+  border: 0;
+  border-radius: calc(var(--radius) - 0.125rem);
+  cursor: pointer;
+}
+.cal-vistas button:hover {
+  color: rgb(var(--c-ink));
+}
+.cal-vistas button.activa {
+  color: rgb(var(--c-ink));
+  background: rgb(var(--c-surface));
+  box-shadow: var(--sombra-1);
+}
+
+/* Leyenda */
+.cal-leyenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem 1.25rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.8125rem;
+  color: rgb(var(--c-ink-soft));
+}
+.cal-leyenda li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.cal-leyenda .esmalte {
+  color: var(--color-estado);
+}
+
+/* ---------- react-big-calendar: estructura general ---------- */
+/* La librería trae bordes #ddd y fondos blancos fijos: se pasan a los tokens para que funcione en oscuro */
+.agenda-calendario .rbc-calendar *:not(button),
+.rbc-overlay * {
+  border-color: rgb(var(--c-line));
+}
+.agenda-calendario .rbc-time-header-content > .rbc-row.rbc-row-resource {
+  border-bottom-color: rgb(var(--c-line));
+}
+.agenda-calendario .rbc-time-view-resources .rbc-time-gutter,
+.agenda-calendario .rbc-time-view-resources .rbc-time-header-gutter {
+  background: rgb(var(--c-surface));
+}
+.agenda-calendario .rbc-month-view,
+.agenda-calendario .rbc-time-view {
+  border: 1px solid rgb(var(--c-line));
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.agenda-calendario .rbc-header {
+  padding: 0.625rem 0.25rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: rgb(var(--c-ink-soft));
+  border-bottom: 1px solid rgb(var(--c-line));
+}
+.agenda-calendario .rbc-header + .rbc-header,
+.agenda-calendario .rbc-day-bg + .rbc-day-bg,
+.agenda-calendario .rbc-month-row + .rbc-month-row,
+.agenda-calendario .rbc-time-content > * + * > *,
+.agenda-calendario .rbc-time-header-content,
+.agenda-calendario .rbc-timeslot-group,
+.agenda-calendario .rbc-day-slot .rbc-time-slot {
+  border-color: rgb(var(--c-line));
+}
+.agenda-calendario .rbc-day-slot .rbc-time-slot {
+  border-top-style: dashed;
+  border-top-color: rgb(var(--c-line) / 0.6);
+}
+.agenda-calendario .rbc-off-range-bg {
+  background: rgb(var(--c-surface-2) / 0.6);
+}
+.agenda-calendario .rbc-month-view .rbc-today {
+  background: rgb(var(--c-primary) / 0.05);
+}
+.agenda-calendario .rbc-time-view .rbc-today {
+  background: transparent;
+}
+.agenda-calendario .rbc-button-link {
+  font: inherit;
+  color: inherit;
+}
+
+/* Mes */
+.agenda-calendario .rbc-date-cell {
+  padding: 0.375rem 0.5rem 0.125rem;
+  font-size: 0.8125rem;
+  text-align: left;
+  font-variant-numeric: tabular-nums;
+}
+.agenda-calendario .rbc-date-cell.rbc-off-range {
+  color: rgb(var(--c-ink-faint));
+}
+.agenda-calendario .rbc-date-cell.rbc-now .rbc-button-link {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.625rem;
+  height: 1.625rem;
+  padding: 0 0.25rem;
+  font-weight: 600;
+  color: rgb(var(--c-on-primary));
+  background: rgb(var(--c-primary));
+  border-radius: 999px;
+}
+.agenda-calendario .rbc-month-view .rbc-day-bg {
+  cursor: pointer;
+}
+.agenda-calendario .rbc-month-view .rbc-day-bg:hover {
+  background: rgb(var(--c-primary) / 0.04);
+}
+.agenda-calendario .rbc-row-segment {
+  padding: 0 0.3125rem 0.1875rem;
+}
+.agenda-calendario .rbc-show-more {
+  padding: 0 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgb(var(--c-primary-ink));
+  background: transparent;
+}
+
+/* Horas (semana y día) */
+.agenda-calendario .rbc-time-header {
+  border-bottom: 1px solid rgb(var(--c-line));
+}
+.agenda-calendario .rbc-time-header .rbc-allday-cell {
+  display: none;
+}
+.agenda-calendario .rbc-time-content {
+  border-top: 0;
+}
+.agenda-calendario .rbc-time-gutter .rbc-timeslot-group {
+  border-bottom: 0;
+}
+.agenda-calendario .rbc-label {
+  padding: 0 0.625rem;
+  font-size: 0.75rem;
+  color: rgb(var(--c-ink-faint));
+  font-variant-numeric: tabular-nums;
+}
+.agenda-calendario .rbc-time-gutter .rbc-time-slot:first-child .rbc-label {
+  position: relative;
+  top: -0.5rem;
+}
+.agenda-calendario .rbc-current-time-indicator {
+  height: 2px;
+  background: rgb(var(--c-primary));
+}
+.agenda-calendario .rbc-slot-selection {
+  font-size: 0.75rem;
+  color: rgb(var(--c-primary-ink));
+  background: rgb(var(--c-primary) / 0.12);
+  border-radius: 0.375rem;
+}
+.agenda-calendario .rbc-day-slot .rbc-events-container {
+  margin-right: 0.375rem;
+}
+.agenda-calendario .rbc-time-view .rbc-header {
+  border-bottom: 0;
+}
+
+/* ---------- Citas dentro del calendario ---------- */
+.agenda-calendario .rbc-event.cita-evento,
+.agenda-calendario .rbc-day-slot .rbc-event.cita-evento {
+  padding: 0.125rem 0.375rem;
+  font-size: 0.75rem;
+  color: rgb(var(--c-ink));
+  background: color-mix(in srgb, var(--color-estado) 14%, rgb(var(--c-surface)));
+  border: 0;
+  border-left: 3px solid var(--color-estado);
+  border-radius: 0.375rem;
+  box-shadow: none;
+}
+.agenda-calendario .rbc-day-slot .rbc-event.cita-evento {
+  padding: 0.375rem 0.5rem;
+  border: 1px solid color-mix(in srgb, var(--color-estado) 30%, transparent);
+  border-left: 3px solid var(--color-estado);
+}
+.agenda-calendario .rbc-event.cita-evento.estado-pendiente {
+  background: color-mix(in srgb, var(--color-estado) 28%, rgb(var(--c-surface)));
+}
+.agenda-calendario .rbc-event.cita-evento:hover {
+  background: color-mix(in srgb, var(--color-estado) 22%, rgb(var(--c-surface)));
+}
+.agenda-calendario .rbc-event.cita-evento.rbc-selected {
+  background: color-mix(in srgb, var(--color-estado) 26%, rgb(var(--c-surface)));
+}
+.agenda-calendario .rbc-event.cita-evento:focus-visible {
+  outline: 2px solid rgb(var(--c-primary));
+  outline-offset: 1px;
+}
+.agenda-calendario .rbc-event.cita-evento.estado-cancelada {
+  color: rgb(var(--c-ink-faint));
+  text-decoration: line-through;
+}
+.agenda-calendario .rbc-day-slot .rbc-event-label {
+  font-size: 0.6875rem;
+  color: rgb(var(--c-ink-soft));
+  font-variant-numeric: tabular-nums;
+}
+.cita-evento-linea {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.cita-evento-hora {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.cita-evento-bloque p {
+  margin: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.cita-evento-cliente {
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+.cita-evento-servicios {
+  color: rgb(var(--c-ink-soft));
+}
+
+/* Ventana "+N más" del mes */
+.rbc-overlay {
+  z-index: 40;
+  min-width: 14rem;
+  padding: 0.5rem;
+  background: rgb(var(--c-surface));
+  border: 1px solid rgb(var(--c-line));
+  border-radius: var(--radius);
+  box-shadow: var(--sombra-3);
+}
+.rbc-overlay-header {
+  margin: -0.5rem -0.5rem 0.5rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-bottom: 1px solid rgb(var(--c-line));
+}
+.rbc-overlay > * + * {
+  margin-top: 0.25rem;
+}
+
+/* ---------- Agenda por empleado: cabeceras de columna ---------- */
+.agenda-por-empleado .rbc-row-resource .rbc-header {
+  padding: 0.75rem 0.5rem;
+  text-align: left;
+}
+.agenda-columna {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+.agenda-columna-inicial {
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 2.125rem;
+  flex-shrink: 0;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: rgb(var(--c-primary-ink));
+  background: rgb(var(--c-primary-soft));
+}
+.agenda-columna-nombre {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgb(var(--c-ink));
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.agenda-columna-conteo {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: rgb(var(--c-ink-soft));
+}
+
+/* ---------- Panel de detalle ---------- */
+.detalle-cita-fondo {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgb(var(--neutral-950) / 0.35);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+.detalle-cita-fondo.ReactModal__Overlay--after-open {
+  opacity: 1;
+}
+.detalle-cita-fondo.ReactModal__Overlay--before-close {
+  opacity: 0;
+}
+.detalle-cita {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  width: min(26rem, 100%);
+  padding: 1.25rem 1.5rem 1.5rem;
+  overflow-y: auto;
+  color: rgb(var(--c-ink));
+  background: rgb(var(--c-surface));
+  border-left: 1px solid rgb(var(--c-line));
+  box-shadow: var(--sombra-3);
+  outline: none;
+  transform: translateX(1.5rem);
+  transition: transform 0.2s ease;
+}
+.ReactModal__Overlay--after-open .detalle-cita {
+  transform: none;
+}
+.detalle-cita-cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+.detalle-cita-estado {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.625rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  background: color-mix(in srgb, var(--color-estado) 14%, transparent);
+  border-radius: 999px;
+}
+.detalle-cita-estado .esmalte {
+  color: var(--color-estado);
+}
+.detalle-cita-cliente {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.detalle-cita-cuando {
+  margin: 0.25rem 0 0;
+  color: rgb(var(--c-ink-soft));
+}
+.detalle-cita-cuando::first-letter {
+  text-transform: uppercase;
+}
+.detalle-cita-datos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin: 1.5rem 0;
+  padding: 1rem 0;
+  border-block: 1px solid rgb(var(--c-line));
+}
+.detalle-cita-datos dt {
+  font-size: 0.75rem;
+  color: rgb(var(--c-ink-soft));
+}
+.detalle-cita-datos dd {
+  margin: 0.125rem 0 0;
+  font-weight: 500;
+}
+.detalle-cita-subtitulo {
+  margin: 0 0 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.detalle-cita-servicios {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.detalle-cita-servicios li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 0;
+  font-variant-numeric: tabular-nums;
+}
+.detalle-cita-servicios small {
+  display: block;
+  font-size: 0.75rem;
+  color: rgb(var(--c-ink-soft));
+}
+.detalle-cita-servicios .detalle-cita-total {
+  margin-top: 0.25rem;
+  padding-top: 0.75rem;
+  font-weight: 600;
+  border-top: 1px solid rgb(var(--c-line));
+}
+.detalle-cita-motivo {
+  margin: 1rem 0 0;
+  padding: 0.75rem;
+  font-size: 0.875rem;
+  background: rgb(var(--c-surface-2));
+  border-radius: var(--radius);
+}
+.detalle-cita-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 1.5rem;
+}
+.detalle-cita-acciones .btn-primary {
+  flex: 1 1 100%;
+}
+
+@media (max-width: 700px) {
+  .agenda-calendario {
+    padding: 0.75rem;
+  }
+  .cal-titulo {
+    font-size: 1.0625rem;
+  }
+  .agenda-filtros .form-select {
+    flex: 1 1 10rem;
+  }
+  .agenda-calendario .rbc-calendar {
+    height: 36rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .detalle-cita,
+  .detalle-cita-fondo {
+    transition: none;
+  }
+}
+
+.agenda-vacio {
+  margin: 0;
+  padding: 2rem 1.25rem;
+  text-align: center;
+  color: rgb(var(--c-ink-soft));
+  border: 1px dashed rgb(var(--c-line-strong));
+  border-radius: var(--radius);
+}

@@ -1284,7 +1284,6 @@ const GestionVentaServicio = () => {
           })
         } catch (error) {
           console.error("Error al crear la venta unificada:", error)
-          depurarErrorRespuesta(error)
           throw error
         }
       } catch (error) {
@@ -1337,7 +1336,7 @@ const GestionVentaServicio = () => {
 
         try {
           // Crear la venta unificada
-          const createResponse = await axios.post(`${API_URL}/ventas`, ventaUnificadaData, { headers })
+          await axios.post(`${API_URL}/ventas`, ventaUnificadaData, { headers })
 
           // Actualizar el estado de la cita a "Completada"
           await axios.put(
@@ -1379,7 +1378,6 @@ const GestionVentaServicio = () => {
           })
         } catch (error) {
           console.error("Error al crear la venta unificada:", error)
-          depurarErrorRespuesta(error)
           throw error
         }
       }
@@ -1416,26 +1414,6 @@ const GestionVentaServicio = () => {
     } finally {
       setIsSaving(false)
     }
-  }
-
-  // Agregar una función para depurar la respuesta de error del servidor
-  // Añadir esta función after the function finalizarVenta
-
-  // Función para depurar errores de respuesta
-  const depurarErrorRespuesta = (error) => {
-
-    if (error.response) {
-
-      // Intentar mostrar más detalles si están disponibles
-      if (error.response.data) {
-        if (typeof error.response.data === "string") {
-        } else {
-        }
-      }
-    } else if (error.request) {
-    } else {
-    }
-
   }
 
   // Update the loading state display

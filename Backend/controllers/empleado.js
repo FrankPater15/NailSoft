@@ -44,8 +44,15 @@ const camposVisibles = (req) =>
 // Obtener todos los empleados
 const obtenerEmpleados = async (req, res) => {
   try {
-    const empleados = await Empleado.find({}, camposVisibles(req));
-    res.status(200).json(empleados);
+    const campos = camposVisibles(req);
+    const empleados = await Empleado.find({}, campos && `${campos} usuario`).lean();
+    // esPropio marca el registro del usuario actual sin exponer el vínculo de los demás
+    const respuesta = empleados.map(({ usuario, ...empleado }) => ({
+      ...empleado,
+      ...(campos ? {} : { usuario }),
+      esPropio: Boolean(usuario) && String(usuario) === String(req.userId),
+    }));
+    res.status(200).json(respuesta);
   } catch (error) {
     responderError(res, error, "Error al obtener los empleados");
   }

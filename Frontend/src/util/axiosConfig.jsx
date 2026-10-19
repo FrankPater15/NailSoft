@@ -70,13 +70,13 @@ axiosInstance.interceptors.response.use(
         })
       }
       // Manejar error de autenticación (401)
-      else if (error.response.status === 401 || error.response.status === 403) {
+      else if (error.response.status === 401) {
         Swal.fire({
           icon: "error",
           title: "Sesión expirada",
           text:
             error.response.data.msg ||
-            "Tu sesión ha expirado o no tienes autorización. Por favor, inicia sesión nuevamente.",
+            "Tu sesión expiró. Inicia sesión de nuevo para continuar.",
           confirmButtonText: "Entendido",
         }).then(() => {
           // Cerrar sesión
